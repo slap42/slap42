@@ -2,17 +2,20 @@
 
 #include <cstdio>
 #include <glad/gl.h>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Slap42 {
 
 const char* vert_src = ""
   "#version 330 core\n"
   "layout (location = 0) in vec3 a_pos;"
+  "uniform mat4 u_view_projection;"
   "out vec3 v_pos;"
   "void main() {"
-  "  gl_Position = vec4(a_pos, 1.0);"
+  "  gl_Position = u_view_projection * vec4(a_pos, 1.0);"
   "  v_pos = a_pos + 0.5;"
   "}";
+
 const char* frag_src = ""
   "#version 330 core\n"
   "in vec3 v_pos;"
@@ -56,6 +59,12 @@ Shader::Shader() {
   glDeleteShader(vert_shader);
   glDeleteShader(frag_shader);
   glUseProgram(shader_program);
+
+  u_view_projection = glGetUniformLocation(shader_program, "u_view_projection");
+}
+
+void Shader::SetViewProjection(const glm::mat4& view_projection) {
+  glUniformMatrix4fv(u_view_projection, 1, GL_FALSE, glm::value_ptr(view_projection));
 }
  
 Shader::~Shader() {

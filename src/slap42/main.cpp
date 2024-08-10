@@ -2,6 +2,7 @@
 
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include "graphics/mesh.hpp"
 #include "graphics/shader.hpp"
@@ -29,16 +30,26 @@ int main() {
     return -1;
   }
 
+  glm::mat4 projection = glm::mat4(1.0f);
+  glfwSetWindowUserPointer(window, &projection);
+  auto on_resize = [](GLFWwindow* window, int width, int height) {
+    glm::mat4* projection = (glm::mat4*)glfwGetWindowUserPointer(window);
+    *projection = glm::perspectiveFov(3.14f / 2.0f, (float)width, float(height), 0.1f, 1000.0f);
+    glViewport(0, 0, width, height);
+  };
+  glfwSetWindowSizeCallback(window, on_resize);
+  on_resize(window, 1280, 720);
+
   glClearColor(0.2, 0.4, 0.6, 1.0);
 
   Shader shader;
   shader.Bind();
 
   float vertices[] = {
-    -0.5f,  0.5f, 0.0f,
-     0.5f,  0.5f, 0.0f,
-    -0.5f, -0.5f, 0.0f,
-     0.5f, -0.5f, 0.0f,
+    -0.5f,  0.5f, -1.0f,
+     0.5f,  0.5f, -1.0f,
+    -0.5f, -0.5f, -1.0f,
+     0.5f, -0.5f, -1.0f,
   };
   unsigned short indices[] = {
     0, 1, 2,
@@ -50,6 +61,8 @@ int main() {
     glfwPollEvents();
 
     glClear(GL_COLOR_BUFFER_BIT);
+
+    shader.SetViewProjection(projection);
     mesh.Render();
 
     glfwSwapBuffers(window);
