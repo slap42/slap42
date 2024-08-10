@@ -5,3 +5,6 @@ add_executable(${PROJECT_NAME} src/main.cpp)
 
 add_subdirectory(src/extern/glfw)
 target_link_libraries(${PROJECT_NAME} PRIVATE glfw)
+
+add_subdirectory(src/extern/glad)
+target_link_libraries(${PROJECT_NAME} PRIVATE glad)
