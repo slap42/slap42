@@ -34,7 +34,7 @@ int main() {
   Shader shader;
   shader.Bind();
 
-  Camera camera(&shader);
+  Camera camera(window, &shader);
   glfwSetWindowUserPointer(window, &camera);
   auto on_resize = [](GLFWwindow* window, int width, int height) {
     Camera* camera = (Camera*)glfwGetWindowUserPointer(window);
@@ -47,10 +47,10 @@ int main() {
   glClearColor(0.2, 0.4, 0.6, 1.0);
 
   float vertices[] = {
-    -0.5f,  0.5f, -1.0f,
-     0.5f,  0.5f, -1.0f,
-    -0.5f, -0.5f, -1.0f,
-     0.5f, -0.5f, -1.0f,
+    -0.5f,  0.5f, 0.0f,
+     0.5f,  0.5f, 0.0f,
+    -0.5f, -0.5f, 0.0f,
+     0.5f, -0.5f, 0.0f,
   };
   unsigned short indices[] = {
     0, 1, 2,
@@ -60,9 +60,11 @@ int main() {
 
   while (!glfwWindowShouldClose(window)) {
     glfwPollEvents();
+    camera.Update();
 
     glClear(GL_COLOR_BUFFER_BIT);
-
+    
+    shader.Bind();
     mesh.Render();
 
     glfwSwapBuffers(window);
