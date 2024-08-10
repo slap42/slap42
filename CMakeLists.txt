@@ -7,6 +7,8 @@ add_executable(${PROJECT_NAME}
   src/slap42/graphics/mesh.cpp
   src/slap42/graphics/shader.hpp
   src/slap42/graphics/shader.cpp
+  src/slap42/graphics/camera.hpp
+  src/slap42/graphics/camera.cpp
 )
 
 add_subdirectory(src/extern/glfw)

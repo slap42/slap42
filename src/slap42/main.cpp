@@ -6,6 +6,7 @@
 
 #include "graphics/mesh.hpp"
 #include "graphics/shader.hpp"
+#include "graphics/camera.hpp"
 
 int main() {
   using namespace Slap42;
@@ -30,20 +31,20 @@ int main() {
     return -1;
   }
 
-  glm::mat4 projection = glm::mat4(1.0f);
-  glfwSetWindowUserPointer(window, &projection);
+  Shader shader;
+  shader.Bind();
+
+  Camera camera(&shader);
+  glfwSetWindowUserPointer(window, &camera);
   auto on_resize = [](GLFWwindow* window, int width, int height) {
-    glm::mat4* projection = (glm::mat4*)glfwGetWindowUserPointer(window);
-    *projection = glm::perspectiveFov(3.14f / 2.0f, (float)width, float(height), 0.1f, 1000.0f);
+    Camera* camera = (Camera*)glfwGetWindowUserPointer(window);
+    camera->OnResize(width, height);
     glViewport(0, 0, width, height);
   };
   glfwSetWindowSizeCallback(window, on_resize);
   on_resize(window, 1280, 720);
 
   glClearColor(0.2, 0.4, 0.6, 1.0);
-
-  Shader shader;
-  shader.Bind();
 
   float vertices[] = {
     -0.5f,  0.5f, -1.0f,
@@ -62,7 +63,6 @@ int main() {
 
     glClear(GL_COLOR_BUFFER_BIT);
 
-    shader.SetViewProjection(projection);
     mesh.Render();
 
     glfwSwapBuffers(window);
