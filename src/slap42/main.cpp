@@ -4,9 +4,9 @@
 #include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "graphics/mesh.hpp"
 #include "graphics/shader.hpp"
 #include "graphics/camera.hpp"
+#include "terrain/chunk.hpp"
 
 int main() {
   using namespace Slap42;
@@ -46,17 +46,7 @@ int main() {
 
   glClearColor(0.2, 0.4, 0.6, 1.0);
 
-  float vertices[] = {
-    -0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
-     0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
-    -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-     0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-  };
-  unsigned short indices[] = {
-    0, 1, 2,
-    2, 1, 3,
-  };
-  Mesh mesh(vertices, sizeof(vertices), indices, sizeof(indices));
+  Chunk chunk(0, 0);
 
   while (!glfwWindowShouldClose(window)) {
     glfwPollEvents();
@@ -65,7 +55,7 @@ int main() {
     glClear(GL_COLOR_BUFFER_BIT);
     
     shader.Bind();
-    mesh.Render();
+    chunk.Render();
 
     glfwSwapBuffers(window);
   }
