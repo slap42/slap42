@@ -7,7 +7,7 @@
 namespace Slap42 {
 
 Camera::Camera(GLFWwindow* window, Shader* shader) : window(window), shader(shader) {
-  position = glm::vec3(0.0f, 0.0f, -1.0f);
+  position = glm::vec3(0.0f, -2.0f, 0.0f);
   CalcView();
   OnResize(1280, 720);
 }

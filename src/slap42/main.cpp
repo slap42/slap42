@@ -46,7 +46,10 @@ int main() {
 
   glClearColor(0.2, 0.4, 0.6, 1.0);
 
-  Chunk chunk(0, 0);
+  Chunk chunk1( 0,  0);
+  Chunk chunk2(-1,  0);
+  Chunk chunk3( 0, -1);
+  Chunk chunk4(-1, -1);
 
   while (!glfwWindowShouldClose(window)) {
     glfwPollEvents();
@@ -55,7 +58,10 @@ int main() {
     glClear(GL_COLOR_BUFFER_BIT);
     
     shader.Bind();
-    chunk.Render();
+    chunk1.Render();
+    chunk2.Render();
+    chunk3.Render();
+    chunk4.Render();
 
     glfwSwapBuffers(window);
   }

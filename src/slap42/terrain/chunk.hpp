@@ -6,7 +6,7 @@ namespace Slap42 {
 
 class Chunk {
 public:
-  Chunk(int x, int z);
+  Chunk(int chunkx, int chunkz);
   ~Chunk();
 
 public:
