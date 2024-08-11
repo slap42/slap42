@@ -38,3 +38,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE glad)
 
 add_subdirectory(src/extern/glm)
 target_link_libraries(${PROJECT_NAME} PRIVATE glm)
+
+add_subdirectory(src/extern/opensimplex)
+target_link_libraries(${PROJECT_NAME} PRIVATE opensimplex)

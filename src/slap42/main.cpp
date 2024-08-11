@@ -44,6 +44,8 @@ int main() {
   glfwSetWindowSizeCallback(window, on_resize);
   on_resize(window, 1280, 720);
 
+  glEnable(GL_DEPTH_TEST);
+  glEnable(GL_CULL_FACE);
   glClearColor(0.2, 0.4, 0.6, 1.0);
 
   Chunk chunk1( 0,  0);
@@ -55,7 +57,7 @@ int main() {
     glfwPollEvents();
     camera.Update();
 
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     shader.Bind();
     chunk1.Render();
