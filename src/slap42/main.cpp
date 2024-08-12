@@ -4,6 +4,10 @@
 #include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <imgui.h>
+#include <backends/imgui_impl_opengl3.h>
+#include <backends/imgui_impl_glfw.h>
+
 #include "graphics/shader.hpp"
 #include "graphics/camera.hpp"
 #include "terrain/chunk.hpp"
@@ -30,6 +34,14 @@ int main() {
     fprintf(stderr, "gladLoadGl failed\n");
     return -1;
   }
+
+  IMGUI_CHECKVERSION();
+  ImGui::CreateContext();
+  ImGuiIO& io = ImGui::GetIO();
+  io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+  io.IniFilename = nullptr;
+  ImGui_ImplGlfw_InitForOpenGL(window, true);
+  ImGui_ImplOpenGL3_Init("#version 330");
 
   Shader shader;
   shader.Bind();
@@ -65,8 +77,19 @@ int main() {
     chunk3.Render();
     chunk4.Render();
 
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+    ImGui::ShowDemoWindow();
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
     glfwSwapBuffers(window);
   }
+
+  ImGui_ImplOpenGL3_Shutdown();
+  ImGui_ImplGlfw_Shutdown();
+  ImGui::DestroyContext();
 
   glfwDestroyWindow(window);
   glfwTerminate();

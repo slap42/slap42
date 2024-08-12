@@ -30,14 +30,13 @@ add_executable(${PROJECT_NAME}
 
 target_include_directories(${PROJECT_NAME} PRIVATE src/slap42)
 
-add_subdirectory(src/extern/glfw)
-target_link_libraries(${PROJECT_NAME} PRIVATE glfw)
-
 add_subdirectory(src/extern/glad)
 target_link_libraries(${PROJECT_NAME} PRIVATE glad)
-
+add_subdirectory(src/extern/glfw)
+target_link_libraries(${PROJECT_NAME} PRIVATE glfw)
 add_subdirectory(src/extern/glm)
 target_link_libraries(${PROJECT_NAME} PRIVATE glm)
-
+add_subdirectory(src/extern/imgui)
+target_link_libraries(${PROJECT_NAME} PRIVATE imgui)
 add_subdirectory(src/extern/opensimplex)
 target_link_libraries(${PROJECT_NAME} PRIVATE opensimplex)
