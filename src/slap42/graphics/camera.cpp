@@ -69,6 +69,7 @@ void Camera::Update() {
 }
 
 void Camera::OnResize(int width, int height) {
+  if (width <= 0 || height <= 0) return;
   projection = glm::perspectiveFov(1.22f, (float)width, float(height), 0.1f, 1000.0f);
   CalcViewProjection();
 }
