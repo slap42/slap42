@@ -36,18 +36,22 @@ void Camera::Update() {
   }
 
   // Mouse input
+  double mousex = 0.0, mousey = 0.0;
+  static double mousex_old, mousey_old;
+
   // TODO: move this to an event consumer
   if (glfwGetKey(window, GLFW_KEY_ESCAPE)) {
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
   }
   if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) && !ImGui::GetIO().WantCaptureMouse) {
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwGetCursorPos(window, &mousex, &mousey);
+    mousex_old = mousex;
+    mousey_old = mousey;
   }
 
   if (glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_DISABLED) {
-    double mousex, mousey;
     glfwGetCursorPos(window, &mousex, &mousey);
-    static double mousex_old = mousex, mousey_old = mousey;
     double delta_x = mousex - mousex_old;
     double delta_y = mousey - mousey_old;
     mousex_old = mousex;
