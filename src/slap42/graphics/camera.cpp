@@ -14,7 +14,7 @@ Camera::Camera(GLFWwindow* window, Shader* shader) : window(window), shader(shad
 }
 
 void Camera::Update() {
-  const float kMoveSpeed = 0.05f;
+  const float kMoveSpeed = 0.5f;
   const float kRotationSpeed = 0.04f;
   const float kMouseSensitivity = 0.005f;
 

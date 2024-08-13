@@ -4,8 +4,7 @@
 
 namespace Slap42 {
 
-Chunk::Chunk(int chunkx, int chunkz) {
-  constexpr size_t kChunkSize = 32;
+Chunk::Chunk(int chunkx, int chunkz) : x(chunkx), z(chunkz) {
   constexpr float kChunkSizeF = (float)kChunkSize;
   constexpr size_t kVertexSize = 6;
   constexpr size_t kVertexBufferSize = kChunkSize * kChunkSize * kVertexSize * 4;

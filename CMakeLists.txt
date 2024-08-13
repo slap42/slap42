@@ -20,16 +20,18 @@ set(SLAP42_GRAPHICS_FILES
 )
 source_group("src/graphics" FILES ${SLAP42_GRAPHICS_FILES})
 
-set(SLAP42_TERRAIN_FILES
-  src/slap42/terrain/chunk.hpp
-  src/slap42/terrain/chunk.cpp
+set(SLAP42_LEVEL_FILES
+  src/slap42/level/chunk.hpp
+  src/slap42/level/chunk.cpp
+  src/slap42/level/level.hpp
+  src/slap42/level/level.cpp
 )
-source_group("src/terrain" FILES ${SLAP42_TERRAIN_FILES})
+source_group("src/level" FILES ${SLAP42_LEVEL_FILES})
 
 add_executable(${PROJECT_NAME}
   ${SLAP42_FILES}
   ${SLAP42_GRAPHICS_FILES}
-  ${SLAP42_TERRAIN_FILES}
+  ${SLAP42_LEVEL_FILES}
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE src/slap42)

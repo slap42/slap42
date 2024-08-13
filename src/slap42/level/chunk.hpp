@@ -12,8 +12,16 @@ public:
 public:
   void Render() const;
 
+public:
+  constexpr static size_t kChunkSize = 32;
+
+public:
+  inline int GetX() const { return x; }
+  inline int GetZ() const { return z; }
+
 private:
   Mesh* mesh;
+  int x, z;
 };
 
 }

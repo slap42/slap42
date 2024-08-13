@@ -20,6 +20,9 @@ private:
   void CalcView();
   void CalcViewProjection();
 
+public:
+  inline glm::vec3 GetPosition() const { return position; }
+
 private:
   // Owned stuff
   glm::vec3 position = glm::vec3(0.0f);
