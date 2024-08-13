@@ -13,6 +13,8 @@ set(SLAP42_GRAPHICS_FILES
   src/slap42/graphics/shader.cpp
   src/slap42/graphics/camera.hpp
   src/slap42/graphics/camera.cpp
+  src/slap42/graphics/texture.hpp
+  src/slap42/graphics/texture.cpp
 )
 source_group("src/graphics" FILES ${SLAP42_GRAPHICS_FILES})
 
@@ -30,6 +32,10 @@ add_executable(${PROJECT_NAME}
 
 target_include_directories(${PROJECT_NAME} PRIVATE src/slap42)
 
+if(WIN32)
+  set_target_properties(${PROJECT_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+endif()
+
 add_subdirectory(src/extern/glad)
 target_link_libraries(${PROJECT_NAME} PRIVATE glad)
 add_subdirectory(src/extern/glfw)
@@ -40,3 +46,5 @@ add_subdirectory(src/extern/imgui)
 target_link_libraries(${PROJECT_NAME} PRIVATE imgui)
 add_subdirectory(src/extern/opensimplex)
 target_link_libraries(${PROJECT_NAME} PRIVATE opensimplex)
+add_subdirectory(src/extern/stb)
+target_link_libraries(${PROJECT_NAME} PRIVATE stb)

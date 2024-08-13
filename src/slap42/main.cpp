@@ -8,8 +8,9 @@
 #include <backends/imgui_impl_opengl3.h>
 #include <backends/imgui_impl_glfw.h>
 
-#include "graphics/shader.hpp"
 #include "graphics/camera.hpp"
+#include "graphics/shader.hpp"
+#include "graphics/texture.hpp"
 #include "terrain/chunk.hpp"
 
 int main() {
@@ -17,7 +18,6 @@ int main() {
 
   if (!glfwInit()) {
     fprintf(stderr, "glfwInit failed\n");
-    return -1;
   }
   
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -25,14 +25,12 @@ int main() {
   GLFWwindow* window = glfwCreateWindow(1280, 720, "Test", nullptr, nullptr);
   if (!window) {
     fprintf(stderr, "glfwCreateWindow failed\n");
-    return -1;
   }
 
   glfwMakeContextCurrent(window);
   int version = gladLoadGL(glfwGetProcAddress);
   if (version == 0) {
     fprintf(stderr, "gladLoadGl failed\n");
-    return -1;
   }
 
   IMGUI_CHECKVERSION();
@@ -45,6 +43,8 @@ int main() {
 
   Shader shader;
   shader.Bind();
+
+  Texture grass_texture("res/images/grass.png");
 
   Camera camera(window, &shader);
   glfwSetWindowUserPointer(window, &camera);
@@ -80,7 +80,7 @@ int main() {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
-    ImGui::ShowDemoWindow();
+    // ImGui::ShowDemoWindow();
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 

@@ -21,8 +21,9 @@ const char* frag_src = ""
   "#version 330 core\n"
   "in vec2 v_tex;"
   "out vec4 o_color;"
+  "uniform sampler2D u_texture;"
   "void main() {"
-  "  o_color = vec4(v_tex, 0.5, 1.0);"
+  "  o_color = texture(u_texture, v_tex);"
   "}";
 
 static GLuint CreateShaderModule(GLenum type, const char** code) {
@@ -62,6 +63,7 @@ Shader::Shader() {
   glUseProgram(shader_program);
 
   u_view_projection = glGetUniformLocation(shader_program, "u_view_projection");
+  glUniform1i(glGetUniformLocation(shader_program, "u_texture"), 0);
 }
 
 void Shader::SetViewProjection(const glm::mat4& view_projection) {
