@@ -38,6 +38,8 @@ if(WIN32)
   set_target_properties(${PROJECT_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
 
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
+
 add_subdirectory(src/extern/glad)
 target_link_libraries(${PROJECT_NAME} PRIVATE glad)
 add_subdirectory(src/extern/glfw)

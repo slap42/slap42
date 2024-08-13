@@ -26,7 +26,7 @@
 #include <algorithm>
 #include <cmath>
 
-#if __cplusplus < 201103L
+#if !defined(_WIN32) && __cplusplus < 201103L
   #pragma message("Info: Your compiler does not claim C++11 support. Some features may be unavailable.")
 #else
   #define OSN_USE_CSTDINT
