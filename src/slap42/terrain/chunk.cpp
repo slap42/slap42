@@ -7,7 +7,7 @@ namespace Slap42 {
 Chunk::Chunk(int chunkx, int chunkz) {
   constexpr size_t kChunkSize = 32;
   constexpr float kChunkSizeF = (float)kChunkSize;
-  constexpr size_t kVertexSize = 5;
+  constexpr size_t kVertexSize = 6;
   constexpr size_t kVertexBufferSize = kChunkSize * kChunkSize * kVertexSize * 4;
   constexpr size_t kIndexBufferSize = kChunkSize * kChunkSize * 6;
 
@@ -18,15 +18,18 @@ Chunk::Chunk(int chunkx, int chunkz) {
   float* vertices = new float[kVertexBufferSize];
   unsigned short* indices = new unsigned short[kIndexBufferSize];
 
+  srand(417);
+
   for (size_t z = 0; z < kChunkSize; ++z) {
     for (size_t x = 0; x < kChunkSize; ++x) {
       size_t i = x * kVertexSize * 4 + z * kChunkSize * kVertexSize * 4;
       float xx = (float)(x + chunkx * kChunkSizeF);
       float zz = (float)(z + chunkz * kChunkSizeF);
-      vertices[i +  0] = 0.0f + xx; vertices[i +  1] = noise.eval((0.0f + xx) * kSample, (1.0f + zz) * kSample) * kHeight; vertices[i +  2] = 1.0f + zz; vertices[i +  3] = 0.0f; vertices[i +  4] = 1.0f;
-      vertices[i +  5] = 1.0f + xx; vertices[i +  6] = noise.eval((1.0f + xx) * kSample, (1.0f + zz) * kSample) * kHeight; vertices[i +  7] = 1.0f + zz; vertices[i +  8] = 1.0f; vertices[i +  9] = 1.0f;
-      vertices[i + 10] = 0.0f + xx; vertices[i + 11] = noise.eval((0.0f + xx) * kSample, (0.0f + zz) * kSample) * kHeight; vertices[i + 12] = 0.0f + zz; vertices[i + 13] = 0.0f; vertices[i + 14] = 0.0f;
-      vertices[i + 15] = 1.0f + xx; vertices[i + 16] = noise.eval((1.0f + xx) * kSample, (0.0f + zz) * kSample) * kHeight; vertices[i + 17] = 0.0f + zz; vertices[i + 18] = 1.0f; vertices[i + 19] = 0.0f;
+      float tex = rand() % 4;
+      vertices[i +  0] = 0.0f + xx; vertices[i +  1] = noise.eval((0.0f + xx) * kSample, (1.0f + zz) * kSample) * kHeight; vertices[i +  2] = 1.0f + zz; vertices[i +  3] = 0.0f; vertices[i +  4] = 1.0f; vertices[i +  5] = tex;
+      vertices[i +  6] = 1.0f + xx; vertices[i +  7] = noise.eval((1.0f + xx) * kSample, (1.0f + zz) * kSample) * kHeight; vertices[i +  8] = 1.0f + zz; vertices[i +  9] = 1.0f; vertices[i + 10] = 1.0f; vertices[i + 11] = tex;
+      vertices[i + 12] = 0.0f + xx; vertices[i + 13] = noise.eval((0.0f + xx) * kSample, (0.0f + zz) * kSample) * kHeight; vertices[i + 14] = 0.0f + zz; vertices[i + 15] = 0.0f; vertices[i + 16] = 0.0f; vertices[i + 17] = tex;
+      vertices[i + 18] = 1.0f + xx; vertices[i + 19] = noise.eval((1.0f + xx) * kSample, (0.0f + zz) * kSample) * kHeight; vertices[i + 20] = 0.0f + zz; vertices[i + 21] = 1.0f; vertices[i + 22] = 0.0f; vertices[i + 23] = tex;
 
       size_t j = x * 6 + z * kChunkSize * 6;
       size_t k = x * 4 + z * kChunkSize * 4;

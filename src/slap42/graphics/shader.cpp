@@ -9,8 +9,8 @@ namespace Slap42 {
 const char* vert_src = ""
   "#version 330 core\n"
   "layout (location = 0) in vec3 a_pos;"
-  "layout (location = 1) in vec2 a_tex;"
-  "out vec2 v_tex;"
+  "layout (location = 1) in vec3 a_tex;"
+  "out vec3 v_tex;"
   "uniform mat4 u_view_projection;"
   "void main() {"
   "  v_tex = a_tex;"
@@ -19,11 +19,11 @@ const char* vert_src = ""
 
 const char* frag_src = ""
   "#version 330 core\n"
-  "in vec2 v_tex;"
+  "in vec3 v_tex;"
   "out vec4 o_color;"
-  "uniform sampler2D u_texture;"
+  "uniform sampler2DArray u_texture_array;"
   "void main() {"
-  "  o_color = texture(u_texture, v_tex);"
+  "  o_color = texture(u_texture_array, v_tex);"
   "}";
 
 static GLuint CreateShaderModule(GLenum type, const char** code) {
@@ -63,7 +63,7 @@ Shader::Shader() {
   glUseProgram(shader_program);
 
   u_view_projection = glGetUniformLocation(shader_program, "u_view_projection");
-  glUniform1i(glGetUniformLocation(shader_program, "u_texture"), 0);
+  glUniform1i(glGetUniformLocation(shader_program, "u_texture_array"), 0);
 }
 
 void Shader::SetViewProjection(const glm::mat4& view_projection) {

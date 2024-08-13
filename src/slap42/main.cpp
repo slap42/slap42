@@ -10,7 +10,7 @@
 
 #include "graphics/camera.hpp"
 #include "graphics/shader.hpp"
-#include "graphics/texture.hpp"
+#include "graphics/texture_array.hpp"
 #include "terrain/chunk.hpp"
 
 int main() {
@@ -44,7 +44,14 @@ int main() {
   Shader shader;
   shader.Bind();
 
-  Texture grass_texture("res/images/grass.png");
+  const char* kFileNames[] = {
+    "res/images/dirt.png",
+    "res/images/grass.png",
+    "res/images/patchy_grass.png",
+    "res/images/stone.png",
+  };
+
+  TextureArray textures(kFileNames, sizeof(kFileNames) / sizeof(char*));
 
   Camera camera(window, &shader);
   glfwSetWindowUserPointer(window, &camera);
