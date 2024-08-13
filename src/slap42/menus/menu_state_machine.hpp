@@ -3,16 +3,12 @@
 #include "menu_state.hpp"
 
 namespace Slap42 {
+namespace MenuStateMachine {
 
-class MenuStateMachine {
-public:
-  void Render();
+void Render();
 
-public:
-  inline MenuState GetState() const { return state; };
+void SetState(MenuState state);
+MenuState GetState();
 
-private:
-  MenuState state = MenuState::kHostJoinMenu;
-};
-
+}
 }

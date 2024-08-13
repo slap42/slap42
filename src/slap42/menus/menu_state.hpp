@@ -6,6 +6,7 @@ enum class MenuState {
   kNone,
   kHostJoinMenu,
   kJoinMenu,
+  kJoinErrorMenu,
 };
 
 }

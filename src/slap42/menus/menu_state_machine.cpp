@@ -2,22 +2,40 @@
 
 #include "host_join_menu.hpp"
 #include "join_menu.hpp"
+#include "join_error_menu.hpp"
 
 namespace Slap42 {
+namespace MenuStateMachine {
 
-void MenuStateMachine::Render() {
+MenuState state = MenuState::kHostJoinMenu;
+
+void SetState(MenuState s) {
+  state = s;
+}
+
+MenuState GetState() {
+  return state;
+}
+
+void Render() {
   switch (state) {
   case MenuState::kNone:
     return;
 
   case MenuState::kHostJoinMenu:
-    HostJoinMenu::Render(&state);
+    HostJoinMenu::Render();
     break;
 
   case MenuState::kJoinMenu:
-    JoinMenu::Render(&state);
+    JoinMenu::Render();
     break;
+
+  case MenuState::kJoinErrorMenu:
+    JoinErrorMenu::Render();
+    break;
+
   }
 }
 
+}
 }

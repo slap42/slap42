@@ -36,14 +36,25 @@ set(SLAP42_MENUS_FILES
   src/slap42/menus/host_join_menu.cpp
   src/slap42/menus/join_menu.hpp
   src/slap42/menus/join_menu.cpp
+  src/slap42/menus/join_error_menu.hpp
+  src/slap42/menus/join_error_menu.cpp
 )
 source_group("src/menus" FILES ${SLAP42_MENUS_FILES})
+
+set(SLAP42_NETWORKING_FILES
+  src/slap42/networking/server.hpp
+  src/slap42/networking/server.cpp
+  src/slap42/networking/client.hpp
+  src/slap42/networking/client.cpp
+)
+source_group("src/networking" FILES ${SLAP42_NETWORKING_FILES})
 
 add_executable(${PROJECT_NAME}
   ${SLAP42_FILES}
   ${SLAP42_GRAPHICS_FILES}
   ${SLAP42_LEVEL_FILES}
   ${SLAP42_MENUS_FILES}
+  ${SLAP42_NETWORKING_FILES}
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE src/slap42)
@@ -54,6 +65,9 @@ endif()
 
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 
+add_subdirectory(src/extern/enet)
+target_link_libraries(${PROJECT_NAME} PRIVATE enet)
+target_include_directories(${PROJECT_NAME} PRIVATE src/extern/enet/include)
 add_subdirectory(src/extern/glad)
 target_link_libraries(${PROJECT_NAME} PRIVATE glad)
 add_subdirectory(src/extern/glfw)

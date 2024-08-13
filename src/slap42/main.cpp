@@ -1,5 +1,7 @@
 #include <cstdio>
 
+#include <enet/enet.h>
+
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
@@ -11,9 +13,16 @@
 #include "graphics/camera.hpp"
 #include "level/level.hpp"
 #include "menus/menu_state_machine.hpp"
+#include "networking/client.hpp"
+#include "networking/server.hpp"
 
 int main() {
   using namespace Slap42;
+
+  atexit(enet_deinitialize);
+  if (enet_initialize() != 0) {
+    fprintf(stderr, "enet_initialize failed\n");
+  }
 
   if (!glfwInit()) {
     fprintf(stderr, "glfwInit failed\n");
@@ -56,12 +65,11 @@ int main() {
   glEnable(GL_CULL_FACE);
   glClearColor(0.2, 0.4, 0.6, 1.0);
 
-  MenuStateMachine menu_state;
-
   while (!glfwWindowShouldClose(window)) {
+    ClientUpdate();
     glfwPollEvents();
 
-    if (menu_state.GetState() == MenuState::kNone) {
+    if (MenuStateMachine::GetState() == MenuState::kNone) {
       camera.Update();
       level.Update(camera.GetPosition());
     }
@@ -74,12 +82,15 @@ int main() {
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
     // ImGui::ShowDemoWindow();
-    menu_state.Render();
+    MenuStateMachine::Render();
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
     glfwSwapBuffers(window);
   }
+
+  ClientDisconnect();
+  StopServer();
 
   ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplGlfw_Shutdown();
