@@ -45,7 +45,6 @@ void Level::Update(const glm::vec3& player_pos) {
       if (chunks.find(hash) == chunks.end()) {
         Chunk* chunk = new Chunk(x, z);
         chunks.emplace(hash, chunk);
-        printf("loaded a chunk at (%d, %d)\n", x, z);
         goto break_loop;
       }
 

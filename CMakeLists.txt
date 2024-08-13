@@ -28,10 +28,22 @@ set(SLAP42_LEVEL_FILES
 )
 source_group("src/level" FILES ${SLAP42_LEVEL_FILES})
 
+set(SLAP42_MENUS_FILES
+  src/slap42/menus/menu_state.hpp
+  src/slap42/menus/menu_state_machine.hpp
+  src/slap42/menus/menu_state_machine.cpp
+  src/slap42/menus/host_join_menu.hpp
+  src/slap42/menus/host_join_menu.cpp
+  src/slap42/menus/join_menu.hpp
+  src/slap42/menus/join_menu.cpp
+)
+source_group("src/menus" FILES ${SLAP42_MENUS_FILES})
+
 add_executable(${PROJECT_NAME}
   ${SLAP42_FILES}
   ${SLAP42_GRAPHICS_FILES}
   ${SLAP42_LEVEL_FILES}
+  ${SLAP42_MENUS_FILES}
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE src/slap42)

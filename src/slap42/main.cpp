@@ -10,6 +10,7 @@
 
 #include "graphics/camera.hpp"
 #include "level/level.hpp"
+#include "menus/menu_state_machine.hpp"
 
 int main() {
   using namespace Slap42;
@@ -55,10 +56,15 @@ int main() {
   glEnable(GL_CULL_FACE);
   glClearColor(0.2, 0.4, 0.6, 1.0);
 
+  MenuStateMachine menu_state;
+
   while (!glfwWindowShouldClose(window)) {
     glfwPollEvents();
-    camera.Update();
-    level.Update(camera.GetPosition());
+
+    if (menu_state.GetState() == MenuState::kNone) {
+      camera.Update();
+      level.Update(camera.GetPosition());
+    }
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -68,6 +74,7 @@ int main() {
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
     // ImGui::ShowDemoWindow();
+    menu_state.Render();
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
