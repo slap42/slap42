@@ -16,9 +16,9 @@ void Render() {
 
   if (ImGui::Button("Host Game")) {
     MenuStateMachine::SetState(MenuState::kNone);
-    StopServer();
-    StartServer();
-    ClientConnect("127.0.0.1", 6969);
+    Server::StopServer();
+    Server::StartServer();
+    Client::ClientConnect("127.0.0.1", 6969);
   }
 
   ImGui::SameLine();

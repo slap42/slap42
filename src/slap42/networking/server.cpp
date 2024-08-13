@@ -3,8 +3,10 @@
 #include <cstdio>
 #include <thread>
 #include <enet/enet.h>
+#include "hud_panels/server_panel.hpp"
 
 namespace Slap42 {
+namespace Server {
 
 static bool server_running = false;
 static std::thread* server_thread;
@@ -25,16 +27,27 @@ static void RunServer() {
     while (enet_host_service(server, &evt, 0) > 0) {
       
       switch (evt.type) {
-        case ENET_EVENT_TYPE_CONNECT:
+        case ENET_EVENT_TYPE_CONNECT: {
           printf("[SERVER] A client has connected: %x:%u\n", evt.peer->address.host, evt.peer->address.port);
+          char buf[128] { };
+          sprintf(buf, "%x:%u", evt.peer->address.host, evt.peer->address.port);
+          ServerPanel::OnPlayerJoin(buf);
           break;
-        case ENET_EVENT_TYPE_DISCONNECT:
+        }
+
+        case ENET_EVENT_TYPE_DISCONNECT: {
           printf("[SERVER] A client has disconnected: %x:%u\n", evt.peer->address.host, evt.peer->address.port);
+          char buf[128] { };
+          sprintf(buf, "%x:%u", evt.peer->address.host, evt.peer->address.port);
+          ServerPanel::OnPlayerLeave(buf);
           break;
-        case ENET_EVENT_TYPE_RECEIVE:
+        }
+
+        case ENET_EVENT_TYPE_RECEIVE: {
           printf("[SERVER] Recieved packet: \n\tPeer: %s\n\tLength: %zu\n\tData: %s\n\tChannel: %u\n",
             (char*)evt.peer->data, evt.packet->dataLength, (char*)evt.packet->data, evt.channelID);
           break;
+        }
       }
     }
   }
@@ -57,4 +70,10 @@ void StopServer() {
   delete server_thread;
 }
 
+
+bool IsServerRunning() {
+  return server_running;
+}
+
+}
 }

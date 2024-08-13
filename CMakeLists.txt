@@ -28,6 +28,14 @@ set(SLAP42_LEVEL_FILES
 )
 source_group("src/level" FILES ${SLAP42_LEVEL_FILES})
 
+set(SLAP42_NETWORKING_FILES
+  src/slap42/networking/server.hpp
+  src/slap42/networking/server.cpp
+  src/slap42/networking/client.hpp
+  src/slap42/networking/client.cpp
+)
+source_group("src/networking" FILES ${SLAP42_NETWORKING_FILES})
+
 set(SLAP42_MENUS_FILES
   src/slap42/menus/menu_state.hpp
   src/slap42/menus/menu_state_machine.hpp
@@ -41,20 +49,19 @@ set(SLAP42_MENUS_FILES
 )
 source_group("src/menus" FILES ${SLAP42_MENUS_FILES})
 
-set(SLAP42_NETWORKING_FILES
-  src/slap42/networking/server.hpp
-  src/slap42/networking/server.cpp
-  src/slap42/networking/client.hpp
-  src/slap42/networking/client.cpp
+set(SLAP42_HUD_PANELS_FILES
+  src/slap42/hud_panels/server_panel.hpp
+  src/slap42/hud_panels/server_panel.cpp
 )
-source_group("src/networking" FILES ${SLAP42_NETWORKING_FILES})
+source_group("src/hud_panels" FILES ${SLAP42_HUD_PANELS_FILES})
 
 add_executable(${PROJECT_NAME}
   ${SLAP42_FILES}
   ${SLAP42_GRAPHICS_FILES}
   ${SLAP42_LEVEL_FILES}
-  ${SLAP42_MENUS_FILES}
   ${SLAP42_NETWORKING_FILES}
+  ${SLAP42_MENUS_FILES}
+  ${SLAP42_HUD_PANELS_FILES}
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE src/slap42)

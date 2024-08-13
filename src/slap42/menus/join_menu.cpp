@@ -20,7 +20,7 @@ void Render() {
   ImGui::InputText("Server URL", buf, sizeof(buf));
 
   if (ImGui::Button("Connect")) {
-    if (ClientConnect(buf, 6969)) {
+    if (Client::ClientConnect(buf, 6969)) {
       MenuStateMachine::SetState(MenuState::kNone);
     }
     else {

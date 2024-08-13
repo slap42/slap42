@@ -11,6 +11,7 @@
 #include <backends/imgui_impl_glfw.h>
 
 #include "graphics/camera.hpp"
+#include "hud_panels/server_panel.hpp"
 #include "level/level.hpp"
 #include "menus/menu_state_machine.hpp"
 #include "networking/client.hpp"
@@ -66,7 +67,7 @@ int main() {
   glClearColor(0.2, 0.4, 0.6, 1.0);
 
   while (!glfwWindowShouldClose(window)) {
-    ClientUpdate();
+    Client::ClientUpdate();
     glfwPollEvents();
 
     if (MenuStateMachine::GetState() == MenuState::kNone) {
@@ -83,14 +84,19 @@ int main() {
     ImGui::NewFrame();
     // ImGui::ShowDemoWindow();
     MenuStateMachine::Render();
+    
+    if (MenuStateMachine::GetState() == MenuState::kNone) {
+      ServerPanel::Render();
+    }
+
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
     glfwSwapBuffers(window);
   }
 
-  ClientDisconnect();
-  StopServer();
+  Client::ClientDisconnect();
+  Server::StopServer();
 
   ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplGlfw_Shutdown();

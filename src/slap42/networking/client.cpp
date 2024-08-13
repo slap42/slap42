@@ -5,6 +5,7 @@
 #include "menus/join_error_menu.hpp"
 
 namespace Slap42 {
+namespace Client {
 
 static ENetHost* client = nullptr;
 static ENetPeer* peer = nullptr;
@@ -83,4 +84,5 @@ void ClientUpdate() {
   }
 }
 
+}
 }
