@@ -3,6 +3,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/rotate_vector.hpp>
+#include <imgui.h>
 
 namespace Slap42 {
 
@@ -13,8 +14,9 @@ Camera::Camera(GLFWwindow* window, Shader* shader) : window(window), shader(shad
 }
 
 void Camera::Update() {
-  const float kMoveSpeed = 0.02f;
+  const float kMoveSpeed = 0.05f;
   const float kRotationSpeed = 0.04f;
+  const float kMouseSensitivity = 0.005f;
 
   glm::vec3 old_position = position;
   glm::vec3 old_rotation = rotation;
@@ -28,14 +30,39 @@ void Camera::Update() {
   }
   if (glfwGetKey(window, GLFW_KEY_UP)) {
     rotation.x -= kRotationSpeed;
-    if (rotation.x < -1.57f) rotation.x = -1.57f;
   }
   if (glfwGetKey(window, GLFW_KEY_DOWN)) {
     rotation.x += kRotationSpeed;
-    if (rotation.x > 1.57f) rotation.x = 1.57f;
   }
 
-  // Position
+  // Mouse input
+  // TODO: move this to an event consumer
+  if (glfwGetKey(window, GLFW_KEY_ESCAPE)) {
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+  }
+  if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) && !ImGui::GetIO().WantCaptureMouse) {
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+  }
+
+  if (glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_DISABLED) {
+    double mousex, mousey;
+    glfwGetCursorPos(window, &mousex, &mousey);
+    static double mousex_old = mousex, mousey_old = mousey;
+    double delta_x = mousex - mousex_old;
+    double delta_y = mousey - mousey_old;
+    mousex_old = mousex;
+    mousey_old = mousey;
+
+    rotation.y += (float)delta_x * kMouseSensitivity;
+    rotation.x += (float)delta_y * kMouseSensitivity;
+  }
+
+  if (rotation.x != old_rotation.x) {
+    if (rotation.x < -1.57f) rotation.x = -1.57f;
+    if (rotation.x >  1.57f) rotation.x =  1.57f;
+  }
+
+  // Movement
   glm::vec3 dir = glm::vec3(0.0f);
 
   if (glfwGetKey(window, GLFW_KEY_W) && !glfwGetKey(window, GLFW_KEY_S)) {
