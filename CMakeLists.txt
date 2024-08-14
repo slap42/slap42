@@ -45,6 +45,7 @@ set(SLAP42_LEVEL_FILES
 source_group("src/level" FILES ${SLAP42_LEVEL_FILES})
 
 set(SLAP42_NETWORKING_FILES
+  src/slap42/networking/message_types.hpp
   src/slap42/networking/server.hpp
   src/slap42/networking/server.cpp
   src/slap42/networking/client.hpp

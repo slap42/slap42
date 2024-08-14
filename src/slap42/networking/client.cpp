@@ -2,7 +2,9 @@
 
 #include <cstdio>
 #include <enet/enet.h>
+#include <glm/gtc/type_ptr.hpp>
 #include "menus/join_error_menu.hpp"
+#include "networking/message_types.hpp"
 
 namespace Slap42 {
 namespace Client {
@@ -70,7 +72,7 @@ void ClientDisconnect() {
   void(0);
 }
 
-void ClientUpdate() {
+void ClientPollMessages() {
   if (!peer) return;
 
   ENetEvent evt;
@@ -82,6 +84,19 @@ void ClientUpdate() {
         break;
     }
   }
+}
+
+void ClientSendPositionUpdate(const glm::vec3& pos, const glm::vec2& rot) {
+  // TODO: Use protocol buffers (or something)
+
+  char buf[sizeof(MessageType) + sizeof(glm::vec3) + sizeof(glm::vec2) + 1]{};
+  MessageType type = MessageType_PositionUpdate;
+  std::memcpy(buf, &type, sizeof(MessageType));
+  std::memcpy(buf + sizeof(MessageType), glm::value_ptr(pos), sizeof(glm::vec3));
+  std::memcpy(buf + sizeof(MessageType) + sizeof(glm::vec3), glm::value_ptr(rot), sizeof(glm::vec2));
+
+  ENetPacket* packet = enet_packet_create(buf, sizeof(buf), ENET_PACKET_FLAG_RELIABLE);
+  enet_peer_send(peer, 0, packet);
 }
 
 }

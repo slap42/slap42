@@ -104,7 +104,7 @@ int main() {
   glClearColor(0.2, 0.4, 0.6, 1.0);
 
   while (!glfwWindowShouldClose(window)) {
-    Client::ClientUpdate();
+    Client::ClientPollMessages();
     glfwPollEvents();
 
     if (MenuStateMachine::GetState() == MenuState::kNone) {

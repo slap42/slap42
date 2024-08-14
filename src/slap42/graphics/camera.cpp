@@ -4,6 +4,7 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/rotate_vector.hpp>
 #include <imgui.h>
+#include "networking/client.hpp"
 
 namespace Slap42 {
 
@@ -20,7 +21,7 @@ void Camera::Update() {
   const float kMouseSensitivity = 0.005f;
 
   glm::vec3 old_position = position;
-  glm::vec3 old_rotation = rotation;
+  glm::vec2 old_rotation = rotation;
 
   // Rotation
   if (glfwGetKey(window, GLFW_KEY_LEFT)) {
@@ -97,6 +98,7 @@ void Camera::Update() {
   
   if (position != old_position || rotation != old_rotation) {
     CalcView();
+    Client::ClientSendPositionUpdate(position, rotation);
   }
 }
 
