@@ -11,6 +11,7 @@
 #include <backends/imgui_impl_glfw.h>
 
 #include "graphics/camera.hpp"
+#include "graphics/meshes/entity_mesh.hpp"
 #include "graphics/shaders/entity_shader.hpp"
 #include "hud_panels/server_panel.hpp"
 #include "level/level.hpp"
@@ -60,7 +61,33 @@ int main() {
 
   EntityShader entity_shader;
 
-  Camera camera(window, level.GetShader());
+  float vertices[] = {
+    -1.0f, -1.0f, -1.0f, 0.5f, 0.2f,
+     1.0f, -1.0f, -1.0f, 0.5f, 0.2f,
+     1.0f,  1.0f, -1.0f, 0.5f, 0.2f,
+    -1.0f,  1.0f, -1.0f, 0.5f, 0.2f,
+    -1.0f, -1.0f,  1.0f, 0.0f, 0.0f,
+     1.0f, -1.0f,  1.0f, 1.0f, 0.0f,
+     1.0f,  1.0f,  1.0f, 1.0f, 1.0f,
+    -1.0f,  1.0f,  1.0f, 0.0f, 1.0f,
+  };
+  unsigned short indices[] = {
+    0, 2, 1,
+    0, 3, 2,
+    4, 5, 6,
+    4, 6, 7,
+    2, 3, 6,
+    3, 7, 6,
+    0, 1, 4,
+    1, 5, 4,
+    1, 2, 5,
+    5, 2, 6,
+    0, 4, 3,
+    4, 7, 3,
+  };
+  EntityMesh entity_mesh(vertices, sizeof(vertices), indices, sizeof(indices));
+
+  Camera camera(window, &entity_shader, level.GetShader());
   glfwSetWindowUserPointer(window, &camera);
   auto on_resize = [](GLFWwindow* window, int w, int h) {
     int width, height;
@@ -88,6 +115,9 @@ int main() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     level.Render();
+
+    entity_shader.Bind();
+    entity_mesh.Render();
 
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();

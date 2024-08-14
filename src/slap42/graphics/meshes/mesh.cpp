@@ -4,17 +4,17 @@
 
 namespace Slap42 {
 
-Mesh::Mesh(float* vertices, int vertex_count, unsigned short* indices, int index_count) : index_count(index_count) { 
+Mesh::Mesh(float* vertices, int vertices_size_bytes, unsigned short* indices, int indices_size_bytes) : index_count(indices_size_bytes / sizeof(unsigned short)) { 
   glGenVertexArrays(1, &vao);
   glGenBuffers(1, &vbo);
   glGenBuffers(1, &ibo);
   glBindVertexArray(vao);
 
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  glBufferData(GL_ARRAY_BUFFER, vertex_count, vertices, GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, vertices_size_bytes, vertices, GL_STATIC_DRAW);
 
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_count, indices,  GL_STATIC_DRAW);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices_size_bytes, indices,  GL_STATIC_DRAW);
 }
 
 Mesh::~Mesh() {

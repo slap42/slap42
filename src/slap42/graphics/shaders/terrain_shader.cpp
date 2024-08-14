@@ -1,6 +1,5 @@
 #include "terrain_shader.hpp"
 
-#include <cstdio>
 #include <glad/gl.h>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -32,6 +31,7 @@ TerrainShader::TerrainShader() : Shader(&vert_src, &frag_src) {
 }
 
 void TerrainShader::SetViewProjection(const glm::mat4& view_projection) {
+  Bind();
   glUniformMatrix4fv(u_view_projection, 1, GL_FALSE, glm::value_ptr(view_projection));
 }
 

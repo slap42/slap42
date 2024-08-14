@@ -4,7 +4,6 @@ namespace Slap42 {
 
 Level::Level() {
   terrain_shader = new TerrainShader();
-  terrain_shader->Bind();
 
   const char* kFileNames[] = {
     "res/images/dirt.png",

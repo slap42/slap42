@@ -7,8 +7,9 @@
 
 namespace Slap42 {
 
-Camera::Camera(GLFWwindow* window, TerrainShader* terrain_shader) : window(window), terrain_shader(terrain_shader) {
-  position = glm::vec3(0.0f, -2.0f, 0.0f);
+Camera::Camera(GLFWwindow* window, EntityShader* entity_shader, TerrainShader* terrain_shader)
+    : window(window), entity_shader(entity_shader), terrain_shader(terrain_shader) {
+  position = glm::vec3(0.0f, 0.0f, -2.0f);
   CalcView();
   OnResize(1280, 720);
 }
@@ -117,8 +118,8 @@ void Camera::CalcView() {
 
 void Camera::CalcViewProjection() {
   glm::mat4 view_projection = projection * view;
-  terrain_shader->Bind();
   terrain_shader->SetViewProjection(view_projection);
+  entity_shader->SetViewProjection(view_projection);
 }
 
 }

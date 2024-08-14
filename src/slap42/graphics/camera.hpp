@@ -2,13 +2,14 @@
 
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
+#include "shaders/entity_shader.hpp"
 #include "shaders/terrain_shader.hpp"
 
 namespace Slap42 {
 
 class Camera {
 public:
-  Camera(GLFWwindow* window, TerrainShader* terrain_shader);
+  Camera(GLFWwindow* window, EntityShader* entity_shader, TerrainShader* terrain_shader);
 
 public:
   void Update();
@@ -33,6 +34,7 @@ private:
 
   // Non-owned pointers
   GLFWwindow* window;
+  EntityShader* entity_shader;
   TerrainShader* terrain_shader;
 };
 
