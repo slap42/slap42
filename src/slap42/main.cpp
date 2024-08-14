@@ -11,6 +11,7 @@
 #include <backends/imgui_impl_glfw.h>
 
 #include "graphics/camera.hpp"
+#include "graphics/shaders/entity_shader.hpp"
 #include "hud_panels/server_panel.hpp"
 #include "level/level.hpp"
 #include "menus/menu_state_machine.hpp"
@@ -56,6 +57,8 @@ int main() {
   ImGui_ImplOpenGL3_Init("#version 330");
 
   Level level;
+
+  EntityShader entity_shader;
 
   Camera camera(window, level.GetShader());
   glfwSetWindowUserPointer(window, &camera);

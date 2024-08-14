@@ -7,10 +7,6 @@ set(SLAP42_FILES
 source_group("src" FILES ${SLAP42_FILES})
 
 set(SLAP42_GRAPHICS_FILES
-  src/slap42/graphics/mesh.hpp
-  src/slap42/graphics/mesh.cpp
-  src/slap42/graphics/shader.hpp
-  src/slap42/graphics/shader.cpp
   src/slap42/graphics/camera.hpp
   src/slap42/graphics/camera.cpp
   src/slap42/graphics/texture.hpp
@@ -19,6 +15,26 @@ set(SLAP42_GRAPHICS_FILES
   src/slap42/graphics/texture_array.cpp
 )
 source_group("src/graphics" FILES ${SLAP42_GRAPHICS_FILES})
+
+set(SLAP42_GRAPHICS_MESHES_FILES
+  src/slap42/graphics/meshes/mesh.hpp
+  src/slap42/graphics/meshes/mesh.cpp
+  src/slap42/graphics/meshes/entity_mesh.hpp
+  src/slap42/graphics/meshes/entity_mesh.cpp
+  src/slap42/graphics/meshes/terrain_mesh.hpp
+  src/slap42/graphics/meshes/terrain_mesh.cpp
+)
+source_group("src/graphics/meshes" FILES ${SLAP42_GRAPHICS_MESHES_FILES})
+
+set(SLAP42_GRAPHICS_SHADERS_FILES
+  src/slap42/graphics/shaders/shader.hpp
+  src/slap42/graphics/shaders/shader.cpp
+  src/slap42/graphics/shaders/entity_shader.hpp
+  src/slap42/graphics/shaders/entity_shader.cpp
+  src/slap42/graphics/shaders/terrain_shader.hpp
+  src/slap42/graphics/shaders/terrain_shader.cpp
+)
+source_group("src/graphics/shaders" FILES ${SLAP42_GRAPHICS_SHADERS_FILES})
 
 set(SLAP42_LEVEL_FILES
   src/slap42/level/chunk.hpp
@@ -58,6 +74,8 @@ source_group("src/hud_panels" FILES ${SLAP42_HUD_PANELS_FILES})
 add_executable(${PROJECT_NAME}
   ${SLAP42_FILES}
   ${SLAP42_GRAPHICS_FILES}
+  ${SLAP42_GRAPHICS_MESHES_FILES}
+  ${SLAP42_GRAPHICS_SHADERS_FILES}
   ${SLAP42_LEVEL_FILES}
   ${SLAP42_NETWORKING_FILES}
   ${SLAP42_MENUS_FILES}

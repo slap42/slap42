@@ -37,7 +37,7 @@ Chunk::Chunk(int chunkx, int chunkz) : x(chunkx), z(chunkz) {
     }
   }
 
-  mesh = new Mesh(vertices, kVertexBufferSize * sizeof(float), indices, kIndexBufferSize * sizeof(unsigned short));
+  mesh = new TerrainMesh(vertices, kVertexBufferSize * sizeof(float), indices, kIndexBufferSize * sizeof(unsigned short));
 
   delete[] vertices;
   delete[] indices;

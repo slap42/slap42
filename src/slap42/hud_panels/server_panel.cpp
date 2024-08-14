@@ -15,7 +15,7 @@ static std::mutex connected_players_mutex;
 void Render() {
   if (!Server::IsServerRunning()) return;
 
-  static bool open = true;
+  static bool open = false;
   if (ImGui::IsKeyPressed(ImGuiKey_F2)) {
     open = !open;
   }

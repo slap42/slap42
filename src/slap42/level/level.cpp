@@ -3,8 +3,8 @@
 namespace Slap42 {
 
 Level::Level() {
-  shader = new Shader();
-  shader->Bind();
+  terrain_shader = new TerrainShader();
+  terrain_shader->Bind();
 
   const char* kFileNames[] = {
     "res/images/dirt.png",
@@ -21,7 +21,7 @@ Level::~Level() {
   }
 
   delete textures;
-  delete shader;
+  delete terrain_shader;
 }
 
 static uint64_t FakeHash(int x, int z) {
@@ -68,7 +68,7 @@ void Level::Update(const glm::vec3& player_pos) {
 }
 
 void Level::Render() const {
-  shader->Bind();
+  terrain_shader->Bind();
   textures->Bind();
 
   for (const auto& chunk : chunks) {

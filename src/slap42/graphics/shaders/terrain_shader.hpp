@@ -1,22 +1,18 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include "shader.hpp"
 
 namespace Slap42 {
 
-class Shader {
+class TerrainShader : public Shader {
 public:
-  Shader();
-  ~Shader();
-
-public:
-  void Bind() const;
+  TerrainShader();
 
 public:
   void SetViewProjection(const glm::mat4& view_projection);
 
 private:
-  unsigned int shader_program;
   unsigned int u_view_projection;
 };
 

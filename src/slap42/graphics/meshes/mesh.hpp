@@ -5,7 +5,7 @@ namespace Slap42 {
 class Mesh {
 public:
   Mesh(float* vertices, int vertex_count, unsigned short* indices, int index_count);
-  ~Mesh();
+  virtual ~Mesh();
 
 public:
   void Render() const;

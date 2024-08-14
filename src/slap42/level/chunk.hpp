@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cstddef>
-#include "graphics/mesh.hpp"
+#include "graphics/meshes/terrain_mesh.hpp"
 
 namespace Slap42 {
 
@@ -21,7 +21,7 @@ public:
   inline int GetZ() const { return z; }
 
 private:
-  Mesh* mesh;
+  TerrainMesh* mesh;
   int x, z;
 };
 
