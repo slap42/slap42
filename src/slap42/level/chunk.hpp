@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstddef>
 #include "graphics/mesh.hpp"
 
 namespace Slap42 {

@@ -20,5 +20,6 @@ add_library(imgui
   imgui/backends/imgui_impl_opengl3.cpp
 )
 
+target_compile_features(imgui PRIVATE cxx_std_17)
 target_include_directories(imgui PUBLIC imgui)
 target_link_libraries(imgui PRIVATE glfw)
