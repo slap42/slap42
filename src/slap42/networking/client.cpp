@@ -75,6 +75,8 @@ void ClientDisconnect() {
       case ENET_EVENT_TYPE_DISCONNECT:
         printf("[CLIENT] Disconnect succeeded\n");
         goto break_loop;
+      default:
+        break;
     }
   }
   break_loop:
@@ -87,7 +89,7 @@ void ClientPollMessages() {
   ENetEvent evt;
   while (enet_host_service(client, &evt, 0) > 0) {
     switch (evt.type) {
-      case ENET_EVENT_TYPE_RECEIVE:
+      case ENET_EVENT_TYPE_RECEIVE: {
         bytepack::binary_stream stream(bytepack::buffer_view(evt.packet->data, evt.packet->dataLength));
         MessageType type;
         stream.read(type);
@@ -101,7 +103,7 @@ void ClientPollMessages() {
             peer_data.at(FakeHash(msg.host, msg.port))->rot = msg.rot;
             break;
           }
-        
+            
           case MessageType::kOnPlayerJoin: {
             OnPlayerJoinMessage msg { };
             msg.deserialize(stream);
@@ -109,7 +111,7 @@ void ClientPollMessages() {
             peer_data.emplace(FakeHash(msg.host, msg.port), std::make_shared<PeerData>());
             break;
           }
-        
+            
           case MessageType::kOnPlayerLeave: {
             OnPlayerLeaveMessage msg { };
             msg.deserialize(stream);
@@ -117,7 +119,14 @@ void ClientPollMessages() {
             peer_data.erase(FakeHash(msg.host, msg.port));
             break;
           }
+            
+          default:
+            printf("[CLIENT] Unhandled message type recieved\n");
+            break;
         }
+      }
+      default:
+        break;
     }
   }
 }

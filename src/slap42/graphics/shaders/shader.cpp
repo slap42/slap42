@@ -28,6 +28,7 @@ Shader::Shader(const char** vert_src, const char** frag_src) {
   glAttachShader(shader_program, vert_shader);
   glAttachShader(shader_program, frag_shader);
   glLinkProgram(shader_program);
+  glUseProgram(shader_program);
 
   int success;
   char info_log[512] { };
@@ -39,7 +40,6 @@ Shader::Shader(const char** vert_src, const char** frag_src) {
 
   glDeleteShader(vert_shader);
   glDeleteShader(frag_shader);
-  glUseProgram(shader_program);
 }
 
 Shader::~Shader() {

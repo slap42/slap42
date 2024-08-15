@@ -28,7 +28,6 @@ static const char* frag_src = ""
 EntityShader::EntityShader() : Shader(&vert_src, &frag_src) {
   u_transform = glGetUniformLocation(shader_program, "u_transform");
   u_view_projection = glGetUniformLocation(shader_program, "u_view_projection");
-  glUniform1i(glGetUniformLocation(shader_program, "u_texture_array"), 0);
 }
 
 void EntityShader::SetTransform(const glm::mat4& transform) {

@@ -35,7 +35,7 @@ static void RunServer() {
           printf("[SERVER] A client has connected: %x:%u\n", evt.peer->address.host, evt.peer->address.port);
 
           char buf[128] { };
-          sprintf(buf, "%x:%u", evt.peer->address.host, evt.peer->address.port);
+          snprintf(buf, sizeof(buf), "%x:%u", evt.peer->address.host, evt.peer->address.port);
           ServerPanel::OnPlayerJoin(buf);
 
           OnPlayerJoinMessage msg { evt.peer->address.host, evt.peer->address.port };
@@ -60,7 +60,7 @@ static void RunServer() {
           printf("[SERVER] A client has disconnected: %x:%u\n", evt.peer->address.host, evt.peer->address.port);
 
           char buf[128] { };
-          sprintf(buf, "%x:%u", evt.peer->address.host, evt.peer->address.port);
+          snprintf(buf, sizeof(buf), "%x:%u", evt.peer->address.host, evt.peer->address.port);
           ServerPanel::OnPlayerLeave(buf);
 
           OnPlayerLeaveMessage msg { evt.peer->address.host, evt.peer->address.port };
@@ -83,9 +83,14 @@ static void RunServer() {
               BroadcastSerializedMessage(server, msg, evt.peer);
               break;
             }
+            
+            default:
+              break;
           }
-
         }
+          
+        case ENET_EVENT_TYPE_NONE:
+          break;
       }
     }
   }
