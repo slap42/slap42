@@ -87,15 +87,12 @@ void ClientPollMessages() {
 }
 
 void ClientSendPositionUpdate(const glm::vec3& pos, const glm::vec2& rot) {
-  // TODO: Use protocol buffers (or something)
-
-  char buf[sizeof(MessageType) + sizeof(glm::vec3) + sizeof(glm::vec2) + 1]{};
-  MessageType type = MessageType_PositionUpdate;
-  std::memcpy(buf, &type, sizeof(MessageType));
-  std::memcpy(buf + sizeof(MessageType), glm::value_ptr(pos), sizeof(glm::vec3));
-  std::memcpy(buf + sizeof(MessageType) + sizeof(glm::vec3), glm::value_ptr(rot), sizeof(glm::vec2));
-
-  ENetPacket* packet = enet_packet_create(buf, sizeof(buf), ENET_PACKET_FLAG_RELIABLE);
+  PositionUpdateMessage pm { pos, rot };
+  bytepack::binary_stream serialization_stream(sizeof(PositionUpdateMessage) + 1);
+  serialization_stream.write(MessageType::kPositionUpdate);
+  pm.serialize(serialization_stream);
+  bytepack::buffer_view buffer = serialization_stream.data();
+  ENetPacket* packet = enet_packet_create(buffer.as<std::uint8_t>(), buffer.size(), ENET_PACKET_FLAG_RELIABLE);
   enet_peer_send(peer, 0, packet);
 }
 

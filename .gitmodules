@@ -10,3 +10,6 @@
 [submodule "src/extern/enet"]
 	path = src/extern/enet
 	url = https://github.com/lsalzman/enet
+[submodule "src/extern/bytepack"]
+	path = src/extern/bytepack
+	url = https://github.com/farukeryilmaz/bytepack

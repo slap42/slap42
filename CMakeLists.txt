@@ -92,8 +92,10 @@ if(WIN32)
   set_target_properties(${PROJECT_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
 
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
 
+add_subdirectory(src/extern/bytepack)
+target_link_libraries(${PROJECT_NAME} PRIVATE bytepack)
 add_subdirectory(src/extern/enet)
 target_link_libraries(${PROJECT_NAME} PRIVATE enet)
 target_include_directories(${PROJECT_NAME} PRIVATE src/extern/enet/include)

@@ -51,16 +51,15 @@ static void RunServer() {
         }
 
         case ENET_EVENT_TYPE_RECEIVE: {
-          MessageType type = MessageType_Null;
-          std::memcpy(&type, evt.packet->data, sizeof(MessageType));
+          bytepack::binary_stream stream(bytepack::buffer_view(evt.packet->data, evt.packet->dataLength));
+          MessageType type;
+          stream.read(type);
 
           switch (type) {
-            case MessageType_PositionUpdate: {
-              glm::vec3 pos { };
-              glm::vec2 rot { };
-              std::memcpy(&pos, evt.packet->data + sizeof(MessageType), sizeof(glm::vec3));
-              std::memcpy(&rot, evt.packet->data + sizeof(MessageType) + sizeof(glm::vec3), sizeof(glm::vec2));
-              printf("Player moved to: (%.2f, %.2f, %.2f) (%.2f, %.2f)\n", pos.x, pos.y, pos.z, rot.x, rot.y); 
+            case MessageType::kPositionUpdate: {
+              PositionUpdateMessage pm { };
+              pm.deserialize(stream);
+              printf("Player moved to: (%.2f, %.2f, %.2f) (%.2f, %.2f)\n", pm.pos.x, pm.pos.y, pm.pos.z, pm.rot.x, pm.rot.y); 
               break;
             }
           }
