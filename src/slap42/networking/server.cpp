@@ -7,14 +7,13 @@
 #include <glm/glm.hpp>
 #include "hud_panels/server_panel.hpp"
 #include "networking/message_types.hpp"
+#include "networking/message_serializer.hpp"
 
 namespace Slap42 {
 namespace Server {
 
 static bool server_running = false;
 static std::thread* server_thread;
-
-static std::unordered_map<unsigned short, ENetPeer*> connected_peers;
 
 static void RunServer() {
   ENetAddress address { };
@@ -34,19 +33,39 @@ static void RunServer() {
       switch (evt.type) {
         case ENET_EVENT_TYPE_CONNECT: {
           printf("[SERVER] A client has connected: %x:%u\n", evt.peer->address.host, evt.peer->address.port);
+
           char buf[128] { };
           sprintf(buf, "%x:%u", evt.peer->address.host, evt.peer->address.port);
-          connected_peers.emplace(evt.peer->address.port, evt.peer);
           ServerPanel::OnPlayerJoin(buf);
+
+          OnPlayerJoinMessage msg { evt.peer->address.host, evt.peer->address.port };
+          BroadcastSerializedMessage(server, msg, evt.peer);
+
+          ENetPeer* current_peer;
+          for (current_peer = server->peers; current_peer < &server->peers[server->peerCount]; ++current_peer) {
+            if (current_peer->state != ENET_PEER_STATE_CONNECTED) {
+              continue;
+            }
+            if (current_peer == evt.peer) {
+              continue;
+            }
+
+            OnPlayerJoinMessage msg2 { current_peer->address.host, current_peer->address.port };
+            SendSerializedMessage(evt.peer, msg2);
+          }
           break;
         }
 
         case ENET_EVENT_TYPE_DISCONNECT: {
           printf("[SERVER] A client has disconnected: %x:%u\n", evt.peer->address.host, evt.peer->address.port);
+
           char buf[128] { };
           sprintf(buf, "%x:%u", evt.peer->address.host, evt.peer->address.port);
-          connected_peers.erase(evt.peer->address.port);
           ServerPanel::OnPlayerLeave(buf);
+
+          OnPlayerLeaveMessage msg { evt.peer->address.host, evt.peer->address.port };
+          BroadcastSerializedMessage(server, msg, evt.peer);
+
           break;
         }
 
@@ -57,9 +76,11 @@ static void RunServer() {
 
           switch (type) {
             case MessageType::kPositionUpdate: {
-              PositionUpdateMessage pm { };
-              pm.deserialize(stream);
-              printf("Player moved to: (%.2f, %.2f, %.2f) (%.2f, %.2f)\n", pm.pos.x, pm.pos.y, pm.pos.z, pm.rot.x, pm.rot.y); 
+              PositionUpdateMessage msg { };
+              msg.deserialize(stream);
+              msg.host = evt.peer->address.host;
+              msg.port = evt.peer->address.port;
+              BroadcastSerializedMessage(server, msg, evt.peer);
               break;
             }
           }

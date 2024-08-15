@@ -5,12 +5,21 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "menus/join_error_menu.hpp"
 #include "networking/message_types.hpp"
+#include "networking/message_serializer.hpp"
+#include "networking/peer_data.hpp"
+#include "utils/hash.hpp"
 
 namespace Slap42 {
 namespace Client {
 
 static ENetHost* client = nullptr;
 static ENetPeer* peer = nullptr;
+
+static std::unordered_map<uint64_t, std::shared_ptr<PeerData>> peer_data;
+
+std::unordered_map<uint64_t, std::shared_ptr<PeerData>>* GetPeerData() {
+  return &peer_data;
+}
 
 bool ClientConnect(const char* hostname, uint16_t port) {
   if (peer)  {
@@ -79,21 +88,43 @@ void ClientPollMessages() {
   while (enet_host_service(client, &evt, 0) > 0) {
     switch (evt.type) {
       case ENET_EVENT_TYPE_RECEIVE:
-        printf("[CLIENT] Recieved packet: \n\tPeer: %s\n\tLength: %zu\n\tData: %s\n\tChannel: %u\n",
-          (char*)evt.peer->data, evt.packet->dataLength, (char*)evt.packet->data, evt.channelID);
-        break;
+        bytepack::binary_stream stream(bytepack::buffer_view(evt.packet->data, evt.packet->dataLength));
+        MessageType type;
+        stream.read(type);
+        
+        switch (type) {
+          case MessageType::kPositionUpdate: {
+            PositionUpdateMessage msg { };
+            msg.deserialize(stream);
+            // printf("[CLIENT] Player moved to: (%.2f, %.2f, %.2f) (%.2f, %.2f)\n", msg.pos.x, msg.pos.y, msg.pos.z, msg.rot.x, msg.rot.y);
+            peer_data.at(FakeHash(msg.host, msg.port))->pos = msg.pos;
+            peer_data.at(FakeHash(msg.host, msg.port))->rot = msg.rot;
+            break;
+          }
+        
+          case MessageType::kOnPlayerJoin: {
+            OnPlayerJoinMessage msg { };
+            msg.deserialize(stream);
+            printf("[CLIENT] A player has joined the game: %x:%u\n", msg.host, msg.port);
+            peer_data.emplace(FakeHash(msg.host, msg.port), std::make_shared<PeerData>());
+            break;
+          }
+        
+          case MessageType::kOnPlayerLeave: {
+            OnPlayerLeaveMessage msg { };
+            msg.deserialize(stream);
+            printf("[CLIENT] A player has left the game: %x:%u\n", msg.host, msg.port);
+            peer_data.erase(FakeHash(msg.host, msg.port));
+            break;
+          }
+        }
     }
   }
 }
 
 void ClientSendPositionUpdate(const glm::vec3& pos, const glm::vec2& rot) {
   PositionUpdateMessage pm { pos, rot };
-  bytepack::binary_stream serialization_stream(sizeof(PositionUpdateMessage) + 1);
-  serialization_stream.write(MessageType::kPositionUpdate);
-  pm.serialize(serialization_stream);
-  bytepack::buffer_view buffer = serialization_stream.data();
-  ENetPacket* packet = enet_packet_create(buffer.as<std::uint8_t>(), buffer.size(), ENET_PACKET_FLAG_RELIABLE);
-  enet_peer_send(peer, 0, packet);
+  SendSerializedMessage(peer, pm);
 }
 
 }

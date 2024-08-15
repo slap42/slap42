@@ -46,10 +46,12 @@ source_group("src/level" FILES ${SLAP42_LEVEL_FILES})
 
 set(SLAP42_NETWORKING_FILES
   src/slap42/networking/message_types.hpp
+  src/slap42/networking/message_serializer.hpp
   src/slap42/networking/server.hpp
   src/slap42/networking/server.cpp
   src/slap42/networking/client.hpp
   src/slap42/networking/client.cpp
+  src/slap42/networking/peer_data.hpp
 )
 source_group("src/networking" FILES ${SLAP42_NETWORKING_FILES})
 
@@ -72,6 +74,11 @@ set(SLAP42_HUD_PANELS_FILES
 )
 source_group("src/hud_panels" FILES ${SLAP42_HUD_PANELS_FILES})
 
+set(SLAP42_UTILS_FILES
+  src/slap42/utils/hash.hpp
+)
+source_group("src/utils" FILES ${SLAP42_UTILS_FILES})
+
 add_executable(${PROJECT_NAME}
   ${SLAP42_FILES}
   ${SLAP42_GRAPHICS_FILES}
@@ -81,6 +88,7 @@ add_executable(${PROJECT_NAME}
   ${SLAP42_NETWORKING_FILES}
   ${SLAP42_MENUS_FILES}
   ${SLAP42_HUD_PANELS_FILES}
+  ${SLAP42_UTILS_FILES}
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE src/slap42)
