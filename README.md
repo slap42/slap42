@@ -11,6 +11,9 @@ I'll be uploading .exe files etc to itch.io at some point when there's a few mor
 ## Links
 
 Github: https://github.com/slap42/slap42
+
 Itch.io: https://slap42.itch.io/
+
 Twitch: https://www.twitch.tv/slap42dev
+
 Youtube: https://www.youtube.com/@Slap42Dev
