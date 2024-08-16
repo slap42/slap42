@@ -123,7 +123,7 @@ int main() {
       const glm::vec3 kXAxis(1.0f, 0.0f, 0.0f);
       const glm::vec3 kYAxis(0.0f, 1.0f, 0.0f);
       glm::mat4 transform = glm::translate(glm::mat4(1.0f), { -peer.second->pos.x, -peer.second->pos.y, -peer.second->pos.z });
-      transform = glm::rotate(transform,  peer.second->rot.y, kYAxis);
+      transform = glm::rotate(transform, -peer.second->rot.y, kYAxis);
       transform = glm::rotate(transform, -peer.second->rot.x, kXAxis);
       entity_shader.SetTransform(transform);
       entity_mesh.Render();
