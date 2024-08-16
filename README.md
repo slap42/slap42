@@ -4,7 +4,9 @@ Slap42 is a game I am building live on Twitch.
 
 ## How to play
 
-Right now the only way to play is to compile the game from source yourself. The game uses cmake for the build system and requires C++20.
+Right now the only way to play is to compile the game from source yourself.
+The build system is cmake and compiling the game requires C++20.
+Windows and macOS are currently supported, and Linux support is planned.
 
 I'll be uploading .exe files etc to itch.io at some point when there's a few more features implemented.
 
