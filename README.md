@@ -2,6 +2,9 @@
 
 Slap42 is a game I am building live on Twitch.
 
+Big shout out to kutobu__, been there since day one, a true believer in the process 🙏💯
+p0lloc is cool too I guess
+
 ## How to play
 
 Right now the only way to play is to compile the game from source yourself.
