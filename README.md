@@ -9,7 +9,7 @@ p0lloc is cool too I guess
 
 Right now the only way to play is to compile the game from source yourself.
 The build system is cmake and compiling the game requires C++20.
-Windows and macOS are currently supported, and Linux support is planned.
+Windows, macOS, and Linux are supported.
 
 I'll be uploading .exe files etc to itch.io at some point when there's a few more features implemented.
 
