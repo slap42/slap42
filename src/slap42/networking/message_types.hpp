@@ -5,7 +5,6 @@
 
 namespace Slap42 {
 
-
 enum class MessageType : uint8_t {
   kNull           = 0x00,
   kPositionUpdate = 0x01,

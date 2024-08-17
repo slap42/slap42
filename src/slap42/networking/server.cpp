@@ -113,7 +113,6 @@ void StopServer() {
   delete server_thread;
 }
 
-
 bool IsServerRunning() {
   return server_running;
 }

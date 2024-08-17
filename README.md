@@ -22,3 +22,18 @@ Itch.io: https://slap42.itch.io/
 Twitch: https://www.twitch.tv/slap42dev
 
 Youtube: https://www.youtube.com/@Slap42Dev
+
+### Backlog
+
+- When starting a server, check whether the port is currently bound. If it is, use another port.
+- Allow choosing a port when joining a server
+- Add initial position parameters to OnPlayerJoin message
+- Allow setting FOV
+- Make trying to join a server happen asynchronously
+- Allow configuring the number of players able to join a server
+- IP whitelists/blacklists for servers
+- Stop exposing hosts/ports to all clients, use a generated ID instead
+- Move shaders to files
+- Rework server panel to read from client-side peer list (if we want to talk to the server, we have a way to do that. It's called UDP)
+- Cleanup the switch statements in Client/Server to make them easier to read
+- Point logs at an in-game console instead of stderr/stdout

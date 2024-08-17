@@ -124,6 +124,7 @@ void ClientPollMessages() {
             printf("[CLIENT] Unhandled message type recieved\n");
             break;
         }
+        break;
       }
       default:
         break;
