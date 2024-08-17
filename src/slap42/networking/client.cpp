@@ -15,9 +15,9 @@ namespace Client {
 static ENetHost* client = nullptr;
 static ENetPeer* peer = nullptr;
 
-static std::unordered_map<uint64_t, std::shared_ptr<PeerData>> peer_data;
+static std::unordered_map<peer_id, std::shared_ptr<PeerData>> peer_data;
 
-std::unordered_map<uint64_t, std::shared_ptr<PeerData>>* GetPeerData() {
+std::unordered_map<peer_id, std::shared_ptr<PeerData>>* GetPeerData() {
   return &peer_data;
 }
 
@@ -96,27 +96,27 @@ void ClientPollMessages() {
         
         switch (type) {
           case MessageType::kPositionUpdate: {
-            PositionUpdateMessage msg { };
+            PlayerPositionUpdateMessage msg { };
             msg.deserialize(stream);
             // printf("[CLIENT] Player moved to: (%.2f, %.2f, %.2f) (%.2f, %.2f)\n", msg.pos.x, msg.pos.y, msg.pos.z, msg.rot.x, msg.rot.y);
-            peer_data.at(FakeHash(msg.host, msg.port))->pos = msg.pos;
-            peer_data.at(FakeHash(msg.host, msg.port))->rot = msg.rot;
+            peer_data.at(msg.id)->pos = msg.pos;
+            peer_data.at(msg.id)->rot = msg.rot;
             break;
           }
             
-          case MessageType::kOnPlayerJoin: {
-            OnPlayerJoinMessage msg { };
+          case MessageType::kPlayerJoin: {
+            PlayerJoinMessage msg { };
             msg.deserialize(stream);
-            printf("[CLIENT] A player has joined the game: %x:%u\n", msg.host, msg.port);
-            peer_data.emplace(FakeHash(msg.host, msg.port), std::make_shared<PeerData>());
+            printf("[CLIENT] A player has joined the game: ID %u\n", msg.id);
+            peer_data.emplace(msg.id, std::make_shared<PeerData>());
             break;
           }
             
-          case MessageType::kOnPlayerLeave: {
-            OnPlayerLeaveMessage msg { };
+          case MessageType::kPlayerLeave: {
+            PlayerLeaveMessage msg { };
             msg.deserialize(stream);
-            printf("[CLIENT] A player has left the game: %x:%u\n", msg.host, msg.port);
-            peer_data.erase(FakeHash(msg.host, msg.port));
+            printf("[CLIENT] A player has left the game: ID %u\n", msg.id);
+            peer_data.erase(msg.id);
             break;
           }
             
@@ -133,7 +133,7 @@ void ClientPollMessages() {
 }
 
 void ClientSendPositionUpdate(const glm::vec3& pos, const glm::vec2& rot) {
-  PositionUpdateMessage pm { pos, rot };
+  PlayerPositionUpdateMessage pm { .pos = pos, .rot = rot };
   SendSerializedMessage(peer, pm);
 }
 

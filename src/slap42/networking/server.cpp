@@ -7,12 +7,21 @@
 #include <glm/glm.hpp>
 #include "networking/message_types.hpp"
 #include "networking/message_serializer.hpp"
+#include "networking/peer_data.hpp"
+#include "utils/hash.hpp"
 
 namespace Slap42 {
 namespace Server {
 
 static bool server_running = false;
 static std::thread* server_thread;
+static std::unordered_map<peer_id, std::shared_ptr<PeerData>> peer_data;
+static std::unordered_map<uint64_t, peer_id> peer_ids;
+static peer_id current_id = 0;
+
+static peer_id GetPeerId(ENetPeer* peer) {
+  return peer_ids[FakeHash(peer->address.host, peer->address.port)];
+}
 
 static void RunServer() {
   ENetAddress address { };
@@ -25,6 +34,7 @@ static void RunServer() {
     return;
   }
 
+
   ENetEvent evt;
   while (server_running) {
     while (enet_host_service(server, &evt, 0) > 0) {
@@ -33,8 +43,15 @@ static void RunServer() {
         case ENET_EVENT_TYPE_CONNECT: {
           printf("[SERVER] A client has connected: %x:%u\n", evt.peer->address.host, evt.peer->address.port);
 
-          OnPlayerJoinMessage msg { evt.peer->address.host, evt.peer->address.port };
-          BroadcastSerializedMessage(server, msg, evt.peer);
+          peer_id new_peer = current_id++;
+
+          peer_data.emplace(new_peer, std::make_shared<PeerData>());
+          peer_ids.emplace(FakeHash(evt.peer->address.host, evt.peer->address.port), new_peer);
+
+          {
+            PlayerJoinMessage msg { new_peer };
+            BroadcastSerializedMessage(server, msg, evt.peer);
+          }
 
           ENetPeer* current_peer;
           for (current_peer = server->peers; current_peer < &server->peers[server->peerCount]; ++current_peer) {
@@ -45,8 +62,8 @@ static void RunServer() {
               continue;
             }
 
-            OnPlayerJoinMessage msg2 { current_peer->address.host, current_peer->address.port };
-            SendSerializedMessage(evt.peer, msg2);
+            PlayerJoinMessage msg { GetPeerId(current_peer) };
+            SendSerializedMessage(evt.peer, msg);
           }
           break;
         }
@@ -54,7 +71,7 @@ static void RunServer() {
         case ENET_EVENT_TYPE_DISCONNECT: {
           printf("[SERVER] A client has disconnected: %x:%u\n", evt.peer->address.host, evt.peer->address.port);
 
-          OnPlayerLeaveMessage msg { evt.peer->address.host, evt.peer->address.port };
+          PlayerLeaveMessage msg { GetPeerId(evt.peer) };
           BroadcastSerializedMessage(server, msg, evt.peer);
 
           break;
@@ -67,10 +84,9 @@ static void RunServer() {
 
           switch (type) {
             case MessageType::kPositionUpdate: {
-              PositionUpdateMessage msg { };
+              PlayerPositionUpdateMessage msg { };
               msg.deserialize(stream);
-              msg.host = evt.peer->address.host;
-              msg.port = evt.peer->address.port;
+              msg.id = GetPeerId(evt.peer);
               BroadcastSerializedMessage(server, msg, evt.peer);
               break;
             }
@@ -78,6 +94,7 @@ static void RunServer() {
             default:
               break;
           }
+  
         }
           
         case ENET_EVENT_TYPE_NONE:

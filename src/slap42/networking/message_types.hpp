@@ -6,56 +6,70 @@
 namespace Slap42 {
 
 enum class MessageType : uint8_t {
-  kNull           = 0x00,
-  kPositionUpdate = 0x01,
-  kOnPlayerJoin   = 0x02,
-  kOnPlayerLeave  = 0x03,
+  kNull                = 0x00,
+  kPositionUpdate      = 0x01,
+  kPlayerJoin          = 0x02,
+  kPlayerLeave         = 0x03,
+  kSetPlayerIdMessage  = 0x04,
 };
 
-struct PositionUpdateMessage {
+typedef uint16_t peer_id;
+
+struct SetPlayerIdMessage {
+  peer_id id;
+
+  MessageType Type() const { return MessageType::kSetPlayerIdMessage; }
+
+  void serialize(bytepack::binary_stream<>& stream) const {
+    stream.write(id);
+  }
+
+  void deserialize(bytepack::binary_stream<>& stream) {
+    stream.read(id);
+  }
+};
+
+struct PlayerPositionUpdateMessage {
+  peer_id id;
   glm::vec3 pos;
   glm::vec2 rot;
-  uint32_t host;
-  uint16_t port;
 
   MessageType Type() const { return MessageType::kPositionUpdate; }
 
   void serialize(bytepack::binary_stream<>& stream) const {
-    stream.write(pos.x, pos.y, pos.z, rot.x, rot.y, host, port);
+    stream.write(id, pos.x, pos.y, pos.z, rot.x, rot.y);
   }
 
   void deserialize(bytepack::binary_stream<>& stream) {
-    stream.read(pos.x, pos.y, pos.z, rot.x, rot.y, host, port);
+    stream.read(id, pos.x, pos.y, pos.z, rot.x, rot.y);
   }
 };
 
-struct OnPlayerJoinMessage {
-  uint32_t host;
-  uint16_t port;
+struct PlayerJoinMessage {
+  peer_id id;
 
-  MessageType Type() const { return MessageType::kOnPlayerJoin; }
+  MessageType Type() const { return MessageType::kPlayerJoin; }
 
   void serialize(bytepack::binary_stream<>& stream) const {
-    stream.write(host, port);
+    stream.write(id);
   }
 
   void deserialize(bytepack::binary_stream<>& stream) {
-    stream.read(host, port);
+    stream.read(id);
   }
 };
 
-struct OnPlayerLeaveMessage {
-  uint32_t host;
-  uint16_t port;
+struct PlayerLeaveMessage {
+  peer_id id;
 
-  MessageType Type() const { return MessageType::kOnPlayerLeave; }
+  MessageType Type() const { return MessageType::kPlayerLeave; }
 
   void serialize(bytepack::binary_stream<>& stream) const {
-    stream.write(host, port);
+    stream.write(id);
   }
 
   void deserialize(bytepack::binary_stream<>& stream) {
-    stream.read(host, port);
+    stream.read(id);
   }
 };
 
