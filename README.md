@@ -34,6 +34,5 @@ Youtube: https://www.youtube.com/@Slap42Dev
 - IP whitelists/blacklists for servers
 - Stop exposing hosts/ports to all clients, use a generated ID instead
 - Move shaders to files
-- Rework server panel to read from client-side peer list (if we want to talk to the server, we have a way to do that. It's called UDP)
 - Cleanup the switch statements in Client/Server to make them easier to read
 - Point logs at an in-game console instead of stderr/stdout

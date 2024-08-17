@@ -5,7 +5,6 @@
 #include <unordered_map>
 #include <enet/enet.h>
 #include <glm/glm.hpp>
-#include "hud_panels/server_panel.hpp"
 #include "networking/message_types.hpp"
 #include "networking/message_serializer.hpp"
 
@@ -34,10 +33,6 @@ static void RunServer() {
         case ENET_EVENT_TYPE_CONNECT: {
           printf("[SERVER] A client has connected: %x:%u\n", evt.peer->address.host, evt.peer->address.port);
 
-          char buf[128] { };
-          snprintf(buf, sizeof(buf), "%x:%u", evt.peer->address.host, evt.peer->address.port);
-          ServerPanel::OnPlayerJoin(buf);
-
           OnPlayerJoinMessage msg { evt.peer->address.host, evt.peer->address.port };
           BroadcastSerializedMessage(server, msg, evt.peer);
 
@@ -58,10 +53,6 @@ static void RunServer() {
 
         case ENET_EVENT_TYPE_DISCONNECT: {
           printf("[SERVER] A client has disconnected: %x:%u\n", evt.peer->address.host, evt.peer->address.port);
-
-          char buf[128] { };
-          snprintf(buf, sizeof(buf), "%x:%u", evt.peer->address.host, evt.peer->address.port);
-          ServerPanel::OnPlayerLeave(buf);
 
           OnPlayerLeaveMessage msg { evt.peer->address.host, evt.peer->address.port };
           BroadcastSerializedMessage(server, msg, evt.peer);
