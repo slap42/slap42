@@ -12,7 +12,7 @@ TextureArray::TextureArray(const char** filenames, int file_count) {
   }
 
   int width, height, channel_count;
-  stbi_uc* stb_pixels = stbi_load(filenames[0], &width, &height, &channel_count, 0);
+  stbi_uc* stb_pixels = stbi_load(filenames[0], &width, &height, &channel_count, 4);
   if (!stb_pixels) {
     fprintf(stderr, "Failed to load texture \"%s\"\n", filenames[0]);
   }

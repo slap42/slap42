@@ -7,13 +7,8 @@ namespace Slap42 {
 Level::Level() {
   terrain_shader = new TerrainShader();
 
-  const char* kFileNames[] = {
-    "res/images/dirt.png",
-    "res/images/grass.png",
-    "res/images/patchy_grass.png",
-    "res/images/stone.png",
-  };
-  textures = new TextureArray(kFileNames, sizeof(kFileNames) / sizeof(char*));
+  grass_texture = new Texture("res/images/Grass002_2K-PNG_Color.png");
+  dirt_texture = new Texture("res/images/Ground067_2K-PNG_Color.png");
 }
 
 Level::~Level() {
@@ -21,7 +16,8 @@ Level::~Level() {
     delete chunk.second;
   }
 
-  delete textures;
+  delete grass_texture;
+  delete dirt_texture;
   delete terrain_shader;
 }
 
@@ -63,7 +59,8 @@ void Level::Update(const glm::vec3& player_pos) {
 
 void Level::Render() const {
   terrain_shader->Bind();
-  textures->Bind();
+  grass_texture->Bind(0);
+  dirt_texture->Bind(1);
 
   for (const auto& chunk : chunks) {
     chunk.second->Render();

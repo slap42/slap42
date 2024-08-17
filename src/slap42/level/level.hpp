@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 #include "chunk.hpp"
 #include "graphics/shaders/terrain_shader.hpp"
-#include "graphics/texture_array.hpp"
+#include "graphics/texture.hpp"
 
 namespace Slap42 {
 
@@ -22,7 +22,8 @@ public:
 
 private:
   TerrainShader* terrain_shader;
-  TextureArray* textures;
+  Texture* grass_texture;
+  Texture* dirt_texture;
 
   std::unordered_map<uint64_t, Chunk*> chunks;
 };

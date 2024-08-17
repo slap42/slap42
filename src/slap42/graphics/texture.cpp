@@ -7,7 +7,7 @@ namespace Slap42 {
 
 Texture::Texture(const char* filename) {
   int width, height, channel_count;
-  stbi_uc* pixels = stbi_load(filename, &width, &height, &channel_count, 0);
+  stbi_uc* pixels = stbi_load(filename, &width, &height, &channel_count, 4);
   if (!pixels) {
     fprintf(stderr, "Failed to load texture \"%s\"\n", filename);
   }
