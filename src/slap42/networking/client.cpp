@@ -108,7 +108,10 @@ void ClientPollMessages() {
             PlayerJoinMessage msg { };
             msg.deserialize(stream);
             printf("[CLIENT] A player has joined the game: ID %u\n", msg.id);
-            peer_data.emplace(msg.id, std::make_shared<PeerData>());
+            auto new_peer_data = std::make_shared<PeerData>();
+            new_peer_data->pos = msg.pos;
+            new_peer_data->rot = msg.rot;
+            peer_data.emplace(msg.id, new_peer_data);
             break;
           }
             

@@ -47,15 +47,17 @@ struct PlayerPositionUpdateMessage {
 
 struct PlayerJoinMessage {
   peer_id id;
+  glm::vec3 pos;
+  glm::vec2 rot;
 
   MessageType Type() const { return MessageType::kPlayerJoin; }
 
   void serialize(bytepack::binary_stream<>& stream) const {
-    stream.write(id);
+    stream.write(id, pos.x, pos.y, pos.z, rot.x, rot.y);
   }
 
   void deserialize(bytepack::binary_stream<>& stream) {
-    stream.read(id);
+    stream.read(id, pos.x, pos.y, pos.z, rot.x, rot.y);
   }
 };
 

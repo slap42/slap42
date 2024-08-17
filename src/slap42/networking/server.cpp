@@ -34,7 +34,6 @@ static void RunServer() {
     return;
   }
 
-
   ENetEvent evt;
   while (server_running) {
     while (enet_host_service(server, &evt, 0) > 0) {
@@ -62,7 +61,12 @@ static void RunServer() {
               continue;
             }
 
-            PlayerJoinMessage msg { GetPeerId(current_peer) };
+            peer_id current_peer_id = GetPeerId(current_peer);
+            PlayerJoinMessage msg {
+              .id = current_peer_id,
+              .pos = peer_data[current_peer_id]->pos,
+              .rot = peer_data[current_peer_id]->rot,
+            };
             SendSerializedMessage(evt.peer, msg);
           }
           break;
@@ -87,6 +91,8 @@ static void RunServer() {
               PlayerPositionUpdateMessage msg { };
               msg.deserialize(stream);
               msg.id = GetPeerId(evt.peer);
+              peer_data[msg.id]->pos = msg.pos;
+              peer_data[msg.id]->rot = msg.rot;
               BroadcastSerializedMessage(server, msg, evt.peer);
               break;
             }
