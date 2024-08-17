@@ -37,5 +37,3 @@ Youtube: https://www.youtube.com/@Slap42Dev
 - Rework server panel to read from client-side peer list (if we want to talk to the server, we have a way to do that. It's called UDP)
 - Cleanup the switch statements in Client/Server to make them easier to read
 - Point logs at an in-game console instead of stderr/stdout
-- src\extern\enet\win32.c(94,17): warning C4996: 'gethostbyname': Use getaddrinfo() or GetAddrInfoW() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
-- src\extern\enet\win32.c(128,17): warning C4996: 'gethostbyaddr': Use getnameinfo() or GetNameInfoW() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings

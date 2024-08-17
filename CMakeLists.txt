@@ -104,18 +104,28 @@ target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
 
 add_subdirectory(src/extern/bytepack)
 target_link_libraries(${PROJECT_NAME} PRIVATE bytepack)
+
 add_subdirectory(src/extern/enet)
-target_link_libraries(${PROJECT_NAME} PRIVATE enet)
 target_include_directories(${PROJECT_NAME} PRIVATE src/extern/enet/include)
+if(WIN32)
+  target_compile_definitions(enet PRIVATE _WINSOCK_DEPRECATED_NO_WARNINGS)
+endif()
+target_link_libraries(${PROJECT_NAME} PRIVATE enet)
+
 add_subdirectory(src/extern/glad)
 target_link_libraries(${PROJECT_NAME} PRIVATE glad)
+
 add_subdirectory(src/extern/glfw)
 target_link_libraries(${PROJECT_NAME} PRIVATE glfw)
+
 add_subdirectory(src/extern/glm)
 target_link_libraries(${PROJECT_NAME} PRIVATE glm)
+
 add_subdirectory(src/extern/imgui)
 target_link_libraries(${PROJECT_NAME} PRIVATE imgui)
+
 add_subdirectory(src/extern/opensimplex)
 target_link_libraries(${PROJECT_NAME} PRIVATE opensimplex)
+
 add_subdirectory(src/extern/stb)
 target_link_libraries(${PROJECT_NAME} PRIVATE stb)
