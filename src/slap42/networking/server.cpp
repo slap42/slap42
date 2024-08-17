@@ -17,7 +17,6 @@ static bool server_running = false;
 static std::thread* server_thread;
 static std::unordered_map<peer_id, std::shared_ptr<PeerData>> peer_data;
 static std::unordered_map<uint64_t, peer_id> peer_ids;
-static peer_id current_id = 0;
 
 static peer_id GetPeerId(ENetPeer* peer) {
   return peer_ids[FakeHash(peer->address.host, peer->address.port)];
@@ -42,13 +41,16 @@ static void RunServer() {
         case ENET_EVENT_TYPE_CONNECT: {
           printf("[SERVER] A client has connected: %x:%u\n", evt.peer->address.host, evt.peer->address.port);
 
-          peer_id new_peer = current_id++;
+          peer_id new_peer_id = 0;
+          while (peer_data.find(new_peer_id) != peer_data.end()) {
+            ++new_peer_id;
+          }
 
-          peer_data.emplace(new_peer, std::make_shared<PeerData>());
-          peer_ids.emplace(FakeHash(evt.peer->address.host, evt.peer->address.port), new_peer);
+          peer_data.emplace(new_peer_id, std::make_shared<PeerData>());
+          peer_ids.emplace(FakeHash(evt.peer->address.host, evt.peer->address.port), new_peer_id);
 
           {
-            PlayerJoinMessage msg { new_peer };
+            PlayerJoinMessage msg { new_peer_id };
             BroadcastSerializedMessage(server, msg, evt.peer);
           }
 
@@ -77,6 +79,9 @@ static void RunServer() {
 
           PlayerLeaveMessage msg { GetPeerId(evt.peer) };
           BroadcastSerializedMessage(server, msg, evt.peer);
+          
+          peer_data.erase(GetPeerId(evt.peer));
+          peer_ids.erase(FakeHash(evt.peer->address.host, evt.peer->address.port));
 
           break;
         }

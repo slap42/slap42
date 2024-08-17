@@ -10,24 +10,9 @@ enum class MessageType : uint8_t {
   kPositionUpdate      = 0x01,
   kPlayerJoin          = 0x02,
   kPlayerLeave         = 0x03,
-  kSetPlayerIdMessage  = 0x04,
 };
 
-typedef uint16_t peer_id;
-
-struct SetPlayerIdMessage {
-  peer_id id;
-
-  MessageType Type() const { return MessageType::kSetPlayerIdMessage; }
-
-  void serialize(bytepack::binary_stream<>& stream) const {
-    stream.write(id);
-  }
-
-  void deserialize(bytepack::binary_stream<>& stream) {
-    stream.read(id);
-  }
-};
+typedef uint8_t peer_id;
 
 struct PlayerPositionUpdateMessage {
   peer_id id;

@@ -3,8 +3,10 @@
 Slap42 is a game I am building live on Twitch.
 
 Big shout out to kutobu__, been there since day one, a true believer in the process 🥐🇫🇷🥖🙏💯
+
 p0lloc is cool too I guess
-ImRiux is officially entitled to a 3% revshare for singlehandedly fixing my terrible player ID code
+
+ImRiux is officially entitled to a 3% revshare for making an actual contribution to the code
 
 ## How to play
 
@@ -12,7 +14,7 @@ Right now the only way to play is to compile the game from source yourself.
 The build system is cmake and compiling the game requires C++20.
 Windows, macOS, and Linux are supported.
 
-I'll be uploading .exe files etc to itch.io at some point when there's a few more features implemented.
+I'll be uploading .exe files etc to itch.io at some point when more features are implemented.
 
 ## Links
 
