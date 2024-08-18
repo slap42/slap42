@@ -1,8 +1,10 @@
 #include "client.hpp"
 
 #include <cstdio>
+#include <sstream>
 #include <enet/enet.h>
 #include <glm/gtc/type_ptr.hpp>
+#include "hud_panels/chat_panel.hpp"
 #include "menus/join_error_menu.hpp"
 #include "networking/message_types.hpp"
 #include "networking/message_serializer.hpp"
@@ -107,7 +109,11 @@ void ClientPollMessages() {
           case MessageType::kPlayerJoin: {
             PlayerJoinMessage msg { };
             msg.deserialize(stream);
-            printf("[CLIENT] A player has joined the game: ID %u\n", msg.id);
+
+            std::stringstream ss;
+            ss << "Player " << (int)msg.id << " joined the game";
+            ChatPanel::AddChatMessage(ss.str());
+
             auto new_peer_data = std::make_shared<PeerData>();
             new_peer_data->pos = msg.pos;
             new_peer_data->rot = msg.rot;
@@ -118,7 +124,11 @@ void ClientPollMessages() {
           case MessageType::kPlayerLeave: {
             PlayerLeaveMessage msg { };
             msg.deserialize(stream);
-            printf("[CLIENT] A player has left the game: ID %u\n", msg.id);
+
+            std::stringstream ss;
+            ss << "Player " << (int)msg.id << " left the game";
+            ChatPanel::AddChatMessage(ss.str());
+
             peer_data.erase(msg.id);
             break;
           }

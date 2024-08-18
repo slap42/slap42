@@ -13,6 +13,7 @@
 #include "graphics/camera.hpp"
 #include "graphics/meshes/entity_mesh.hpp"
 #include "graphics/shaders/entity_shader.hpp"
+#include "hud_panels/chat_panel.hpp"
 #include "hud_panels/server_panel.hpp"
 #include "level/level.hpp"
 #include "menus/menu_state_machine.hpp"
@@ -137,6 +138,7 @@ int main() {
     
     if (MenuStateMachine::GetState() == MenuState::kNone) {
       ServerPanel::Render();
+      ChatPanel::Render();
     }
 
     ImGui::Render();

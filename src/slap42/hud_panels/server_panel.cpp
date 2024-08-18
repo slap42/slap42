@@ -1,3 +1,5 @@
+#include "server_panel.hpp"
+
 #include <imgui.h>
 #include "networking/client.hpp"
 #include "networking/server.hpp"

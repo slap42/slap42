@@ -16,6 +16,13 @@ Windows, macOS, and Linux are supported.
 
 I'll be uploading .exe files etc to itch.io at some point when more features are implemented.
 
+## Hamachi Network
+
+To join the game while I'm live, you can join this Hamachi network:
+
+Hamachi network: slap42
+Password: slap42
+
 ## Links
 
 Github: https://github.com/slap42/slap42
@@ -26,7 +33,7 @@ Twitch: https://www.twitch.tv/slap42dev
 
 Youtube: https://www.youtube.com/@Slap42Dev
 
-### Backlog
+## Backlog
 
 - When starting a server, check whether the port is available. If it is not, use another port.
 - Allow choosing a port when joining a server?
