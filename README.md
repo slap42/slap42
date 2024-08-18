@@ -37,4 +37,3 @@ Youtube: https://www.youtube.com/@Slap42Dev
 - Move shaders to files
 - Cleanup the switch statements in Client/Server to make them easier to read
 - Point logs at an in-game console instead of stderr/stdout
-- Fix mipmaps
