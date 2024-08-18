@@ -28,8 +28,8 @@ Youtube: https://www.youtube.com/@Slap42Dev
 
 ### Backlog
 
-- When starting a server, check whether the port is currently bound. If it is, use another port.
-- Allow choosing a port when joining a server
+- When starting a server, check whether the port is available. If it is not, use another port.
+- Allow choosing a port when joining a server?
 - Allow setting FOV
 - Make trying to join a server happen asynchronously
 - Allow configuring the number of players able to join a server
@@ -37,3 +37,4 @@ Youtube: https://www.youtube.com/@Slap42Dev
 - Move shaders to files
 - Cleanup the switch statements in Client/Server to make them easier to read
 - Point logs at an in-game console instead of stderr/stdout
+- Fix mipmaps
