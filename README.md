@@ -20,7 +20,8 @@ I'll be uploading .exe files etc to itch.io at some point when more features are
 
 To join the game while I'm live, you can join this Hamachi network:
 
-Hamachi network: slap42
+Network: slap42
+
 Password: slap42
 
 ## Links
@@ -33,7 +34,15 @@ Twitch: https://www.twitch.tv/slap42dev
 
 Youtube: https://www.youtube.com/@Slap42Dev
 
-## Backlog
+## Todo List:
+
+### New Features
+
+- Physics
+- Grass and trees
+- Chat system
+
+### Backlog
 
 - When starting a server, check whether the port is available. If it is not, use another port.
 - Allow choosing a port when joining a server?
