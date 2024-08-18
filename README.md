@@ -34,6 +34,5 @@ Youtube: https://www.youtube.com/@Slap42Dev
 - Make trying to join a server happen asynchronously
 - Allow configuring the number of players able to join a server
 - IP whitelists/blacklists for servers
-- Move shaders to files
 - Cleanup the switch statements in Client/Server to make them easier to read
 - Point logs at an in-game console instead of stderr/stdout
