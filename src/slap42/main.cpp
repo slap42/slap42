@@ -44,6 +44,9 @@ int main() {
   std::ifstream version_file("res/version.txt");
   std::stringstream title;
   title << "Slap42 " << version_file.rdbuf();
+#ifndef NDEBUG
+  title << " Debug";
+#endif
 
   GLFWwindow* window = glfwCreateWindow(1280, 720, title.str().c_str(), nullptr, nullptr);
   if (!window) {
