@@ -35,5 +35,26 @@ if platform.system() == 'Windows':
   shutil.rmtree('release')
   shutil.rmtree('output')
 
+if platform.system() == 'Darwin':
+  print('Compiling Slap42 ' + version + ' for macOS')
+  subprocess.run('cmake -G Xcode -B release -D CMAKE_OSX_ARCHITECTURES=x86_64', shell=True)
+  subprocess.run('cmake --build release --config Release', shell=True)
+  os.mkdir('output')
+  shutil.copytree('res', 'output/res')
+  shutil.move('release/Release/Slap42', 'output/Slap42')
+  shutil.make_archive('Slap42 ' + version + ' macOS x86_64 (Intel)', 'zip', 'output')
+  shutil.rmtree('release')
+  shutil.rmtree('output')
+
+  print('Compiling Slap42 ' + version + ' for macOS')
+  subprocess.run('cmake -G Xcode -B release -D CMAKE_OSX_ARCHITECTURES=arm64', shell=True)
+  subprocess.run('cmake --build release --config Release', shell=True)
+  os.mkdir('output')
+  shutil.copytree('res', 'output/res')
+  shutil.move('release/Release/Slap42', 'output/Slap42')
+  shutil.make_archive('Slap42 ' + version + ' macOS arm64 (Apple Silicon)', 'zip', 'output')
+  shutil.rmtree('release')
+  shutil.rmtree('output')
+
 else:
   print('Could not create release - unsupported host operating system: ' + platform.system())
