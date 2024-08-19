@@ -1,4 +1,6 @@
 #include <cstdio>
+#include <fstream>
+#include <sstream>
 
 #include <enet/enet.h>
 
@@ -39,7 +41,11 @@ int main() {
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #endif
 
-  GLFWwindow* window = glfwCreateWindow(1280, 720, "Test", nullptr, nullptr);
+  std::ifstream version_file("res/version.txt");
+  std::stringstream title;
+  title << "Slap42 " << version_file.rdbuf();
+
+  GLFWwindow* window = glfwCreateWindow(1280, 720, title.str().c_str(), nullptr, nullptr);
   if (!window) {
     fprintf(stderr, "glfwCreateWindow failed\n");
   }
@@ -157,3 +163,9 @@ int main() {
   glfwDestroyWindow(window);
   glfwTerminate();
 }
+
+#if defined(_WIN32) && defined(NDEBUG)
+int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) {
+  return main();
+}
+#endif

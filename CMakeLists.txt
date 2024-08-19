@@ -111,6 +111,7 @@ add_subdirectory(src/extern/enet)
 target_include_directories(${PROJECT_NAME} PRIVATE src/extern/enet/include)
 if(WIN32)
   target_compile_definitions(enet PRIVATE _WINSOCK_DEPRECATED_NO_WARNINGS)
+  set_target_properties(${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE $<CONFIG:Release>)
 endif()
 target_link_libraries(${PROJECT_NAME} PRIVATE enet)
 

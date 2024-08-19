@@ -2,6 +2,7 @@
 
 #include <cstdio>
 #include <thread>
+#include <memory>
 #include <unordered_map>
 #include <enet/enet.h>
 #include <glm/glm.hpp>
