@@ -56,5 +56,17 @@ if platform.system() == 'Darwin':
   shutil.rmtree('release')
   shutil.rmtree('output')
 
+
+if platform.system() == 'Linux':
+  print('Compiling Slap42 ' + version + ' for Linux')
+  subprocess.run('cmake -G "Unix Makefiles" -B release -D CMAKE_BUILD_TYPE=Release', shell=True)
+  subprocess.run('cmake --build release', shell=True)
+  os.mkdir('output')
+  shutil.copytree('res', 'output/res')
+  shutil.move('release/Slap42', 'output/Slap42')
+  shutil.make_archive('Slap42 ' + version + ' Linux', 'gztar', 'output')
+  shutil.rmtree('release')
+  shutil.rmtree('output')
+
 else:
   print('Could not create release - unsupported host operating system: ' + platform.system())
