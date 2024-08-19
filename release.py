@@ -30,7 +30,7 @@ if platform.system() == 'Windows':
   subprocess.run('cmake --build release --config Release')
   os.mkdir('output')
   shutil.copytree('res', 'output/res')
-  shutil.move('release\Release\Slap42.exe', 'output\Slap42.exe')
+  shutil.move('release/Release/Slap42.exe', 'output/Slap42.exe')
   shutil.make_archive('Slap42 ' + version + ' Windows', 'zip', 'output')
   shutil.rmtree('release')
   shutil.rmtree('output')
