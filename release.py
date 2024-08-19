@@ -34,3 +34,6 @@ if platform.system() == 'Windows':
   shutil.make_archive('Slap42 ' + version + ' Windows', 'zip', 'output')
   shutil.rmtree('release')
   shutil.rmtree('output')
+
+else:
+  print('Could not create release - unsupported host operating system: ' + platform.system())
