@@ -70,3 +70,4 @@ Youtube: https://www.youtube.com/@Slap42Dev
 - Point logs at an in-game console instead of stderr/stdout
 - Delta time
 - Camera mouse control on a Linux VM goes crazy and will sometimes cause a segfault
+- Terrain flickering bug reported on Windows
