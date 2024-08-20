@@ -30,6 +30,25 @@ The build system is cmake and compiling the game requires C++20.
 
 Windows, macOS, and Linux are supported.
 
+### Running the Game
+
+The game expects to be run from a folder containing another folder called `res`. The `res` folder contains all the resources needed to run the game - images, shaders, etc.
+
+If you're on Windows it should be enough to just unzip the downloaded file you got from itch.io and click the exe file, making sure not to move any of the files or folders from the way they were when you unzipped them.
+
+If running from a terminal or command prompt, make sure the working directory is the folder containing the executable file and the res folder.
+
+### Warnings on Windows
+
+If you download the game from itch.io you will probably get warnings about the executable not being from a trusted source. I haven't paid Microsoft for a signing key yet, so this warning will pop up until I do so. If you trust me you can choose `more options` then `run anyway`. If you don't trust me that's okay, you can compile from source yourself or go look at the code to make sure I'm not doing anything dodgy.
+
+### Controls
+
+WASD - Move
+Mouse or Arrow Keys - Turn the camera
+T - Open chat
+Esc - Close chat / unlock mouse
+
 ### Hamachi Network
 
 To join the game while I'm live, you can join this Hamachi network:
