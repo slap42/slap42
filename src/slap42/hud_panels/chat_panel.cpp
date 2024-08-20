@@ -31,24 +31,36 @@ void Render() {
   ImGui::SetNextWindowSize({ 640, 480 }, ImGuiCond_Always);
   ImVec2 display_size = ImGui::GetIO().DisplaySize;
   ImGui::SetNextWindowPos({ 0, display_size.y }, ImGuiCond_Always, { 0.0f, 1.0f });
-  ImGui::Begin("Chat", &open, ImGuiWindowFlags_AlwaysAutoResize);
- 
+
+  ImGui::PushStyleVar(ImGuiStyleVar_Alpha, 0.5f);
+  ImGui::Begin("Chat", &open, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar);
+  ImGui::PopStyleVar();
+
+  auto content_region = ImGui::GetContentRegionAvail();
+  ImGui::BeginChild("Messages", { content_region.x, content_region.y - 25 });
+
   for (auto& msg : chat_messages) {
     ImGui::Text("%s", msg.c_str());
   }
 
-  auto content_region = ImGui::GetContentRegionAvail();
-  ImGui::BeginChild("Messages", { content_region.x, content_region.y - 25 });
+  static bool snap_to_bottom = false;
+  if (snap_to_bottom) {
+    snap_to_bottom = false;
+    ImGui::SetScrollY(999999999999.0f);
+  }
+
   ImGui::EndChild();
 
   if (ImGui::IsWindowAppearing()) {
     ImGui::SetKeyboardFocusHere();
   }
+
   static char buf[256] { };
   if (ImGui::InputText("Chat Message", buf, sizeof(buf), ImGuiInputTextFlags_EnterReturnsTrue)) {
     Client::ClientSendChatMessage(buf);
     std::memset(buf, 0, sizeof(buf));
     ImGui::SetKeyboardFocusHere(-1);
+    snap_to_bottom = true;
   }
 
   ImGui::End();

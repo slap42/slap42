@@ -68,10 +68,12 @@ Youtube: https://www.youtube.com/@Slap42Dev
 - Allow configuring the number of players able to join a server
 - IP whitelists/blacklists for servers
 - Cleanup the switch statements in Client/Server to make them easier to read
-- Point logs at an in-game console instead of stderr/stdout
+- Point logs at an in-game console instead of stderr/stdout?
 - Delta time
 - Camera mouse control on a Linux VM goes crazy and will sometimes cause a segfault
 - Terrain flickering bug reported on Windows
 - Might be a race condition causing enet_peer_send to fail?
-- Move ALL controls (kb/mouse and cursor input modes) to a single controls file
 - Usernames
+- Joystick controls
+- Controls rebinding
+- Move ALL controls (kb/mouse and cursor input modes) to a single controls file
