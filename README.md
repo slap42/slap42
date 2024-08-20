@@ -53,9 +53,9 @@ If you download the game from itch.io you will probably get warnings about the e
 
 To join the game while I'm live, you can join this Hamachi network:
 
-Network: slap42
+Network: `slap42`
 
-Password: slap42
+Password: `slap42`
 
 Please don't write anything racist in the chat and get me banned.
 
