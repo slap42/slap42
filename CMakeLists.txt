@@ -81,6 +81,14 @@ set(SLAP42_UTILS_FILES
 )
 source_group("src/utils" FILES ${SLAP42_UTILS_FILES})
 
+set(SLAP42_WINDOW_FILES
+  src/slap42/window/controls.hpp
+  src/slap42/window/controls.cpp
+  src/slap42/window/window.hpp
+  src/slap42/window/window.cpp
+)
+source_group("src/window" FILES ${SLAP42_WINDOW_FILES})
+
 add_executable(${PROJECT_NAME}
   ${SLAP42_FILES}
   ${SLAP42_GRAPHICS_FILES}
@@ -91,6 +99,7 @@ add_executable(${PROJECT_NAME}
   ${SLAP42_MENUS_FILES}
   ${SLAP42_HUD_PANELS_FILES}
   ${SLAP42_UTILS_FILES}
+  ${SLAP42_WINDOW_FILES}
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE src/slap42)

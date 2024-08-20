@@ -1,21 +1,38 @@
 #include "camera.hpp"
 
+#include <glad/gl.h>
+#include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/rotate_vector.hpp>
 #include <imgui.h>
 #include "networking/client.hpp"
+#include "window/window.hpp"
 
 namespace Slap42 {
 
-Camera::Camera(GLFWwindow* window, EntityShader* entity_shader, TerrainShader* terrain_shader)
-    : window(window), entity_shader(entity_shader), terrain_shader(terrain_shader) {
+Camera::Camera(EntityShader* entity_shader, TerrainShader* terrain_shader) : entity_shader(entity_shader), terrain_shader(terrain_shader) {
   position = glm::vec3(0.0f, 0.0f, -2.0f);
   CalcView();
+  
+  // TODO: window::GetSize()
   OnResize(1280, 720);
+  
+  glfwSetWindowUserPointer(Window::GetWindow(), this);
+  auto on_resize = [](GLFWwindow* window, int w, int h) {
+    int width, height;
+    glfwGetFramebufferSize(Window::GetWindow(), &width, &height);
+    Camera* camera = (Camera*)glfwGetWindowUserPointer(window);
+    camera->OnResize(width, height);
+    glViewport(0, 0, width, height);
+  };
+  glfwSetWindowSizeCallback(Window::GetWindow(), on_resize);
+  on_resize(Window::GetWindow(), 1280, 720);
 }
 
 void Camera::Update() {
+  static GLFWwindow* window = Window::GetWindow();
+  
   const float kMoveSpeed = 0.5f;
   const float kRotationSpeed = 0.04f;
   const float kMouseSensitivity = 0.005f;
