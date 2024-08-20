@@ -56,7 +56,6 @@ if platform.system() == 'Darwin':
   shutil.rmtree('release')
   shutil.rmtree('output')
 
-
 if platform.system() == 'Linux':
   print('Compiling Slap42 ' + version + ' for Linux')
   subprocess.run('cmake -G "Unix Makefiles" -B release -D CMAKE_BUILD_TYPE=Release', shell=True)

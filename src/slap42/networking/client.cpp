@@ -132,9 +132,20 @@ void ClientPollMessages() {
             peer_data.erase(msg.id);
             break;
           }
+
+          case MessageType::kChatMessage: {
+            ChatMessageMessage msg { };
+            msg.deserialize(stream);
+
+            std::stringstream ss;
+            ss << "[Player " << (int)msg.id << "] " << msg.msg;
+
+            ChatPanel::AddChatMessage(ss.str());
+            break;
+          }
             
           default:
-            printf("[CLIENT] Unhandled message type recieved\n");
+            printf("[CLIENT] Unhandled message type received\n");
             break;
         }
         break;
@@ -148,6 +159,11 @@ void ClientPollMessages() {
 void ClientSendPositionUpdate(const glm::vec3& pos, const glm::vec2& rot) {
   PlayerPositionUpdateMessage pm { .pos = pos, .rot = rot };
   SendSerializedMessage(peer, pm);
+}
+
+void ClientSendChatMessage(const std::string& msg) {
+  ChatMessageMessage cm { .msg = msg };
+  SendSerializedMessage(peer, cm);
 }
 
 }

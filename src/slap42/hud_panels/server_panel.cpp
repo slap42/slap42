@@ -11,7 +11,7 @@ void Render() {
   if (!Server::IsServerRunning()) return;
 
   static bool open = false;
-  if (ImGui::IsKeyPressed(ImGuiKey_F2)) {
+  if (!ImGui::GetIO().WantCaptureKeyboard && ImGui::IsKeyPressed(ImGuiKey_F2)) {
     open = !open;
   }
   if (!open) return;

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <bytepack/bytepack.hpp>
 #include <glm/glm.hpp>
 
@@ -10,6 +11,7 @@ enum class MessageType : uint8_t {
   kPositionUpdate      = 0x01,
   kPlayerJoin          = 0x02,
   kPlayerLeave         = 0x03,
+  kChatMessage         = 0x04,
 };
 
 typedef uint8_t peer_id;
@@ -57,6 +59,21 @@ struct PlayerLeaveMessage {
 
   void deserialize(bytepack::binary_stream<>& stream) {
     stream.read(id);
+  }
+};
+
+struct ChatMessageMessage {
+  peer_id id;
+  std::string msg;
+
+  MessageType Type() const { return MessageType::kChatMessage; }
+
+  void serialize(bytepack::binary_stream<>& stream) const {
+    stream.write(id, msg);
+  }
+
+  void deserialize(bytepack::binary_stream<>& stream) {
+    stream.read(id, msg);
   }
 };
 

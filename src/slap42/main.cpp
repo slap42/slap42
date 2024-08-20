@@ -118,7 +118,9 @@ int main() {
     glfwPollEvents();
 
     if (MenuStateMachine::GetState() == MenuState::kNone) {
-      camera.Update();
+      if (!ImGui::GetIO().WantCaptureKeyboard) {
+        camera.Update();
+      }
       level.Update(camera.GetPosition());
     }
 

@@ -2,6 +2,7 @@
 
 #include <deque>
 #include <imgui.h>
+#include "networking/client.hpp"
 
 namespace Slap42 {
 namespace ChatPanel {
@@ -18,10 +19,14 @@ void AddChatMessage(const std::string& msg) {
 
 void Render() {
   static bool open = false;
-  if (ImGui::IsKeyPressed(ImGuiKey_T)) {
+  if (!ImGui::GetIO().WantCaptureKeyboard && ImGui::IsKeyPressed(ImGuiKey_T)) {
     open = !open;
   }
   if (!open) return;
+  if (ImGui::IsKeyPressed(ImGuiKey_Escape)) {
+    open = false;
+    return;
+  }
   
   ImGui::SetNextWindowSize({ 640, 480 }, ImGuiCond_Always);
   ImVec2 display_size = ImGui::GetIO().DisplaySize;
@@ -30,6 +35,20 @@ void Render() {
  
   for (auto& msg : chat_messages) {
     ImGui::Text("%s", msg.c_str());
+  }
+
+  auto content_region = ImGui::GetContentRegionAvail();
+  ImGui::BeginChild("Messages", { content_region.x, content_region.y - 25 });
+  ImGui::EndChild();
+
+  if (ImGui::IsWindowAppearing()) {
+    ImGui::SetKeyboardFocusHere();
+  }
+  static char buf[256] { };
+  if (ImGui::InputText("Chat Message", buf, sizeof(buf), ImGuiInputTextFlags_EnterReturnsTrue)) {
+    Client::ClientSendChatMessage(buf);
+    std::memset(buf, 0, sizeof(buf));
+    ImGui::SetKeyboardFocusHere(-1);
   }
 
   ImGui::End();

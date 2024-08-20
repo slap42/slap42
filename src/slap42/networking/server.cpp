@@ -102,11 +102,22 @@ static void RunServer() {
               BroadcastSerializedMessage(server, msg, evt.peer);
               break;
             }
-            
-            default:
+
+            case MessageType::kChatMessage: {
+              ChatMessageMessage msg { };
+              msg.deserialize(stream);
+              msg.id = GetPeerId(evt.peer);
+              BroadcastSerializedMessage(server, msg);
               break;
+            }
+            
+            default: {
+              printf("[SERVER] Unrecognized message type received: %u\n", type);
+              break;
+            }
           }
   
+          break;
         }
           
         case ENET_EVENT_TYPE_NONE:

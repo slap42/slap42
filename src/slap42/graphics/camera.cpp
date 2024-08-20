@@ -42,10 +42,10 @@ void Camera::Update() {
   static double mousex_old, mousey_old;
 
   // TODO: move this to an event consumer
-  if (glfwGetKey(window, GLFW_KEY_ESCAPE)) {
+  if (!ImGui::GetIO().WantCaptureKeyboard && ImGui::IsKeyPressed(ImGuiKey_Escape)) {
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
   }
-  if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) && !ImGui::GetIO().WantCaptureMouse) {
+  if (!ImGui::GetIO().WantCaptureMouse && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT)) {
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwGetCursorPos(window, &mousex, &mousey);
     mousex_old = mousex;

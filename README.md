@@ -57,6 +57,7 @@ Youtube: https://www.youtube.com/@Slap42Dev
 - Physics
 - Grass and trees
 - Chat system
+- Model loading
 
 ### Backlog
 
@@ -71,3 +72,6 @@ Youtube: https://www.youtube.com/@Slap42Dev
 - Delta time
 - Camera mouse control on a Linux VM goes crazy and will sometimes cause a segfault
 - Terrain flickering bug reported on Windows
+- Might be a race condition causing enet_peer_send to fail?
+- Move ALL controls (kb/mouse and cursor input modes) to a single controls file
+- Usernames

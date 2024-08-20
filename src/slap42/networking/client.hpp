@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <string>
 #include <memory>
 #include <unordered_map>
 #include <glm/glm.hpp>
@@ -15,6 +16,7 @@ void ClientDisconnect();
 void ClientPollMessages();
 
 void ClientSendPositionUpdate(const glm::vec3& pos, const glm::vec2& rot);
+void ClientSendChatMessage(const std::string& msg);
 
 std::unordered_map<peer_id, std::shared_ptr<PeerData>>* GetPeerData();
 
