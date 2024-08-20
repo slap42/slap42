@@ -1,5 +1,6 @@
 #include "chat_panel.hpp"
 
+#include <algorithm>
 #include <deque>
 #include <imgui.h>
 #include "networking/client.hpp"
@@ -28,7 +29,11 @@ void Render() {
     return;
   }
   
-  ImGui::SetNextWindowSize({ 640, 480 }, ImGuiCond_Always);
+  ImVec2 window_size = {
+    std::min(640.0f, ImGui::GetMainViewport()->Size.x / 2.0f),
+    std::min(480.0f, ImGui::GetMainViewport()->Size.y / 2.0f)
+  };
+  ImGui::SetNextWindowSize(window_size, ImGuiCond_Always);
   ImVec2 display_size = ImGui::GetIO().DisplaySize;
   ImGui::SetNextWindowPos({ 0, display_size.y }, ImGuiCond_Always, { 0.0f, 1.0f });
 
@@ -55,13 +60,15 @@ void Render() {
     ImGui::SetKeyboardFocusHere();
   }
 
+  ImGui::PushItemWidth(window_size.x - 25);
   static char buf[256] { };
-  if (ImGui::InputText("Chat Message", buf, sizeof(buf), ImGuiInputTextFlags_EnterReturnsTrue)) {
+  if (ImGui::InputText("##Chat Message", buf, sizeof(buf), ImGuiInputTextFlags_EnterReturnsTrue)) {
     Client::ClientSendChatMessage(buf);
     std::memset(buf, 0, sizeof(buf));
     ImGui::SetKeyboardFocusHere(-1);
     snap_to_bottom = true;
   }
+  ImGui::PopItemWidth();
 
   ImGui::End();
 }

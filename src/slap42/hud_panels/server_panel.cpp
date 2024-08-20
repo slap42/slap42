@@ -24,7 +24,7 @@ void Render() {
   ImGui::Text("Host player (you)");
   auto* peers = Client::GetPeerData();
   for (const auto& peer : *peers) {
-    ImGui::Text("Player with ID %d", peer.first);
+    ImGui::Text("Player %d", peer.first);
   }
 
   ImGui::End();
