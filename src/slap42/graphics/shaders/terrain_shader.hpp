@@ -4,16 +4,15 @@
 #include "shader.hpp"
 
 namespace Slap42 {
+namespace Shader {
+namespace TerrainShader {
 
-class TerrainShader : public Shader {
-public:
-  TerrainShader();
+void Create();
+void Destroy();
+void Bind();
 
-public:
-  void SetViewProjection(const glm::mat4& view_projection);
+void SetViewProjection(const glm::mat4& view_projection);
 
-private:
-  unsigned int u_view_projection;
-};
-
+}
+}
 }

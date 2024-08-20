@@ -17,11 +17,7 @@ public:
   void Update(const glm::vec3& player_pos);
   void Render() const;
 
-public:
-  inline TerrainShader* GetShader() const { return terrain_shader; }
-
 private:
-  TerrainShader* terrain_shader;
   Texture* grass_texture;
   Texture* dirt_texture;
 

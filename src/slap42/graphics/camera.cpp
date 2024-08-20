@@ -11,7 +11,7 @@
 
 namespace Slap42 {
 
-Camera::Camera(EntityShader* entity_shader, TerrainShader* terrain_shader) : entity_shader(entity_shader), terrain_shader(terrain_shader) {
+Camera::Camera() {
   position = glm::vec3(0.0f, 0.0f, -2.0f);
   CalcView();
   
@@ -137,8 +137,8 @@ void Camera::CalcView() {
 
 void Camera::CalcViewProjection() {
   glm::mat4 view_projection = projection * view;
-  terrain_shader->SetViewProjection(view_projection);
-  entity_shader->SetViewProjection(view_projection);
+  Shader::TerrainShader::SetViewProjection(view_projection);
+  Shader::EntityShader::SetViewProjection(view_projection);
 }
 
 }

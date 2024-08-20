@@ -4,18 +4,16 @@
 #include "shader.hpp"
 
 namespace Slap42 {
+namespace Shader {
+namespace EntityShader {
 
-class EntityShader : public Shader {
-public:
-  EntityShader();
+void Create();
+void Destroy();
+void Bind();
 
-public:
-  void SetTransform(const glm::mat4& transform);
-  void SetViewProjection(const glm::mat4& view_projection);
+void SetTransform(const glm::mat4& transform);
+void SetViewProjection(const glm::mat4& view_projection);
 
-private:
-  unsigned int u_transform;
-  unsigned int u_view_projection;
-};
-
+}
+}
 }

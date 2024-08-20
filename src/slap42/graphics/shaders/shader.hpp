@@ -1,17 +1,9 @@
 #pragma once
 
 namespace Slap42 {
+namespace Shader {
 
-class Shader {
-public:
-  Shader(const char* vert_path, const char* frag_path);
-  virtual ~Shader();
+unsigned int Compile(const char* vert_path, const char* frag_path);
 
-public:
-  void Bind() const;
-  
-protected:
-  unsigned int shader_program;
-};
-
+}
 }

@@ -5,7 +5,7 @@
 namespace Slap42 {
 
 Level::Level() {
-  terrain_shader = new TerrainShader();
+  Shader::TerrainShader::Create();
 
   grass_texture = new Texture("res/images/Grass002_2K-PNG_Color.png");
   dirt_texture = new Texture("res/images/Ground067_2K-PNG_Color.png");
@@ -18,7 +18,8 @@ Level::~Level() {
 
   delete grass_texture;
   delete dirt_texture;
-  delete terrain_shader;
+  
+  Shader::TerrainShader::Destroy();
 }
 
 void Level::Update(const glm::vec3& player_pos) {
@@ -58,7 +59,8 @@ void Level::Update(const glm::vec3& player_pos) {
 }
 
 void Level::Render() const {
-  terrain_shader->Bind();
+  Shader::TerrainShader::Bind();
+  
   grass_texture->Bind(0);
   dirt_texture->Bind(1);
 

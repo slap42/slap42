@@ -27,7 +27,7 @@ int main() {
 
   Level level;
 
-  EntityShader entity_shader;
+  Shader::EntityShader::Create();
 
   float vertices[] = {
     -1.0f, -1.0f, -1.0f, 0.5f, 0.2f,
@@ -55,7 +55,7 @@ int main() {
   };
   EntityMesh entity_mesh(vertices, sizeof(vertices), indices, sizeof(indices));
 
-  Camera camera(&entity_shader, level.GetShader());
+  Camera camera;
 
   while (Window::IsOpen()) {
     Client::ClientPollMessages();
@@ -72,7 +72,7 @@ int main() {
 
     level.Render();
 
-    entity_shader.Bind();
+    Shader::EntityShader::Bind();
 
     auto peers = Client::GetPeerData();
     for (auto& peer : *peers) {
@@ -81,7 +81,7 @@ int main() {
       glm::mat4 transform = glm::translate(glm::mat4(1.0f), { -peer.second->pos.x, -peer.second->pos.y, -peer.second->pos.z });
       transform = glm::rotate(transform, -peer.second->rot.y, kYAxis);
       transform = glm::rotate(transform, -peer.second->rot.x, kXAxis);
-      entity_shader.SetTransform(transform);
+      Shader::EntityShader::SetTransform(transform);
       entity_mesh.Render();
     }
 
