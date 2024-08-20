@@ -7,8 +7,13 @@ void Update() {
   
 }
 
-bool IsButtonDown(Button button);
-bool IsButtonPressed(Button button);
+bool IsButtonDown(Button button) {
+  return false;
+}
+
+bool IsButtonPressed(Button button) {
+  return false;
+}
 
 }
 }

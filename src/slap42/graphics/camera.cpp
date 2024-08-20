@@ -18,20 +18,20 @@ Camera::Camera(EntityShader* entity_shader, TerrainShader* terrain_shader) : ent
   // TODO: window::GetSize()
   OnResize(1280, 720);
   
-  glfwSetWindowUserPointer(Window::GetWindow(), this);
+  glfwSetWindowUserPointer(Window::GetGlfwWindow(), this);
   auto on_resize = [](GLFWwindow* window, int w, int h) {
     int width, height;
-    glfwGetFramebufferSize(Window::GetWindow(), &width, &height);
+    glfwGetFramebufferSize(Window::GetGlfwWindow(), &width, &height);
     Camera* camera = (Camera*)glfwGetWindowUserPointer(window);
     camera->OnResize(width, height);
     glViewport(0, 0, width, height);
   };
-  glfwSetWindowSizeCallback(Window::GetWindow(), on_resize);
-  on_resize(Window::GetWindow(), 1280, 720);
+  glfwSetWindowSizeCallback(Window::GetGlfwWindow(), on_resize);
+  on_resize(Window::GetGlfwWindow(), 1280, 720);
 }
 
 void Camera::Update() {
-  static GLFWwindow* window = Window::GetWindow();
+  static GLFWwindow* window = Window::GetGlfwWindow();
   
   const float kMoveSpeed = 0.5f;
   const float kRotationSpeed = 0.04f;

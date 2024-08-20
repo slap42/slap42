@@ -9,16 +9,18 @@
 #include <backends/imgui_impl_opengl3.h>
 #include <backends/imgui_impl_glfw.h>
 
+#include "controls.hpp"
+
 namespace Slap42 {
 namespace Window {
 
 static GLFWwindow* window;
 
-GLFWwindow* GetWindow() {
+GLFWwindow* GetGlfwWindow() {
   return window;
 }
 
-void CreateWindow() {
+void Create() {
   if (!glfwInit()) {
     fprintf(stderr, "glfwInit failed\n");
   }
@@ -61,7 +63,7 @@ void CreateWindow() {
   ImGui_ImplOpenGL3_Init("#version 330");
 }
 
-void DestroyWindow() {
+void Destroy() {
   ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplGlfw_Shutdown();
   ImGui::DestroyContext();
@@ -70,15 +72,17 @@ void DestroyWindow() {
   glfwTerminate();
 }
 
-bool IsWindowOpen() {
+bool IsOpen() {
   return !glfwWindowShouldClose(window);
 }
 
-void PollWindowEvents() {
+void PollEvents() {
   glfwPollEvents();
+  
+  Controls::Update();
 }
 
-void ClearWindow() {
+void Clear() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 

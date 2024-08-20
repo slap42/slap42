@@ -23,7 +23,7 @@ int main() {
     fprintf(stderr, "enet_initialize failed\n");
   }
 
-  Window::CreateWindow();
+  Window::Create();
 
   Level level;
 
@@ -57,9 +57,9 @@ int main() {
 
   Camera camera(&entity_shader, level.GetShader());
 
-  while (Window::IsWindowOpen()) {
+  while (Window::IsOpen()) {
     Client::ClientPollMessages();
-    Window::PollWindowEvents();
+    Window::PollEvents();
     
     if (MenuStateMachine::GetState() == MenuState::kNone) {
       if (!ImGui::GetIO().WantCaptureKeyboard) {
@@ -68,7 +68,7 @@ int main() {
       level.Update(camera.GetPosition());
     }
 
-    Window::ClearWindow();
+    Window::Clear();
 
     level.Render();
 
@@ -102,7 +102,7 @@ int main() {
   Client::ClientDisconnect();
   Server::StopServer();
 
-  Window::DestroyWindow();
+  Window::Destroy();
 }
 
 #if defined(_WIN32) && defined(NDEBUG)
