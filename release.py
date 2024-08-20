@@ -13,7 +13,8 @@ if args.bumpminor == True:
   v = version.split('.')
   v[1] = str(int(v[1]) + 1)
   version_file = open('res/version.txt', 'w')
-  version_file.write('.'.join(v))
+  version = '.'.join(v)
+  version_file.write(version)
   version_file.close()
 
 if args.bumpmajor == True:
@@ -21,7 +22,8 @@ if args.bumpmajor == True:
   v[0] = 'v' + str(int(v[0][1:]) + 1)
   v[1] = '0'
   version_file = open('res/version.txt', 'w')
-  version_file.write('.'.join(v))
+  version = '.'.join(v)
+  version_file.write(version)
   version_file.close()
 
 if platform.system() == 'Windows':
@@ -35,7 +37,7 @@ if platform.system() == 'Windows':
   shutil.rmtree('release')
   shutil.rmtree('output')
 
-if platform.system() == 'Darwin':
+elif platform.system() == 'Darwin':
   print('Compiling Slap42 ' + version + ' for macOS')
   subprocess.run('cmake -G Xcode -B release -D CMAKE_OSX_ARCHITECTURES=x86_64', shell=True)
   subprocess.run('cmake --build release --config Release', shell=True)
@@ -56,7 +58,7 @@ if platform.system() == 'Darwin':
   shutil.rmtree('release')
   shutil.rmtree('output')
 
-if platform.system() == 'Linux':
+elif platform.system() == 'Linux':
   print('Compiling Slap42 ' + version + ' for Linux')
   subprocess.run('cmake -G "Unix Makefiles" -B release -D CMAKE_BUILD_TYPE=Release', shell=True)
   subprocess.run('cmake --build release', shell=True)
