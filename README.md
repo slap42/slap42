@@ -34,7 +34,7 @@ Windows, macOS, and Linux are supported.
 
 The game expects to be run from a folder containing another folder called `res`. The `res` folder contains all the resources needed to run the game - images, shaders, etc.
 
-If you're on Windows it should be enough to just unzip the downloaded file you got from itch.io and click the exe file, making sure not to move any of the files or folders from the way they were when you unzipped them.
+If you're on Windows it should be enough to just unzip the folder you downloaded from itch.io and click `Slap42.exe`, making sure not to move any of the files or folders from their original locations.
 
 If running from a terminal or command prompt, make sure the working directory is the folder containing the executable file and the res folder.
 
