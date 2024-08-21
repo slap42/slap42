@@ -80,6 +80,8 @@ Youtube: https://www.youtube.com/@Slap42Dev
 
 ### Backlog
 
+### Bugs / Cleanup
+
 - When starting a server, check whether the port is available. If it is not, use another port.
 - Allow choosing a port when joining a server?
 - Allow setting FOV
@@ -90,9 +92,12 @@ Youtube: https://www.youtube.com/@Slap42Dev
 - Point logs at an in-game console instead of stderr/stdout?
 - Delta time
 - Camera mouse control on a Linux VM goes crazy and will sometimes cause a segfault
-- Terrain flickering bug reported on Windows
-- Might be a race condition causing enet_peer_send to fail?
 - Usernames
 - Joystick controls
 - Controls rebinding
 - Move ALL controls (kb/mouse and cursor input modes) to a single controls file
+- Chat messages over 26 characters not sending
+
+#### Can't Repro, Reported on Other People's Hardware
+- Terrain flickering bug reported on Windows
+- Might be a race condition causing enet_peer_send to fail?

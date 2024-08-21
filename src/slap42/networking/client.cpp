@@ -1,6 +1,7 @@
 #include "client.hpp"
 
 #include <cstdio>
+#include <iomanip>
 #include <sstream>
 #include <enet/enet.h>
 #include <glm/gtc/type_ptr.hpp>
@@ -63,7 +64,7 @@ bool ClientConnect(const char* hostname, uint16_t port) {
 
 void ClientDisconnect() {
   if (!peer)  {
-    fprintf(stderr, "[CLIENT] ClientDisconnect called when client is not connected");
+    fprintf(stderr, "[CLIENT] ClientDisconnect called when client is not connected\n");
     return;
   }
 
@@ -138,7 +139,7 @@ void ClientPollMessages() {
             msg.deserialize(stream);
 
             std::stringstream ss;
-            ss << "[Player " << (int)msg.id << "] " << msg.msg;
+            ss << "[Player 0x" << std::hex << msg.id << "] " << msg.msg;
 
             ChatPanel::AddChatMessage(ss.str());
             break;

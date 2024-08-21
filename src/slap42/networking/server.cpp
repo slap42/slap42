@@ -17,11 +17,6 @@ namespace Server {
 static bool server_running = false;
 static std::thread* server_thread;
 static std::unordered_map<peer_id, std::shared_ptr<PeerData>> peer_data;
-static std::unordered_map<uint64_t, peer_id> peer_ids;
-
-static peer_id GetPeerId(ENetPeer* peer) {
-  return peer_ids[FakeHash(peer->address.host, peer->address.port)];
-}
 
 static void RunServer() {
   ENetAddress address { };
@@ -42,16 +37,10 @@ static void RunServer() {
         case ENET_EVENT_TYPE_CONNECT: {
           printf("[SERVER] A client has connected: %x:%u\n", evt.peer->address.host, evt.peer->address.port);
 
-          peer_id new_peer_id = 0;
-          while (peer_data.find(new_peer_id) != peer_data.end()) {
-            ++new_peer_id;
-          }
-
-          peer_data.emplace(new_peer_id, std::make_shared<PeerData>());
-          peer_ids.emplace(FakeHash(evt.peer->address.host, evt.peer->address.port), new_peer_id);
+          peer_data.emplace(evt.peer->connectID, std::make_shared<PeerData>());
 
           {
-            PlayerJoinMessage msg { new_peer_id };
+            PlayerJoinMessage msg { evt.peer->connectID };
             BroadcastSerializedMessage(server, msg, evt.peer);
           }
 
@@ -64,11 +53,11 @@ static void RunServer() {
               continue;
             }
 
-            peer_id current_peer_id = GetPeerId(current_peer);
+            peer_id id = current_peer->connectID;
             PlayerJoinMessage msg {
-              .id = current_peer_id,
-              .pos = peer_data[current_peer_id]->pos,
-              .rot = peer_data[current_peer_id]->rot,
+              .id = id,
+              .pos = peer_data[id]->pos,
+              .rot = peer_data[id]->rot,
             };
             SendSerializedMessage(evt.peer, msg);
           }
@@ -78,12 +67,10 @@ static void RunServer() {
         case ENET_EVENT_TYPE_DISCONNECT: {
           printf("[SERVER] A client has disconnected: %x:%u\n", evt.peer->address.host, evt.peer->address.port);
 
-          PlayerLeaveMessage msg { GetPeerId(evt.peer) };
+          PlayerLeaveMessage msg { evt.peer->connectID };
           BroadcastSerializedMessage(server, msg, evt.peer);
           
-          peer_data.erase(GetPeerId(evt.peer));
-          peer_ids.erase(FakeHash(evt.peer->address.host, evt.peer->address.port));
-
+          peer_data.erase(evt.peer->connectID);
           break;
         }
 
@@ -96,7 +83,7 @@ static void RunServer() {
             case MessageType::kPositionUpdate: {
               PlayerPositionUpdateMessage msg { };
               msg.deserialize(stream);
-              msg.id = GetPeerId(evt.peer);
+              msg.id = evt.peer->connectID;
               peer_data[msg.id]->pos = msg.pos;
               peer_data[msg.id]->rot = msg.rot;
               BroadcastSerializedMessage(server, msg, evt.peer);
@@ -106,7 +93,7 @@ static void RunServer() {
             case MessageType::kChatMessage: {
               ChatMessageMessage msg { };
               msg.deserialize(stream);
-              msg.id = GetPeerId(evt.peer);
+              msg.id = evt.peer->connectID;
               BroadcastSerializedMessage(server, msg);
               break;
             }
