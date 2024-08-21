@@ -38,7 +38,7 @@ if platform.system() == 'Windows':
   shutil.rmtree('output')
 
 elif platform.system() == 'Darwin':
-  print('Compiling Slap42 ' + version + ' for macOS')
+  print('Compiling Slap42 ' + version + ' for macOS x86_64 (Intel)')
   subprocess.run('cmake -G Xcode -B release -D CMAKE_OSX_ARCHITECTURES=x86_64', shell=True)
   subprocess.run('cmake --build release --config Release', shell=True)
   os.mkdir('output')
@@ -48,7 +48,7 @@ elif platform.system() == 'Darwin':
   shutil.rmtree('release')
   shutil.rmtree('output')
 
-  print('Compiling Slap42 ' + version + ' for macOS')
+  print('Compiling Slap42 ' + version + ' for macOS arm64 (Apple Silicon)')
   subprocess.run('cmake -G Xcode -B release -D CMAKE_OSX_ARCHITECTURES=arm64', shell=True)
   subprocess.run('cmake --build release --config Release', shell=True)
   os.mkdir('output')
