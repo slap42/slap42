@@ -74,7 +74,7 @@ int main() {
 
     Shader::EntityShader::Bind();
 
-    auto peers = Client::GetPeerData();
+    auto* peers = Client::GetPeerData();
     for (auto& peer : *peers) {
       const glm::vec3 kXAxis(1.0f, 0.0f, 0.0f);
       const glm::vec3 kYAxis(0.0f, 1.0f, 0.0f);

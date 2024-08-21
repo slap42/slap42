@@ -13,7 +13,7 @@ enum class MessageType : uint8_t {
   kChatMessage         = 0x04,
 };
 
-typedef uint32_t peer_id;
+typedef uint8_t peer_id;
 
 struct PlayerPositionUpdateMessage {
   peer_id id;

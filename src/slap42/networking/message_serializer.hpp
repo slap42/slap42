@@ -28,7 +28,7 @@ void BroadcastSerializedMessage(ENetHost* host, const T& t, ENetPeer* to_ignore 
     if (current_peer->state != ENET_PEER_STATE_CONNECTED) {
       continue;
     }
-    if (to_ignore && current_peer->connectID == to_ignore->connectID) {
+    if (to_ignore && current_peer->data == to_ignore->data) {
       continue;
     }
 

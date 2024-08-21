@@ -56,14 +56,15 @@ void Render() {
   auto content_region = ImGui::GetContentRegionAvail();
   ImGui::BeginChild("Messages", { content_region.x, content_region.y - 25 });
 
-  for (auto& msg : chat_messages) {
+  for (const auto& msg : chat_messages) {
     ImGui::TextWrapped("%s", msg.c_str());
   }
 
-  static bool snap_to_bottom = false;
-  if (snap_to_bottom) {
-    snap_to_bottom = false;
-    ImGui::SetScrollY(999999999999.0f);
+  // We need 1 extra frame to calculate the size of the child window contents before we can set the scroll
+  static int snap_to_bottom = 2;
+  if (snap_to_bottom < 2) {
+    ++snap_to_bottom;
+    ImGui::SetScrollHereY(1.0f);
   }
 
   ImGui::EndChild();
@@ -73,12 +74,13 @@ void Render() {
   }
 
   ImGui::PushItemWidth(window_size.x - 25);
+  // Max chat message length is 255 characters, don't change this without updating the network stuff too
   static char buf[256] { };
   if (ImGui::InputText("##Chat Message", buf, sizeof(buf), ImGuiInputTextFlags_EnterReturnsTrue)) {
     Client::ClientSendChatMessage(buf);
     std::memset(buf, 0, sizeof(buf));
     ImGui::SetKeyboardFocusHere(-1);
-    snap_to_bottom = true;
+    snap_to_bottom = 0;
   }
   ImGui::PopItemWidth();
 

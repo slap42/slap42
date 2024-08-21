@@ -1,7 +1,6 @@
 #include "client.hpp"
 
 #include <cstdio>
-#include <iomanip>
 #include <sstream>
 #include <enet/enet.h>
 #include <glm/gtc/type_ptr.hpp>
@@ -139,7 +138,7 @@ void ClientPollMessages() {
             msg.deserialize(stream);
 
             std::stringstream ss;
-            ss << "[Player 0x" << std::hex << msg.id << "] " << msg.msg_buf;
+            ss << "[Player " << (int)msg.id << "] " << msg.msg_buf;
 
             ChatPanel::AddChatMessage(ss.str());
             break;
