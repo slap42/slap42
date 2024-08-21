@@ -112,7 +112,7 @@ void ClientPollMessages() {
 
             std::stringstream ss;
             ss << "Player " << (int)msg.id << " joined the game";
-            ChatPanel::AddChatMessage(ss.str());
+            ChatPanel::AddChatMessage(255, ss.str());
 
             auto new_peer_data = std::make_shared<PeerData>();
             new_peer_data->pos = msg.pos;
@@ -127,7 +127,7 @@ void ClientPollMessages() {
 
             std::stringstream ss;
             ss << "Player " << (int)msg.id << " left the game";
-            ChatPanel::AddChatMessage(ss.str());
+            ChatPanel::AddChatMessage(255, ss.str());
 
             peer_data.erase(msg.id);
             break;
@@ -140,7 +140,7 @@ void ClientPollMessages() {
             std::stringstream ss;
             ss << "[Player " << (int)msg.id << "] " << msg.msg_buf;
 
-            ChatPanel::AddChatMessage(ss.str());
+            ChatPanel::AddChatMessage(msg.id, ss.str());
             break;
           }
             

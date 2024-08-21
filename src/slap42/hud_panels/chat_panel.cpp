@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <deque>
 #include <GLFW/glfw3.h>
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/color_space.hpp>
 #include <imgui.h>
 #include "networking/client.hpp"
 #include "window/window.hpp"
@@ -10,11 +12,11 @@
 namespace Slap42 {
 namespace ChatPanel {
 
-static std::deque<std::string> chat_messages;
+static std::deque<std::pair<peer_id, std::string>> chat_messages;
 
-void AddChatMessage(const std::string& msg) {
+void AddChatMessage(peer_id sender, const std::string& msg) {
   const size_t kMaxMessages = 100;
-  chat_messages.push_back(msg);
+  chat_messages.push_back({ sender, msg });
   while (chat_messages.size() > kMaxMessages) {
     chat_messages.pop_front();
   }
@@ -57,7 +59,14 @@ void Render() {
   ImGui::BeginChild("Messages", { content_region.x, content_region.y - 25 });
 
   for (const auto& msg : chat_messages) {
-    ImGui::TextWrapped("%s", msg.c_str());
+    if (msg.first != 255) {
+      glm::vec3 hsv = glm::rgbColor(glm::vec3{ ((msg.first + (msg.first % 2 == 0 ? 0 : 4)) * 43) % 360, 0.7f, 1.0f });
+      ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(hsv.r * 255.0f, hsv.g * 255.0f, hsv.b * 255.0f, 255.0f));
+    }
+    ImGui::TextWrapped("%s", msg.second.c_str());
+    if (msg.first != 255) {
+      ImGui::PopStyleColor();
+    }
   }
 
   // We need 1 extra frame to calculate the size of the child window contents before we can set the scroll
