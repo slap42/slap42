@@ -2,8 +2,10 @@
 
 #include <algorithm>
 #include <deque>
+#include <GLFW/glfw3.h>
 #include <imgui.h>
 #include "networking/client.hpp"
+#include "window/window.hpp"
 
 namespace Slap42 {
 namespace ChatPanel {
@@ -20,11 +22,21 @@ void AddChatMessage(const std::string& msg) {
 
 void Render() {
   static bool open = false;
-  if (!ImGui::GetIO().WantCaptureKeyboard && ImGui::IsKeyPressed(ImGuiKey_T)) {
-    open = !open;
+  static bool was_cursor_hidden = false;
+  if (!open && !ImGui::GetIO().WantCaptureKeyboard && ImGui::IsKeyPressed(ImGuiKey_T)) {
+    open = true;
+    was_cursor_hidden = glfwGetInputMode(Window::GetGlfwWindow(), GLFW_CURSOR) == GLFW_CURSOR_DISABLED;
+    glfwSetInputMode(Window::GetGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
   }
   if (!open) return;
   if (ImGui::IsKeyPressed(ImGuiKey_Escape)) {
+    open = false;
+    if (was_cursor_hidden) {
+      glfwSetInputMode(Window::GetGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    }
+    return;
+  }
+  if (glfwGetInputMode(Window::GetGlfwWindow(), GLFW_CURSOR) == GLFW_CURSOR_DISABLED) {
     open = false;
     return;
   }

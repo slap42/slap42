@@ -15,5 +15,8 @@ void Update();
 bool IsButtonDown(Button button);
 bool IsButtonPressed(Button button);
 
+float GetMouseDeltaX();
+float GetMouseDeltaY();
+
 }
 }

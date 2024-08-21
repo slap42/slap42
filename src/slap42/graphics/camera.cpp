@@ -7,6 +7,7 @@
 #include <glm/gtx/rotate_vector.hpp>
 #include <imgui.h>
 #include "networking/client.hpp"
+#include "window/controls.hpp"
 #include "window/window.hpp"
 
 namespace Slap42 {
@@ -82,29 +83,18 @@ void Update() {
   }
   
   // Mouse input
-  double mousex = 0.0, mousey = 0.0;
-  static double mousex_old, mousey_old;
   
-  // TODO: move this to an event consumer
+  // TODO: move this to an event consumer?
   if (!ImGui::GetIO().WantCaptureKeyboard && ImGui::IsKeyPressed(ImGuiKey_Escape)) {
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
   }
   if (!ImGui::GetIO().WantCaptureMouse && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT)) {
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    glfwGetCursorPos(window, &mousex, &mousey);
-    mousex_old = mousex;
-    mousey_old = mousey;
   }
   
   if (glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_DISABLED) {
-    glfwGetCursorPos(window, &mousex, &mousey);
-    double delta_x = mousex - mousex_old;
-    double delta_y = mousey - mousey_old;
-    mousex_old = mousex;
-    mousey_old = mousey;
-    
-    rotation.y += (float)delta_x * kMouseSensitivity;
-    rotation.x += (float)delta_y * kMouseSensitivity;
+    rotation.y += Controls::GetMouseDeltaX() * kMouseSensitivity;
+    rotation.x += Controls::GetMouseDeltaY() * kMouseSensitivity;
   }
   
   if (rotation.x != old_rotation.x) {
