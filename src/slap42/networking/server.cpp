@@ -112,7 +112,7 @@ static void RunServer() {
             }
             
             default: {
-              printf("[SERVER] Unrecognized message type received: %u\n", type);
+              printf("[SERVER] Unrecognized message type received: %u\n", (unsigned int)type);
               break;
             }
           }

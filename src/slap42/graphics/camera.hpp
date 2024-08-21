@@ -5,30 +5,12 @@
 #include "shaders/terrain_shader.hpp"
 
 namespace Slap42 {
+namespace Camera {
 
-class Camera {
-public:
-  Camera();
+void Create();
+void Update();
 
-public:
-  void Update();
+glm::vec3 GetPosition();
 
-public:
-  void OnResize(int width, int height);
-
-private:
-  void CalcView();
-  void CalcViewProjection();
-
-public:
-  inline glm::vec3 GetPosition() const { return position; }
-
-private:
-  glm::vec3 position = glm::vec3(0.0f);
-  glm::vec2 rotation = glm::vec2(0.0f);
-
-  glm::mat4 view = glm::mat4(1.0f);
-  glm::mat4 projection = glm::mat4(1.0f);
-};
-
+}
 }

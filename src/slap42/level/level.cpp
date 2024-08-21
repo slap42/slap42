@@ -1,6 +1,7 @@
 #include "level.hpp"
 
 #include "utils/hash.hpp"
+#include "graphics/camera.hpp"
 
 namespace Slap42 {
 
@@ -22,7 +23,9 @@ Level::~Level() {
   Shader::TerrainShader::Destroy();
 }
 
-void Level::Update(const glm::vec3& player_pos) {
+void Level::Update() {
+  const glm::vec3 player_pos = Camera::GetPosition();
+  
   // Minimum value: 3
   const int kChunkSpawnDistance = 8;
   const int kChunkDespawnDistance = kChunkSpawnDistance * 1.5;

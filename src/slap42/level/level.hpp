@@ -1,7 +1,6 @@
 #pragma once
 
 #include <unordered_map>
-#include <glm/glm.hpp>
 #include "chunk.hpp"
 #include "graphics/shaders/terrain_shader.hpp"
 #include "graphics/texture.hpp"
@@ -14,7 +13,7 @@ public:
   ~Level();
 
 public:
-  void Update(const glm::vec3& player_pos);
+  void Update();
   void Render() const;
 
 private:

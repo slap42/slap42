@@ -55,7 +55,7 @@ int main() {
   };
   EntityMesh entity_mesh(vertices, sizeof(vertices), indices, sizeof(indices));
 
-  Camera camera;
+  Camera::Create();
 
   while (Window::IsOpen()) {
     Client::ClientPollMessages();
@@ -63,9 +63,9 @@ int main() {
     
     if (MenuStateMachine::GetState() == MenuState::kNone) {
       if (!ImGui::GetIO().WantCaptureKeyboard) {
-        camera.Update();
+        Camera::Update();
       }
-      level.Update(camera.GetPosition());
+      level.Update();
     }
 
     Window::Clear();
