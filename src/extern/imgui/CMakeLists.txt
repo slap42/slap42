@@ -22,4 +22,4 @@ add_library(imgui
 
 target_compile_features(imgui PRIVATE cxx_std_17)
 target_include_directories(imgui PUBLIC imgui)
-target_link_libraries(imgui PRIVATE glfw)
+target_include_directories(imgui PRIVATE ../glfw/include)

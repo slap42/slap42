@@ -112,15 +112,17 @@ if(WIN32)
 endif()
 
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
+if(WIN32)
+  set_target_properties(${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE $<CONFIG:Release>)
+endif()
 
 add_subdirectory(src/extern/bytepack)
 target_link_libraries(${PROJECT_NAME} PRIVATE bytepack)
 
 add_subdirectory(src/extern/enet)
-target_include_directories(${PROJECT_NAME} PRIVATE src/extern/enet/include)
+target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE src/extern/enet/include)
 if(WIN32)
   target_compile_definitions(enet PRIVATE _WINSOCK_DEPRECATED_NO_WARNINGS)
-  set_target_properties(${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE $<CONFIG:Release>)
 endif()
 target_link_libraries(${PROJECT_NAME} PRIVATE enet)
 
