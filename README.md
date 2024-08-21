@@ -75,8 +75,12 @@ Youtube: https://www.youtube.com/@Slap42Dev
 
 - Physics
 - Grass and trees
-- Chat system
 - Model loading
+- Allow configuring the number of players able to join a server
+- IP whitelists/blacklists for servers
+- Allow setting FOV
+- Delta time
+- Usernames
 
 ### Backlog
 
@@ -84,19 +88,13 @@ Youtube: https://www.youtube.com/@Slap42Dev
 
 - When starting a server, check whether the port is available. If it is not, use another port.
 - Allow choosing a port when joining a server?
-- Allow setting FOV
 - Make trying to join a server happen asynchronously
-- Allow configuring the number of players able to join a server
-- IP whitelists/blacklists for servers
 - Cleanup the switch statements in Client/Server to make them easier to read
 - Point logs at an in-game console instead of stderr/stdout?
-- Delta time
 - Camera mouse control on a Linux VM goes crazy and will sometimes cause a segfault
-- Usernames
 - Joystick controls
 - Controls rebinding
 - Move ALL controls (kb/mouse and cursor input modes) to a single controls file
-- Chat messages over 26 characters not sending
 
 #### Can't Repro, Reported on Other People's Hardware
 - Terrain flickering bug reported on Windows

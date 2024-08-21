@@ -45,7 +45,7 @@ void Render() {
   ImGui::BeginChild("Messages", { content_region.x, content_region.y - 25 });
 
   for (auto& msg : chat_messages) {
-    ImGui::Text("%s", msg.c_str());
+    ImGui::TextWrapped("%s", msg.c_str());
   }
 
   static bool snap_to_bottom = false;

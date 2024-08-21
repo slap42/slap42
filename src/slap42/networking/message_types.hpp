@@ -1,7 +1,5 @@
 #pragma once
 
-#include <cstdint>
-#include <string>
 #include <bytepack/bytepack.hpp>
 #include <glm/glm.hpp>
 
@@ -65,16 +63,16 @@ struct PlayerLeaveMessage {
 
 struct ChatMessageMessage {
   peer_id id;
-  std::string msg;
+  char msg_buf[256] { };
 
   MessageType Type() const { return MessageType::kChatMessage; }
 
   void serialize(bytepack::binary_stream<>& stream) const {
-    stream.write(id, msg);
+    stream.write(id, msg_buf);
   }
 
   void deserialize(bytepack::binary_stream<>& stream) {
-    stream.read(id, msg);
+    stream.read(id, msg_buf);
   }
 };
 

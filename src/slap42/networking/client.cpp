@@ -139,7 +139,7 @@ void ClientPollMessages() {
             msg.deserialize(stream);
 
             std::stringstream ss;
-            ss << "[Player 0x" << std::hex << msg.id << "] " << msg.msg;
+            ss << "[Player 0x" << std::hex << msg.id << "] " << msg.msg_buf;
 
             ChatPanel::AddChatMessage(ss.str());
             break;
@@ -163,7 +163,11 @@ void ClientSendPositionUpdate(const glm::vec3& pos, const glm::vec2& rot) {
 }
 
 void ClientSendChatMessage(const std::string& msg) {
-  ChatMessageMessage cm { .msg = msg };
+  if (msg.length() > 255) {
+    fprintf(stderr, "[CLIENT] Error - Can't send a message of length > 255 \"%s\"\n", msg.c_str());
+  }
+  ChatMessageMessage cm { };
+  strcpy(cm.msg_buf, msg.c_str());
   SendSerializedMessage(peer, cm);
 }
 
