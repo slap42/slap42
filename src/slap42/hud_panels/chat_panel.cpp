@@ -13,6 +13,7 @@ namespace Slap42 {
 namespace ChatPanel {
 
 static std::deque<std::pair<peer_id, std::string>> chat_messages;
+static int snap_to_bottom = 0;
 
 void AddChatMessage(peer_id sender, const std::string& msg) {
   const size_t kMaxMessages = 100;
@@ -20,6 +21,7 @@ void AddChatMessage(peer_id sender, const std::string& msg) {
   while (chat_messages.size() > kMaxMessages) {
     chat_messages.pop_front();
   }
+  snap_to_bottom = 2;
 }
 
 void Render() {
@@ -70,9 +72,11 @@ void Render() {
   }
 
   // We need 1 extra frame to calculate the size of the child window contents before we can set the scroll
-  static int snap_to_bottom = 2;
-  if (snap_to_bottom < 2) {
-    ++snap_to_bottom;
+  if (snap_to_bottom == 2 && ImGui::GetScrollY() != ImGui::GetScrollMaxY()) {
+    snap_to_bottom = 0;
+  }
+  if (snap_to_bottom > 0) {
+    --snap_to_bottom;
     ImGui::SetScrollHereY(1.0f);
   }
 
@@ -86,10 +90,13 @@ void Render() {
   // Max chat message length is 255 characters, don't change this without updating the network stuff too
   static char buf[256] { };
   if (ImGui::InputText("##Chat Message", buf, sizeof(buf), ImGuiInputTextFlags_EnterReturnsTrue)) {
-    Client::ClientSendChatMessage(buf);
-    std::memset(buf, 0, sizeof(buf));
+    if (std::strlen(buf) > 0) {
+      Client::ClientSendChatMessage(buf);
+      std::memset(buf, 0, sizeof(buf));
+      snap_to_bottom = 2;
+    }
+
     ImGui::SetKeyboardFocusHere(-1);
-    snap_to_bottom = 0;
   }
   ImGui::PopItemWidth();
 
