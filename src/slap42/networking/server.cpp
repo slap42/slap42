@@ -43,12 +43,12 @@ static void RunServer() {
           while (peer_data.find(current_id) != peer_data.end()) {
             ++current_id;
           }
-          evt.peer->data = (void*)current_id;
+          evt.peer->data = (void*)(uint64_t)current_id;
 
-          peer_data.emplace((peer_id)evt.peer->data, std::make_shared<PeerData>());
+          peer_data.emplace((peer_id)(uint64_t)evt.peer->data, std::make_shared<PeerData>());
 
           {
-            PlayerJoinMessage msg { (peer_id)evt.peer->data };
+            PlayerJoinMessage msg { (peer_id)(uint64_t)evt.peer->data };
             BroadcastSerializedMessage(server, msg, evt.peer);
           }
 
@@ -61,7 +61,7 @@ static void RunServer() {
               continue;
             }
 
-            peer_id id = (peer_id)current_peer->data;
+            peer_id id = (peer_id)(uint64_t)current_peer->data;
             PlayerJoinMessage msg {
               .id = id,
               .pos = peer_data[id]->pos,
@@ -75,10 +75,10 @@ static void RunServer() {
         case ENET_EVENT_TYPE_DISCONNECT: {
           printf("[SERVER] A client has disconnected: %x:%u\n", evt.peer->address.host, evt.peer->address.port);
 
-          PlayerLeaveMessage msg { (peer_id)evt.peer->data };
+          PlayerLeaveMessage msg { (peer_id)(uint64_t)evt.peer->data };
           BroadcastSerializedMessage(server, msg, evt.peer);
           
-          peer_data.erase((peer_id)evt.peer->data);
+          peer_data.erase((peer_id)(uint64_t)evt.peer->data);
           break;
         }
 
@@ -91,7 +91,7 @@ static void RunServer() {
             case MessageType::kPositionUpdate: {
               PlayerPositionUpdateMessage msg { };
               msg.deserialize(stream);
-              msg.id = (peer_id)evt.peer->data;
+              msg.id = (peer_id)(uint64_t)evt.peer->data;
               peer_data[msg.id]->pos = msg.pos;
               peer_data[msg.id]->rot = msg.rot;
               BroadcastSerializedMessage(server, msg, evt.peer);
@@ -101,7 +101,7 @@ static void RunServer() {
             case MessageType::kChatMessage: {
               ChatMessageMessage msg { };
               msg.deserialize(stream);
-              msg.id = (peer_id)evt.peer->data;
+              msg.id = (peer_id)(uint64_t)evt.peer->data;
               BroadcastSerializedMessage(server, msg);
               break;
             }
