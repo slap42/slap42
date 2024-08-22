@@ -8,7 +8,7 @@ namespace Slap42 {
 namespace Camera {
 
 void Create();
-void Update();
+void Update(float delta);
 
 glm::vec3 GetPosition();
 

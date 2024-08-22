@@ -79,7 +79,6 @@ Youtube: https://www.youtube.com/@Slap42Dev
 - Allow configuring the number of players able to join a server
 - IP whitelists/blacklists for servers
 - Allow setting FOV
-- Delta time
 - Usernames
 - Joystick controls
 

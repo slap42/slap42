@@ -58,12 +58,12 @@ void Create() {
   on_resize(Window::GetGlfwWindow(), 1280, 720);
 }
 
-void Update() {
+void Update(float delta) {
   static GLFWwindow* window = Window::GetGlfwWindow();
   
-  const float kMoveSpeed = 0.5f;
-  const float kRotationSpeed = 0.04f;
-  const float kMouseSensitivity = 0.005f;
+  constexpr float kMoveSpeed = 0.05f;
+  constexpr float kRotationSpeed = 0.04f;
+  constexpr float kMouseSensitivity = 0.005f;
   
   glm::vec3 old_position = position;
   glm::vec2 old_rotation = rotation;
@@ -120,14 +120,14 @@ void Update() {
   
   if (dir.x != 0 || dir.z != 0) {
     dir = glm::rotateY(dir, -rotation.y);
-    position += glm::normalize(dir) * kMoveSpeed;
+    position += glm::normalize(dir) * kMoveSpeed * delta;
   }
   
   if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT)) {
-    position.y += kMoveSpeed;
+    position.y += kMoveSpeed * delta;
   }
   if (glfwGetKey(window, GLFW_KEY_SPACE)) {
-    position.y -= kMoveSpeed;
+    position.y -= kMoveSpeed * delta;
   }
   
   if (position != old_position || rotation != old_rotation) {

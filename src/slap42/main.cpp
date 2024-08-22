@@ -1,3 +1,4 @@
+#include <chrono>
 #include <cstdio>
 
 #include <enet/enet.h>
@@ -57,13 +58,19 @@ int main() {
 
   Camera::Create();
 
+  auto last_time = std::chrono::high_resolution_clock::now();
+
   while (Window::IsOpen()) {
+    auto current_time = std::chrono::high_resolution_clock::now();
+    float delta = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - last_time).count();
+    last_time = current_time;
+
     Client::ClientPollMessages();
     Window::PollEvents();
     
     if (MenuStateMachine::GetState() == MenuState::kNone) {
       if (!ImGui::GetIO().WantCaptureKeyboard) {
-        Camera::Update();
+        Camera::Update(delta);
       }
       level.Update();
     }
