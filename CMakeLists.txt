@@ -118,30 +118,30 @@ if(WIN32)
   set_target_properties(${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE $<CONFIG:Release>)
 endif()
 
-add_subdirectory(src/extern/bytepack)
+add_subdirectory(src/extern/bytepack SYSTEM)
 target_link_libraries(${PROJECT_NAME} PRIVATE bytepack)
 
-add_subdirectory(src/extern/enet)
+add_subdirectory(src/extern/enet SYSTEM)
 target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE src/extern/enet/include)
 if(WIN32)
   target_compile_definitions(enet PRIVATE _WINSOCK_DEPRECATED_NO_WARNINGS)
 endif()
 target_link_libraries(${PROJECT_NAME} PRIVATE enet)
 
-add_subdirectory(src/extern/glad)
+add_subdirectory(src/extern/glad SYSTEM)
 target_link_libraries(${PROJECT_NAME} PRIVATE glad)
 
-add_subdirectory(src/extern/glfw)
+add_subdirectory(src/extern/glfw SYSTEM)
 target_link_libraries(${PROJECT_NAME} PRIVATE glfw)
 
-add_subdirectory(src/extern/glm)
+add_subdirectory(src/extern/glm SYSTEM)
 target_link_libraries(${PROJECT_NAME} PRIVATE glm)
 
-add_subdirectory(src/extern/imgui)
+add_subdirectory(src/extern/imgui SYSTEM)
 target_link_libraries(${PROJECT_NAME} PRIVATE imgui)
 
-add_subdirectory(src/extern/opensimplex)
+add_subdirectory(src/extern/opensimplex SYSTEM)
 target_link_libraries(${PROJECT_NAME} PRIVATE opensimplex)
 
-add_subdirectory(src/extern/stb)
+add_subdirectory(src/extern/stb SYSTEM)
 target_link_libraries(${PROJECT_NAME} PRIVATE stb)
