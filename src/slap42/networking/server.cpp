@@ -37,7 +37,8 @@ static void RunServer() {
         case ENET_EVENT_TYPE_CONNECT: {
           printf("[SERVER] A client has connected: %x:%u\n", evt.peer->address.host, evt.peer->address.port);
   
-          // Store current ID in peer user data
+          // Store ID in peer user data
+          // We can't use connectID as this is set to zero on disconnect
           peer_id current_id = 0;
           while (peer_data.find(current_id) != peer_data.end()) {
             ++current_id;

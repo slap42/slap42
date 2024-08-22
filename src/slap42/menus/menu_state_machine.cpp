@@ -3,6 +3,7 @@
 #include "host_join_menu.hpp"
 #include "join_menu.hpp"
 #include "join_error_menu.hpp"
+#include "join_async_menu.hpp"
 
 namespace Slap42 {
 namespace MenuStateMachine {
@@ -32,6 +33,10 @@ void Render() {
 
   case MenuState::kJoinErrorMenu:
     JoinErrorMenu::Render();
+    break;
+
+  case MenuState::kJoinAsyncMenu:
+    JoinAsyncMenu::Render();
     break;
 
   }

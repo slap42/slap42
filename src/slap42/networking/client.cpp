@@ -1,7 +1,9 @@
 #include "client.hpp"
 
+#include <chrono>
 #include <cstdio>
 #include <sstream>
+#include <mutex>
 #include <enet/enet.h>
 #include <glm/gtc/type_ptr.hpp>
 #include "hud_panels/chat_panel.hpp"
@@ -18,6 +20,9 @@ static ENetHost* client = nullptr;
 static ENetPeer* peer = nullptr;
 
 static std::unordered_map<peer_id, std::shared_ptr<PeerData>> peer_data;
+
+static bool interrupt_connect_attempt = false;
+static std::mutex interrupt_connect_attempt_mutex;
 
 std::unordered_map<peer_id, std::shared_ptr<PeerData>>* GetPeerData() {
   return &peer_data;
@@ -47,23 +52,40 @@ bool ClientConnect(const char* hostname, uint16_t port) {
     return false;
   }
   
+  // Time this manually because we want to be able to interrupt it
   ENetEvent evt;
-  if (enet_host_service(client, &evt, 5000) && evt.type == ENET_EVENT_TYPE_CONNECT) {
-    printf("[CLIENT] Connection to %s:%u succeeded!\n", hostname, port);
-    return true;
+  auto start = std::chrono::steady_clock::now();
+  while (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - start).count() < 5) {
+    if (enet_host_service(client, &evt, 0) && evt.type == ENET_EVENT_TYPE_CONNECT) {
+      printf("[CLIENT] Connection to %s:%u succeeded!\n", hostname, port);
+      return true;
+    }
+
+    std::scoped_lock sl(interrupt_connect_attempt_mutex);
+    if (interrupt_connect_attempt) {
+      break;
+    }
   }
-  else {
-    enet_peer_reset(peer);
-    client = nullptr;
-    peer = nullptr;
-    JoinErrorMenu::SetErrorMessage("[CLIENT] enet_host_service failed: Connection timed out waiting for connection to the server\n");
-    return false;
+  
+  // Timeout, connection fail
+  enet_peer_reset(peer);
+  client = nullptr;
+  peer = nullptr;
+  if (!interrupt_connect_attempt) {
+    JoinErrorMenu::SetErrorMessage("[CLIENT] Failed to connect to the server\n");
   }
+  std::scoped_lock sl(interrupt_connect_attempt_mutex);
+  interrupt_connect_attempt = false;
+  return false;
+}
+
+void InterruptConnectAttempt() {
+  std::scoped_lock sl(interrupt_connect_attempt_mutex);
+  interrupt_connect_attempt = true;
 }
 
 void ClientDisconnect() {
   if (!peer)  {
-    fprintf(stderr, "[CLIENT] ClientDisconnect called when client is not connected\n");
     return;
   }
 
@@ -163,7 +185,7 @@ void ClientSendPositionUpdate(const glm::vec3& pos, const glm::vec2& rot) {
 
 void ClientSendChatMessage(const std::string& msg) {
   if (msg.length() > 255) {
-    fprintf(stderr, "[CLIENT] Error - Can't send a message of length > 255 \"%s\"\n", msg.c_str());
+    fprintf(stderr, "[CLIENT] Error - Can't send a chat message of length > 255 \"%s\"\n", msg.c_str());
   }
   ChatMessageMessage cm { };
   strcpy(cm.msg_buf, msg.c_str());

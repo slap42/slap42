@@ -89,7 +89,6 @@ Youtube: https://www.youtube.com/@Slap42Dev
 
 - When starting a server, check whether the port is available. If it is not, use another port.
 - Allow choosing a port when joining a server
-- Make trying to join a server happen asynchronously
 - Cleanup the switch statements in Client/Server to make them easier to read
 - Point logs at an in-game console instead of stderr/stdout?
 - Camera mouse control on a Linux VM goes crazy and will sometimes cause a segfault

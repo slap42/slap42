@@ -65,6 +65,8 @@ set(SLAP42_MENUS_FILES
   src/slap42/menus/join_menu.cpp
   src/slap42/menus/join_error_menu.hpp
   src/slap42/menus/join_error_menu.cpp
+  src/slap42/menus/join_async_menu.hpp
+  src/slap42/menus/join_async_menu.cpp
 )
 source_group("src/menus" FILES ${SLAP42_MENUS_FILES})
 

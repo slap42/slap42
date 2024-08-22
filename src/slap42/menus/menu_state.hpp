@@ -7,6 +7,7 @@ enum class MenuState {
   kHostJoinMenu,
   kJoinMenu,
   kJoinErrorMenu,
+  kJoinAsyncMenu,
 };
 
 }

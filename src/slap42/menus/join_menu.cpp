@@ -6,6 +6,7 @@
 #include "join_error_menu.hpp"
 #include "networking/client.hpp"
 #include "menus/menu_state_machine.hpp"
+#include "menus/join_async_menu.hpp"
 
 namespace Slap42 {
 namespace JoinMenu {
@@ -17,15 +18,10 @@ void Render() {
   ImGui::Begin("Join Game", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar);
 
   static char buf[256] { "127.0.0.1" };
-  ImGui::InputText("Server URL", buf, sizeof(buf));
 
-  if (ImGui::Button("Connect")) {
-    if (Client::ClientConnect(buf, 6969)) {
-      MenuStateMachine::SetState(MenuState::kNone);
-    }
-    else {
-      MenuStateMachine::SetState(MenuState::kJoinErrorMenu);
-    }
+  if (ImGui::InputText("Server URL", buf, sizeof(buf), ImGuiInputTextFlags_EnterReturnsTrue) || ImGui::Button("Connect")) {
+    JoinAsyncMenu::Reset(buf);
+    MenuStateMachine::SetState(MenuState::kJoinAsyncMenu);
   }
 
   networking_end:
