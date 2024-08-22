@@ -91,7 +91,8 @@ void ClientDisconnect() {
 
   ENetEvent evt;
   enet_peer_disconnect(peer, 0);
-  while (enet_host_service(client, &evt, 5000) > 0) {
+  // No need to wait here, as the connection will timeout on server side
+  while (enet_host_service(client, &evt, 0) > 0) {
     switch (evt.type) {
       case ENET_EVENT_TYPE_RECEIVE:
         enet_packet_destroy(evt.packet);
