@@ -2,12 +2,12 @@
 
 #include <imgui.h>
 #include "networking/client.hpp"
-#include "networking/server.hpp"
 
 namespace Slap42 {
 namespace ServerPanel {
 
 void Render() {
+/*
   // TODO: This should just be part of the main menu
   if (!Server::IsServerRunning()) return;
 
@@ -29,6 +29,7 @@ void Render() {
   }
 
   ImGui::End();
+*/
 }
 
 }

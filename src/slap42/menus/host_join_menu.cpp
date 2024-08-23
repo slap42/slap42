@@ -16,10 +16,22 @@ void Render() {
   ImGui::Begin("Host or Join Game", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar);
 
   if (ImGui::Button("Host Game")) {
-    MenuStateMachine::SetState(MenuState::kNone);
     Server::StopServer();
     Server::StartServer();
-    Client::ClientConnect("127.0.0.1", 6969);
+
+    while (Server::GetState() == ServerState::kStopped) {
+      void(0);
+    }
+
+    if (Server::GetState() == ServerState::kRunning) {
+      MenuStateMachine::SetState(MenuState::kNone);
+      Client::ClientConnect("127.0.0.1", 6969);
+    }
+    else {
+      Server::StopServer();
+      MenuStateMachine::SetState(MenuState::kHostErrorMenu);
+    }
+
   }
 
   ImGui::SameLine();

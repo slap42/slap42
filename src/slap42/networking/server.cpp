@@ -3,9 +3,11 @@
 #include <cstdio>
 #include <thread>
 #include <memory>
+#include <mutex>
 #include <unordered_map>
 #include <enet/enet.h>
 #include <glm/glm.hpp>
+#include "menus/host_error_menu.hpp"
 #include "networking/message_types.hpp"
 #include "networking/message_serializer.hpp"
 #include "networking/peer_data.hpp"
@@ -14,9 +16,21 @@
 namespace Slap42 {
 namespace Server {
 
-static bool server_running = false;
+static std::mutex server_state_mutex;
+static ServerState state = ServerState::kStopped;
+
 static std::thread* server_thread;
 static std::unordered_map<peer_id, std::shared_ptr<PeerData>> peer_data;
+
+static void SetState(ServerState s) {
+  std::scoped_lock sl(server_state_mutex);
+  state = s;
+}
+
+ServerState GetState() {
+  std::scoped_lock sl(server_state_mutex);
+  return state;
+}
 
 static void RunServer() {
   ENetAddress address { };
@@ -25,12 +39,16 @@ static void RunServer() {
 
   ENetHost* server = enet_host_create(&address, 32, 1, 0, 0);
   if (!server) {
-    fprintf(stderr, "[SERVER] Failed to start server: enet_host_create failed\n");
+    HostErrorMenu::SetErrorMessage("[SERVER] Failed to start server: enet_host_create failed.\nThe chosen port might already be in use by another application.");
+    SetState(ServerState::kError);
     return;
+  }
+  else {
+    SetState(ServerState::kRunning);
   }
 
   ENetEvent evt;
-  while (server_running) {
+  while (GetState() == ServerState::kRunning) {
     while (enet_host_service(server, &evt, 0) > 0) {
       
       switch (evt.type) {
@@ -125,22 +143,17 @@ static void RunServer() {
 }
 
 void StartServer() {
-  if (server_running) return;
+  if (GetState() != ServerState::kStopped) return;
   printf("[SERVER] Starting Server\n");
-  server_running = true;
   server_thread = new std::thread(RunServer);
 }
 
 void StopServer() {
-  if (!server_running) return;
-  server_running = false;
+  if (GetState() == ServerState::kStopped) return;
+  SetState(ServerState::kStopped);
   server_thread->join();
   printf("[SERVER] Stopped Server\n");
   delete server_thread;
-}
-
-bool IsServerRunning() {
-  return server_running;
 }
 
 }

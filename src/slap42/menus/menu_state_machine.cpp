@@ -1,6 +1,7 @@
 #include "menu_state_machine.hpp"
 
 #include "host_join_menu.hpp"
+#include "host_error_menu.hpp"
 #include "join_menu.hpp"
 #include "join_error_menu.hpp"
 #include "join_async_menu.hpp"
@@ -39,6 +40,10 @@ void Render() {
 
   case MenuState::kHostJoinMenu:
     HostJoinMenu::Render();
+    break;
+
+  case MenuState::kHostErrorMenu:
+    HostErrorMenu::Render();
     break;
 
   case MenuState::kJoinMenu:
