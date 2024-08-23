@@ -15,19 +15,21 @@ static bool ready = false;
 static bool done = false;
 static std::mutex done_mutex;
 static bool success = false;
-static std::string host_url;
+static std::string server_host;
+static uint16_t server_port;
 static std::thread* thread = nullptr;
 
-void Reset(const char* host) {
+void Reset(const char* host, uint16_t port) {
   ready = true;
   done = false;
   success = false;
-  host_url = host;
+  server_host = host;
+  server_port = port;
   thread = nullptr;
 }
 
 static void DoThread() {
-  success = Client::ClientConnect(host_url.c_str(), 6969);
+  success = Client::ClientConnect(server_host.c_str(), server_port);
   std::scoped_lock sl(done_mutex);
   done = true;
 }
@@ -57,7 +59,9 @@ void Render() {
 
   ImGui::Begin("Join Async", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar);
 
-  ImGui::Text("Trying to join the game...");
+  ImGui::Text("Trying to join server...");
+  ImGui::Text("Host: %s", server_host.c_str());
+  ImGui::Text("Port: %d", server_port);
 
   if (ImGui::Button("Back")) {
     Client::InterruptConnectAttempt();

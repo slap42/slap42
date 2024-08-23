@@ -95,8 +95,9 @@ If running in a VM, make sure mouse integration is turned on or cursor input won
 
 - Cleanup the switch statements in Client/Server to make them easier to read
 - When starting a server, check whether the port is available. If it is not, use another port.
-- Allow choosing a port when joining a server
+- Allow choosing a port when starting a server
 - Point logs at an in-game console instead of stderr/stdout?
+- Better validation for hostname and port
 
 #### "It Works On My Machine"
 - Terrain flickering bug reported on Windows
