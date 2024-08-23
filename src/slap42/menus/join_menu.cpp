@@ -60,7 +60,6 @@ void Render() {
     }
   }
 
-  networking_end:
   ImGui::SameLine();
   if (ImGui::Button("Back")) {
     MenuStateMachine::SetState(MenuState::kHostJoinMenu);

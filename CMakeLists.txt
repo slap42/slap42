@@ -63,6 +63,8 @@ set(SLAP42_MENUS_FILES
   src/slap42/menus/menu_state_machine.cpp
   src/slap42/menus/host_join_menu.hpp
   src/slap42/menus/host_join_menu.cpp
+  src/slap42/menus/host_menu.hpp
+  src/slap42/menus/host_menu.cpp
   src/slap42/menus/host_error_menu.hpp
   src/slap42/menus/host_error_menu.cpp
   src/slap42/menus/join_menu.hpp

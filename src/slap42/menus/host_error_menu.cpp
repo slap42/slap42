@@ -25,7 +25,7 @@ void Render() {
   ImGui::Text("%s", message.c_str());
 
   if (ImGui::Button("Back")) {
-    MenuStateMachine::SetState(MenuState::kHostJoinMenu);
+    MenuStateMachine::SetState(MenuState::kHostMenu);
   }
 
   ImGui::End();

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 namespace Slap42 {
 
 enum class ServerState {
@@ -10,7 +12,7 @@ enum class ServerState {
 
 namespace Server {
 
-void StartServer();
+void StartServer(uint16_t port);
 void StopServer();
 
 ServerState GetState();

@@ -5,6 +5,7 @@ namespace Slap42 {
 enum class MenuState {
   kNone,
   kHostJoinMenu,
+  kHostMenu,
   kHostErrorMenu,
   kJoinMenu,
   kJoinErrorMenu,
