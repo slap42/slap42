@@ -69,6 +69,10 @@ Twitch: https://www.twitch.tv/slap42dev
 
 Youtube: https://www.youtube.com/@Slap42Dev
 
+## Notes
+
+If running in a VM, make sure mouse integration is turned on or cursor input won't work
+
 ## Todo List:
 
 ### New Features
@@ -88,7 +92,6 @@ Youtube: https://www.youtube.com/@Slap42Dev
 
 #### Bugs
 
-- Camera mouse control on a Linux VM goes crazy and will sometimes cause a segfault
 - Shader link fails with no error message on Linux VM
 
 #### Cleanup
