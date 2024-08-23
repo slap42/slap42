@@ -92,8 +92,6 @@ If running in a VM, make sure mouse integration is turned on or cursor input won
 #### Bugs
 
 - Shader link fails with no error message on Linux VM - error code 1282
-- Error 1282 on delete mesh vao, vbo, and ibo
-- We are leaking GPU memory at an alarming rate
 
 #### Cleanup
 

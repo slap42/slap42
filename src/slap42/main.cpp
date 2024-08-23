@@ -3,6 +3,7 @@
 
 #include <enet/enet.h>
 #include <glm/gtc/matrix_transform.hpp>
+#include <GLFW/glfw3.h>
 #include <imgui.h>
 
 #include "graphics/camera.hpp"
@@ -21,6 +22,7 @@ int main() {
   using namespace Slap42;
 
   atexit(enet_deinitialize);
+  atexit(Window::Destroy);
   if (enet_initialize() != 0) {
     fprintf(stderr, "enet_initialize failed\n");
   }
@@ -114,8 +116,6 @@ int main() {
 
   Client::ClientDisconnect();
   Server::StopServer();
-
-  Window::Destroy();
 }
 
 #if defined(_WIN32) && defined(NDEBUG)
