@@ -30,9 +30,9 @@ void Render() {
   static bool was_mouse_grabbed = false;
 
   // Opening chat menu with T
-  if (!Controls::IsInputStateInMenu() && Controls::IsButtonPressed(Button::kOpenChatMenu)) {
+  if (Controls::IsInPlayerInputState() && Controls::IsButtonPressed(Button::kOpenChatMenu)) {
     was_mouse_grabbed = Controls::GetInputState() == InputState::kMouseGrabbed;
-    Controls::SetInputState(InputState::kChatMenu);
+    Controls::SetInputState(InputState::kNonBlockingMenu);
     open = true;
   }
 

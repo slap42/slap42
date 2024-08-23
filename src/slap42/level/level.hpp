@@ -16,6 +16,9 @@ public:
   void Update();
   void Render() const;
 
+public:
+  static int* GetRenderDistancePtr();
+
 private:
   Texture* grass_texture;
   Texture* dirt_texture;

@@ -87,6 +87,7 @@ If running in a VM, make sure mouse integration is turned on or cursor input won
 - Usernames
 - Joystick controls
 - Controls rebinding
+- Serialize preferences including username and render distance
 
 ### Backlog
 

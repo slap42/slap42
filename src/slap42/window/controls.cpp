@@ -38,7 +38,7 @@ static std::unordered_map<Button, ButtonData> button_data = {
   { Button::kActionSecondary, { GLFW_MOUSE_BUTTON_RIGHT, ButtonBindDevice::kMouse    } },
 };
 
-static InputState state = InputState::kMouseFree;
+static InputState state = InputState::kBlockingMenuNotInGame;
 
 InputState GetInputState() {
   return state;
@@ -57,8 +57,8 @@ void SetInputState(InputState s) {
   }
 }
 
-bool IsInputStateInMenu() {
-  return state != InputState::kMouseFree && state != InputState::kMouseGrabbed;
+bool IsInPlayerInputState() {
+  return state == InputState::kMouseFree || state == InputState::kMouseGrabbed;
 }
 
 void Update() {
@@ -108,6 +108,16 @@ float GetMouseDeltaX() {
 
 float GetMouseDeltaY() {
   return mouse_delta_y;
+}
+
+static InputState cached_cursor_state = InputState::kMouseFree;
+
+void CacheCursorGrabbed() {
+  cached_cursor_state = state;
+}
+
+void SetInputStateWithCachedCursor() {
+  SetInputState(cached_cursor_state);
 }
 
 }

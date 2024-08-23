@@ -37,7 +37,7 @@ static void CalcView() {
 
 static void OnResize(int width, int height) {
   if (width <= 0 || height <= 0) return;
-  projection = glm::perspectiveFov(1.22f, (float)width, float(height), 0.1f, 1000.0f);
+  projection = glm::perspectiveFov(1.22f, (float)width, float(height), 0.1f, 10000.0f);
   CalcViewProjection();
 }
 
@@ -60,10 +60,6 @@ void Create() {
 }
 
 void Update(float delta) {
-  if (Controls::IsInputStateInMenu()) {
-    return;
-  }
-
   static GLFWwindow* window = Window::GetGlfwWindow();
   
   constexpr float kMoveSpeed = 0.05f;

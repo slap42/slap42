@@ -26,7 +26,9 @@ enum class Button {
 enum class InputState {
   kMouseFree,
   kMouseGrabbed,
-  kChatMenu,
+  kNonBlockingMenu,
+  kBlockingMenuInGame,
+  kBlockingMenuNotInGame,
 };
 
 namespace Controls {
@@ -41,7 +43,10 @@ float GetMouseDeltaY();
 
 InputState GetInputState();
 void SetInputState(InputState s);
-bool IsInputStateInMenu();
+
+bool IsInPlayerInputState();
+void CacheCursorGrabbed();
+void SetInputStateWithCachedCursor();
 
 }
 }

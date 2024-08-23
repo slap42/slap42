@@ -14,6 +14,7 @@
 #include "menus/menu_state_machine.hpp"
 #include "networking/client.hpp"
 #include "networking/server.hpp"
+#include "window/controls.hpp"
 #include "window/window.hpp"
 
 int main() {
@@ -68,9 +69,16 @@ int main() {
     Client::ClientPollMessages();
     Window::PollEvents();
     
-    if (MenuStateMachine::GetState() == MenuState::kNone) {
-      Camera::Update(delta);
+    if (Controls::IsInPlayerInputState() || Controls::GetInputState() == InputState::kNonBlockingMenu) {
       level.Update();
+    }
+
+    if (Controls::IsInPlayerInputState()) {
+      Camera::Update(delta);
+
+      if (Controls::IsButtonPressed(Button::kOpenMainMenu)) {
+        MenuStateMachine::SetState(MenuState::kPauseMenu);
+      }
     }
 
     Window::Clear();

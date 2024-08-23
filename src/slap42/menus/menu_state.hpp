@@ -8,6 +8,7 @@ enum class MenuState {
   kJoinMenu,
   kJoinErrorMenu,
   kJoinAsyncMenu,
+  kPauseMenu,
 };
 
 }

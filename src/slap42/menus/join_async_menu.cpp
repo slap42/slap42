@@ -6,6 +6,7 @@
 #include <imgui.h>
 #include "networking/client.hpp"
 #include "menus/menu_state_machine.hpp"
+#include "window/controls.hpp"
 
 namespace Slap42 {
 namespace JoinAsyncMenu {

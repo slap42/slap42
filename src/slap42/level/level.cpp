@@ -5,6 +5,9 @@
 
 namespace Slap42 {
 
+// Minimum value: 3
+static int render_distance = 8;
+
 Level::Level() {
   Shader::TerrainShader::Create();
 
@@ -26,14 +29,15 @@ Level::~Level() {
 void Level::Update() {
   const glm::vec3 player_pos = Camera::GetPosition();
   
-  // Minimum value: 3
-  const int kChunkSpawnDistance = 8;
-  const int kChunkDespawnDistance = kChunkSpawnDistance * 1.5;
+  const int kChunkDespawnDistance = render_distance * 2;
   glm::vec2 player_chunk_pos = { -((player_pos.x + Chunk::kChunkSize / 2) / Chunk::kChunkSize), -((player_pos.z + Chunk::kChunkSize / 2) / Chunk::kChunkSize) };
 
   // Load chunks close to the player
-  for (int x = player_chunk_pos.x - kChunkSpawnDistance; x < player_chunk_pos.x + kChunkSpawnDistance; ++x) {
-    for (int z = player_chunk_pos.y - kChunkSpawnDistance; z < player_chunk_pos.y + kChunkSpawnDistance; ++z) {
+  for (int x = player_chunk_pos.x - render_distance; x < player_chunk_pos.x + render_distance; ++x) {
+    for (int z = player_chunk_pos.y - render_distance; z < player_chunk_pos.y + render_distance; ++z) {
+
+      glm::vec2 chunk_pos = { x, z };
+      if (glm::distance(chunk_pos, player_chunk_pos) > render_distance) continue;
 
       uint64_t hash = FakeHash(x, z);
       if (chunks.find(hash) == chunks.end()) {
@@ -70,6 +74,10 @@ void Level::Render() const {
   for (const auto& chunk : chunks) {
     chunk.second->Render();
   }
+}
+
+int* Level::GetRenderDistancePtr() {
+  return &render_distance;
 }
 
 }

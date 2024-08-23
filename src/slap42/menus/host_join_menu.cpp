@@ -4,6 +4,7 @@
 #include "networking/client.hpp"
 #include "networking/server.hpp"
 #include "menus/menu_state_machine.hpp"
+#include "window/controls.hpp"
 
 namespace Slap42 {
 namespace HostJoinMenu {

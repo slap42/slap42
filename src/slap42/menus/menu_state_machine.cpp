@@ -4,6 +4,8 @@
 #include "join_menu.hpp"
 #include "join_error_menu.hpp"
 #include "join_async_menu.hpp"
+#include "pause_menu.hpp"
+#include "window/controls.hpp"
 
 namespace Slap42 {
 namespace MenuStateMachine {
@@ -11,7 +13,19 @@ namespace MenuStateMachine {
 MenuState state = MenuState::kHostJoinMenu;
 
 void SetState(MenuState s) {
+  if (state == MenuState::kNone) {
+    Controls::CacheCursorGrabbed();
+  }
+
   state = s;
+
+  if (state == MenuState::kNone) {
+    Controls::SetInputStateWithCachedCursor();
+  }
+
+  if (state == MenuState::kPauseMenu) {
+    Controls::SetInputState(InputState::kNonBlockingMenu);
+  }
 }
 
 MenuState GetState() {
@@ -37,6 +51,10 @@ void Render() {
 
   case MenuState::kJoinAsyncMenu:
     JoinAsyncMenu::Render();
+    break;
+
+  case MenuState::kPauseMenu:
+    PauseMenu::Render();
     break;
 
   }
