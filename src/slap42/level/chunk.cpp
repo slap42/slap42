@@ -8,7 +8,6 @@ Chunk::Chunk(int chunkx, int chunkz) : x(chunkx), z(chunkz) {
   constexpr float kChunkSizeF = (float)kChunkSize;
   constexpr size_t kVertexSize = 4;
   constexpr size_t kVertexBufferSize = (kChunkSize + 1) * (kChunkSize + 1) * kVertexSize;
-
   constexpr size_t kIndexBufferSize = kChunkSize * kChunkSize * 6;
 
   OSN::Noise<2> noise;

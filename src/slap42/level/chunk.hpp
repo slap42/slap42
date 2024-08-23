@@ -14,7 +14,7 @@ public:
   void Render() const;
 
 public:
-  constexpr static size_t kChunkSize = 32;
+  constexpr static size_t kChunkSize = 128;
 
 public:
   inline int GetX() const { return x; }

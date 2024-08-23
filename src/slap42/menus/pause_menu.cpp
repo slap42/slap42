@@ -14,7 +14,7 @@ void Render() {
 
   ImGui::Begin("Pause Menu", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar);
 
-  ImGui::SliderInt("Render Distance", Level::GetRenderDistancePtr(), 3, 30);
+  ImGui::SliderInt("Render Distance", Level::GetRenderDistancePtr(), 5, 30);
 
   if (ImGui::Button("Back")) {
     MenuStateMachine::SetState(MenuState::kNone);
