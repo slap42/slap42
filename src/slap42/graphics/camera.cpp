@@ -59,6 +59,10 @@ void Create() {
 }
 
 void Update(float delta) {
+  if (Controls::IsInputStateInMenu()) {
+    return;
+  }
+
   static GLFWwindow* window = Window::GetGlfwWindow();
   
   constexpr float kMoveSpeed = 0.05f;
@@ -69,30 +73,21 @@ void Update(float delta) {
   glm::vec2 old_rotation = rotation;
   
   // Rotation
-  if (glfwGetKey(window, GLFW_KEY_LEFT)) {
+  if (Controls::IsButtonDown(Button::kRotateLeft)) {
     rotation.y -= kRotationSpeed;
   }
-  if (glfwGetKey(window, GLFW_KEY_RIGHT)) {
+  if (Controls::IsButtonDown(Button::kRotateRight)) {
     rotation.y += kRotationSpeed;
   }
-  if (glfwGetKey(window, GLFW_KEY_UP)) {
+  if (Controls::IsButtonDown(Button::kRotateUp)) {
     rotation.x -= kRotationSpeed;
   }
-  if (glfwGetKey(window, GLFW_KEY_DOWN)) {
+  if (Controls::IsButtonDown(Button::kRotateDown)) {
     rotation.x += kRotationSpeed;
   }
   
   // Mouse input
-  
-  // TODO: move this to an event consumer?
-  if (!ImGui::GetIO().WantCaptureKeyboard && ImGui::IsKeyPressed(ImGuiKey_Escape)) {
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-  }
-  if (!ImGui::GetIO().WantCaptureMouse && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT)) {
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-  }
-  
-  if (glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_DISABLED) {
+  if (Controls::GetInputState() == InputState::kMouseGrabbed) {
     rotation.y += Controls::GetMouseDeltaX() * kMouseSensitivity;
     rotation.x += Controls::GetMouseDeltaY() * kMouseSensitivity;
   }
@@ -101,32 +96,37 @@ void Update(float delta) {
     if (rotation.x < -1.57f) rotation.x = -1.57f;
     if (rotation.x >  1.57f) rotation.x =  1.57f;
   }
+
+  // Grabbing mouse
+  if (Controls::IsButtonPressed(Button::kActionPrimary)) {
+    Controls::SetInputState(InputState::kMouseGrabbed);
+  }
   
   // Movement
   glm::vec3 dir = glm::vec3(0.0f);
   
-  if (glfwGetKey(window, GLFW_KEY_W) && !glfwGetKey(window, GLFW_KEY_S)) {
-    dir.z = 1.0f;
+  if (Controls::IsButtonDown(Button::kMoveForward)) {
+    dir.z += 1.0f;
   }
-  if (glfwGetKey(window, GLFW_KEY_S) && !glfwGetKey(window, GLFW_KEY_W)) {
-    dir.z = -1.0f;
+  if (Controls::IsButtonDown(Button::kMoveBack)) {
+    dir.z -= 1.0f;
   }
-  if (glfwGetKey(window, GLFW_KEY_A) && !glfwGetKey(window, GLFW_KEY_D)) {
-    dir.x = 1.0f;
+  if (Controls::IsButtonDown(Button::kMoveLeft)) {
+    dir.x += 1.0f;
   }
-  if (glfwGetKey(window, GLFW_KEY_D) && !glfwGetKey(window, GLFW_KEY_A)) {
-    dir.x = -1.0f;
+  if (Controls::IsButtonDown(Button::kMoveRight)) {
+    dir.x -= 1.0f;
   }
   
-  if (dir.x != 0 || dir.z != 0) {
+  if (dir.x != 0.0f || dir.z != 0.0f) {
     dir = glm::rotateY(dir, -rotation.y);
     position += glm::normalize(dir) * kMoveSpeed * delta;
   }
   
-  if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT)) {
+  if (Controls::IsButtonDown(Button::kCrouch)) {
     position.y += kMoveSpeed * delta;
   }
-  if (glfwGetKey(window, GLFW_KEY_SPACE)) {
+  if (Controls::IsButtonDown(Button::kJump)) {
     position.y -= kMoveSpeed * delta;
   }
   

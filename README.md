@@ -92,7 +92,6 @@ Youtube: https://www.youtube.com/@Slap42Dev
 - Cleanup the switch statements in Client/Server to make them easier to read
 - Point logs at an in-game console instead of stderr/stdout?
 - Camera mouse control on a Linux VM goes crazy and will sometimes cause a segfault
-- Move ALL controls (kb/mouse and cursor input modes) to a single controls file
 - Controls rebinding
 
 #### Can't Repro, Reported on Other People's Hardware

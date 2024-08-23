@@ -8,6 +8,7 @@ namespace Slap42 {
 namespace ServerPanel {
 
 void Render() {
+  // TODO: This should just be part of the main menu
   if (!Server::IsServerRunning()) return;
 
   static bool open = false;

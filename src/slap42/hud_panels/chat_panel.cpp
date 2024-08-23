@@ -7,6 +7,7 @@
 #include <glm/gtx/color_space.hpp>
 #include <imgui.h>
 #include "networking/client.hpp"
+#include "window/controls.hpp"
 #include "window/window.hpp"
 
 namespace Slap42 {
@@ -26,24 +27,28 @@ void AddChatMessage(peer_id sender, const std::string& msg) {
 
 void Render() {
   static bool open = false;
-  static bool was_cursor_hidden = false;
-  if (!open && !ImGui::GetIO().WantCaptureKeyboard && ImGui::IsKeyPressed(ImGuiKey_T)) {
+  static bool was_mouse_grabbed = false;
+
+  // Opening chat menu with T
+  if (!Controls::IsInputStateInMenu() && Controls::IsButtonPressed(Button::kOpenChatMenu)) {
+    was_mouse_grabbed = Controls::GetInputState() == InputState::kMouseGrabbed;
+    Controls::SetInputState(InputState::kChatMenu);
     open = true;
-    was_cursor_hidden = glfwGetInputMode(Window::GetGlfwWindow(), GLFW_CURSOR) == GLFW_CURSOR_DISABLED;
-    glfwSetInputMode(Window::GetGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
   }
+
+  // Closing chat menu by clicking
+  if (open && !ImGui::GetIO().WantCaptureMouse && Controls::IsButtonPressed(Button::kActionPrimary)) {
+    Controls::SetInputState(InputState::kMouseGrabbed);
+    open = false;
+  }
+
+  // Closing chat menu with Esc
+  if (open && Controls::IsButtonPressed(Button::kOpenMainMenu)) {
+    Controls::SetInputState(was_mouse_grabbed ? InputState::kMouseGrabbed : InputState::kMouseFree);
+    open = false;
+  }
+
   if (!open) return;
-  if (ImGui::IsKeyPressed(ImGuiKey_Escape)) {
-    open = false;
-    if (was_cursor_hidden) {
-      glfwSetInputMode(Window::GetGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    }
-    return;
-  }
-  if (glfwGetInputMode(Window::GetGlfwWindow(), GLFW_CURSOR) == GLFW_CURSOR_DISABLED) {
-    open = false;
-    return;
-  }
   
   ImVec2 window_size = {
     std::min(640.0f, ImGui::GetMainViewport()->Size.x / 2.0f),

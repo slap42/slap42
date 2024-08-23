@@ -69,9 +69,7 @@ int main() {
     Window::PollEvents();
     
     if (MenuStateMachine::GetState() == MenuState::kNone) {
-      if (!ImGui::GetIO().WantCaptureKeyboard) {
-        Camera::Update(delta);
-      }
+      Camera::Update(delta);
       level.Update();
     }
 
