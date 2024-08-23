@@ -82,18 +82,22 @@ Youtube: https://www.youtube.com/@Slap42Dev
 - Allow setting render distance
 - Usernames
 - Joystick controls
+- Controls rebinding
 
 ### Backlog
 
-### Bugs / Cleanup
+#### Bugs
 
+- Camera mouse control on a Linux VM goes crazy and will sometimes cause a segfault
+- Shader link fails with no error message on Linux VM
+
+#### Cleanup
+
+- Cleanup the switch statements in Client/Server to make them easier to read
 - When starting a server, check whether the port is available. If it is not, use another port.
 - Allow choosing a port when joining a server
-- Cleanup the switch statements in Client/Server to make them easier to read
 - Point logs at an in-game console instead of stderr/stdout?
-- Camera mouse control on a Linux VM goes crazy and will sometimes cause a segfault
-- Controls rebinding
 
-#### Can't Repro, Reported on Other People's Hardware
+#### "It Works On My Machine"
 - Terrain flickering bug reported on Windows
 - Might be a race condition causing enet_peer_send to fail?
