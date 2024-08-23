@@ -13,6 +13,8 @@ set(SLAP42_GRAPHICS_FILES
   src/slap42/graphics/texture.cpp
   src/slap42/graphics/texture_array.hpp
   src/slap42/graphics/texture_array.cpp
+  src/slap42/graphics/gl_check.hpp
+  src/slap42/graphics/gl_check.cpp
 )
 source_group("src/graphics" FILES ${SLAP42_GRAPHICS_FILES})
 

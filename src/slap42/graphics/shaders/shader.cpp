@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <glad/gl.h>
+#include "graphics/gl_check.hpp"
 
 namespace Slap42 {
 namespace Shader {
@@ -18,15 +19,16 @@ static GLuint CreateShaderModule(GLenum type, const char* file_path) {
   std::string str = ss.str();
   const char* code[1] = { str.c_str() };
   
-  GLuint shader = glCreateShader(type);
-  glShaderSource(shader, 1, code, nullptr);
-  glCompileShader(shader);
+  GLuint shader;
+  GL_CHECK(shader = glCreateShader(type));
+  GL_CHECK(glShaderSource(shader, 1, code, nullptr));
+  GL_CHECK(glCompileShader(shader));
   
   int success;
   char info_log[512] { };
-  glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+  GL_CHECK(glGetShaderiv(shader, GL_COMPILE_STATUS, &success));
   if (!success) {
-    glGetShaderInfoLog(shader, sizeof(info_log), nullptr, info_log);
+    GL_CHECK(glGetShaderInfoLog(shader, sizeof(info_log), nullptr, info_log));
     fprintf(stderr, "Shader compile failed: \"%s\"\n Shader failed to compile with error: %s\n", file_path, info_log);
   }
   
@@ -36,22 +38,22 @@ static GLuint CreateShaderModule(GLenum type, const char* file_path) {
 unsigned int Compile(const char* vert_path, const char* frag_path) {
   GLuint vert_shader = CreateShaderModule(GL_VERTEX_SHADER, vert_path);
   GLuint frag_shader = CreateShaderModule(GL_FRAGMENT_SHADER, frag_path);
-  unsigned int shader_program = glCreateProgram();
-  glAttachShader(shader_program, vert_shader);
-  glAttachShader(shader_program, frag_shader);
-  glLinkProgram(shader_program);
-  glUseProgram(shader_program);
+  unsigned int shader_program;
+  GL_CHECK(shader_program = glCreateProgram());
+  GL_CHECK(glAttachShader(shader_program, vert_shader));
+  GL_CHECK(glAttachShader(shader_program, frag_shader));
+  GL_CHECK(glLinkProgram(shader_program));
   
   int success;
   char info_log[512] { };
-  glGetShaderiv(shader_program, GL_LINK_STATUS, &success);
+  GL_CHECK(glGetShaderiv(shader_program, GL_LINK_STATUS, &success));
   if (!success) {
-    glGetShaderInfoLog(shader_program, sizeof(info_log), nullptr, info_log);
+    GL_CHECK(glGetShaderInfoLog(shader_program, sizeof(info_log), nullptr, info_log));
     fprintf(stderr, "Shader link failed with error: %s\n", info_log);
   }
   
-  glDeleteShader(vert_shader);
-  glDeleteShader(frag_shader);
+  GL_CHECK(glDeleteShader(vert_shader));
+  GL_CHECK(glDeleteShader(frag_shader));
   
   return shader_program;
 }

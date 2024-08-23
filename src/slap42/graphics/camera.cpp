@@ -6,6 +6,7 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/rotate_vector.hpp>
 #include <imgui.h>
+#include "gl_check.hpp"
 #include "networking/client.hpp"
 #include "window/controls.hpp"
 #include "window/window.hpp"
@@ -52,7 +53,7 @@ void Create() {
     int width, height;
     glfwGetFramebufferSize(Window::GetGlfwWindow(), &width, &height);
     OnResize(width, height);
-    glViewport(0, 0, width, height);
+    GL_CHECK(glViewport(0, 0, width, height));
   };
   glfwSetWindowSizeCallback(Window::GetGlfwWindow(), on_resize);
   on_resize(Window::GetGlfwWindow(), 1280, 720);
