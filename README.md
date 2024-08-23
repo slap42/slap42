@@ -91,8 +91,6 @@ If running in a VM, make sure mouse integration is turned on or cursor input won
 
 #### Bugs
 
-- Shader link fails with no error message on Linux VM - error code 1282
-
 #### Cleanup
 
 - Cleanup the switch statements in Client/Server to make them easier to read

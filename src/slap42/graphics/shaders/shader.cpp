@@ -38,7 +38,7 @@ static GLuint CreateShaderModule(GLenum type, const char* file_path) {
 unsigned int Compile(const char* vert_path, const char* frag_path) {
   GLuint vert_shader = CreateShaderModule(GL_VERTEX_SHADER, vert_path);
   GLuint frag_shader = CreateShaderModule(GL_FRAGMENT_SHADER, frag_path);
-  unsigned int shader_program;
+  GLuint shader_program;
   GL_CHECK(shader_program = glCreateProgram());
   GL_CHECK(glAttachShader(shader_program, vert_shader));
   GL_CHECK(glAttachShader(shader_program, frag_shader));
@@ -46,7 +46,7 @@ unsigned int Compile(const char* vert_path, const char* frag_path) {
   
   int success;
   char info_log[512] { };
-  GL_CHECK(glGetShaderiv(shader_program, GL_LINK_STATUS, &success));
+  GL_CHECK(glGetProgramiv(shader_program, GL_LINK_STATUS, &success));
   if (!success) {
     GL_CHECK(glGetShaderInfoLog(shader_program, sizeof(info_log), nullptr, info_log));
     fprintf(stderr, "Shader link failed with error: %s\n", info_log);
