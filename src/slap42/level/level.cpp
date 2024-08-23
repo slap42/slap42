@@ -5,7 +5,6 @@
 
 namespace Slap42 {
 
-// Minimum value: 3
 static int render_distance = 8;
 
 Level::Level() {
@@ -29,23 +28,49 @@ Level::~Level() {
 void Level::Update() {
   const glm::vec3 player_pos = Camera::GetPosition();
   
-  const int kChunkDespawnDistance = render_distance * 2;
-  glm::vec2 player_chunk_pos = { -((player_pos.x + Chunk::kChunkSize / 2) / Chunk::kChunkSize), -((player_pos.z + Chunk::kChunkSize / 2) / Chunk::kChunkSize) };
+  const float kChunkSpawnDistance = render_distance * 0.4f;
+  const float kChunkDespawnDistance = render_distance * 0.7f;
+  glm::vec2 player_chunk_pos { 0.0f };
+  if (player_pos.x > 0) {
+    player_chunk_pos.x = -(player_pos.x / Chunk::kChunkSize) - 1;
+  }
+  else {
+    player_chunk_pos.x = -(player_pos.x / Chunk::kChunkSize);
+  }
+  if (player_pos.z > 0) {
+    player_chunk_pos.y = -(player_pos.z / Chunk::kChunkSize) - 1;
+  }
+  else {
+    player_chunk_pos.y = -(player_pos.z / Chunk::kChunkSize);
+  }
 
   // Load chunks close to the player
-  for (int x = player_chunk_pos.x - render_distance; x < player_chunk_pos.x + render_distance; ++x) {
-    for (int z = player_chunk_pos.y - render_distance; z < player_chunk_pos.y + render_distance; ++z) {
+  {
+    int x = 0, z = 0, dx = 0, dz = 0;
+    dz = -1;
+    int t = render_distance;
+    int max_i = t * t;
+    for (int i = 0; i < max_i; ++i) {
+      // Load the chunk
+      glm::vec2 chunk_pos = { x + player_chunk_pos.x, z + player_chunk_pos.y };
 
-      glm::vec2 chunk_pos = { x, z };
-      if (glm::distance(chunk_pos, player_chunk_pos) > render_distance) continue;
-
-      uint64_t hash = FakeHash(x, z);
-      if (chunks.find(hash) == chunks.end()) {
-        Chunk* chunk = new Chunk(x, z);
-        chunks.emplace(hash, chunk);
-        goto break_loop;
+      if (glm::distance(chunk_pos, player_chunk_pos) <= kChunkSpawnDistance) {
+        uint64_t hash = FakeHash(x + (int)player_chunk_pos.x, z + (int)player_chunk_pos.y);
+        if (chunks.find(hash) == chunks.end()) {
+          Chunk* chunk = new Chunk(x + (int)player_chunk_pos.x, z + (int)player_chunk_pos.y);
+          chunks.emplace(hash, chunk);
+          goto break_loop;
+        }
       }
 
+      if (x == z || (x < 0 && x == -z) || (x > 0 && x == 1 - z)) {
+        t = dx;
+        dx = -dz;
+        dz = t;
+      }
+
+      x += dx;
+      z += dz;
     }
   }
   break_loop:
