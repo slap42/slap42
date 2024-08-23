@@ -49,6 +49,10 @@ void Create() {
   if (version == 0) {
     fprintf(stderr, "gladLoadGl failed\n");
   }
+
+  if (glfwRawMouseMotionSupported()) {
+    glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+  }
   
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
