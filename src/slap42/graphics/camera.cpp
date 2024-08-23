@@ -64,7 +64,9 @@ void Create() {
   auto on_resize = [](GLFWwindow* window, int w, int h) {
     if (w <= 0 || h <= 0) return;
     OnResize(w, h);
-    GL_CHECK(glViewport(0, 0, w, h));
+    int width, height;
+    glfwGetFramebufferSize(window, &width, &height);
+    GL_CHECK(glViewport(0, 0, width, height));
   };
   glfwSetWindowSizeCallback(Window::GetGlfwWindow(), on_resize);
   on_resize(Window::GetGlfwWindow(), Window::GetFramebufferWidth(), Window::GetFramebufferHeight());
