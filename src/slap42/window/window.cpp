@@ -105,6 +105,18 @@ void ImguiEnd() {
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
+int GetFramebufferWidth() {
+  int width, height;
+  glfwGetFramebufferSize(window, &width, &height);
+  return width;
+}
+
+int GetFramebufferHeight() {
+  int width, height;
+  glfwGetFramebufferSize(window, &width, &height);
+  return height;
+}
+
 }
 }
 

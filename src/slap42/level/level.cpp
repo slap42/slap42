@@ -101,8 +101,12 @@ void Level::Render() const {
   }
 }
 
-int* Level::GetRenderDistancePtr() {
-  return &render_distance;
+int Level::GetRenderDistance() {
+  return render_distance;
+}
+
+void Level::SetRenderDistance(int rd) {
+  render_distance = rd;
 }
 
 }

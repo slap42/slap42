@@ -2,6 +2,7 @@
 
 #include <imgui.h>
 #include "level/level.hpp"
+#include "graphics/camera.hpp"
 #include "menus/menu_state_machine.hpp"
 #include "window/controls.hpp"
 
@@ -14,7 +15,15 @@ void Render() {
 
   ImGui::Begin("Pause Menu", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar);
 
-  ImGui::SliderInt("Render Distance", Level::GetRenderDistancePtr(), 5, 30);
+  int render_distance = Level::GetRenderDistance();
+  if (ImGui::SliderInt("Render Distance", &render_distance, 5, 30)) {
+    Level::SetRenderDistance(render_distance);
+  }
+
+  float fov = Camera::GetFov();
+  if (ImGui::SliderFloat("FOV", &fov, 1.0f, 2.0f, "%.2f", ImGuiSliderFlags_AlwaysClamp)) {
+    Camera::SetFov(fov);
+  }
 
   if (ImGui::Button("Back")) {
     MenuStateMachine::SetState(MenuState::kNone);

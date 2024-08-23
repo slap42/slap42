@@ -17,7 +17,8 @@ public:
   void Render() const;
 
 public:
-  static int* GetRenderDistancePtr();
+  static int GetRenderDistance();
+  static void SetRenderDistance(int render_distance);
 
 private:
   Texture* grass_texture;

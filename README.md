@@ -82,12 +82,10 @@ If running in a VM, make sure mouse integration is turned on or cursor input won
 - Model loading
 - Allow configuring the number of players able to join a server
 - IP whitelists/blacklists for servers
-- Allow setting FOV
-- Allow setting render distance
 - Usernames
 - Joystick controls
 - Controls rebinding
-- Serialize preferences including username and render distance
+- Serialize preferences including username, fov, and render distance
 
 ### Backlog
 
@@ -95,6 +93,7 @@ If running in a VM, make sure mouse integration is turned on or cursor input won
 
 - Shader link fails with no error message on Linux VM - error code 1282
 - Error 1282 on delete mesh vao, vbo, and ibo
+- We are leaking GPU memory at an alarming rate
 
 #### Cleanup
 

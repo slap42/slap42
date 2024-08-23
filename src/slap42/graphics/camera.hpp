@@ -12,5 +12,8 @@ void Update(float delta);
 
 glm::vec3 GetPosition();
 
+float GetFov();
+void SetFov(float fov);
+
 }
 }

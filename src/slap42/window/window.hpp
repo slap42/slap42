@@ -14,6 +14,8 @@ void Clear();
 void SwapBuffers();
 void ImguiBegin();
 void ImguiEnd();
+int GetFramebufferWidth();
+int GetFramebufferHeight();
 
 }
 }
