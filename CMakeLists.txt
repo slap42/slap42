@@ -75,14 +75,14 @@ set(SLAP42_MENUS_FILES
   src/slap42/menus/join_async_menu.cpp
   src/slap42/menus/pause_menu.hpp
   src/slap42/menus/pause_menu.cpp
+  src/slap42/menus/connected_players_menu.hpp
+  src/slap42/menus/connected_players_menu.cpp
 )
 source_group("src/menus" FILES ${SLAP42_MENUS_FILES})
 
 set(SLAP42_HUD_PANELS_FILES
   src/slap42/hud_panels/chat_panel.hpp
   src/slap42/hud_panels/chat_panel.cpp
-  src/slap42/hud_panels/server_panel.hpp
-  src/slap42/hud_panels/server_panel.cpp
 )
 source_group("src/hud_panels" FILES ${SLAP42_HUD_PANELS_FILES})
 

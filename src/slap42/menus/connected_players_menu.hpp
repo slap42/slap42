@@ -1,7 +1,7 @@
 #pragma once
 
 namespace Slap42 {
-namespace ServerPanel {
+namespace ConnectedPlayersMenu {
 
 void Render();
 

@@ -10,7 +10,6 @@
 #include "graphics/meshes/entity_mesh.hpp"
 #include "graphics/shaders/entity_shader.hpp"
 #include "hud_panels/chat_panel.hpp"
-#include "hud_panels/server_panel.hpp"
 #include "level/level.hpp"
 #include "menus/menu_state_machine.hpp"
 #include "networking/client.hpp"
@@ -67,8 +66,9 @@ int main() {
     auto current_time = std::chrono::high_resolution_clock::now();
     float delta = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - last_time).count();
     last_time = current_time;
-
-    Client::ClientPollMessages();
+    
+    MenuStateMachine::Update();
+    Client::PollMessages();
     Window::PollEvents();
     
     if (Controls::IsInPlayerInputState() || Controls::GetInputState() == InputState::kNonBlockingMenu) {
@@ -105,7 +105,6 @@ int main() {
     MenuStateMachine::Render();
     
     if (MenuStateMachine::GetState() == MenuState::kNone) {
-      ServerPanel::Render();
       ChatPanel::Render();
     }
 
@@ -114,7 +113,7 @@ int main() {
     Window::SwapBuffers();
   }
 
-  Client::ClientDisconnect();
+  Client::Disconnect();
   Server::StopServer();
 }
 

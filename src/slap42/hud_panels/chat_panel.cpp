@@ -96,7 +96,7 @@ void Render() {
   static char buf[256] { };
   if (ImGui::InputText("##Chat Message", buf, sizeof(buf), ImGuiInputTextFlags_EnterReturnsTrue)) {
     if (std::strlen(buf) > 0) {
-      Client::ClientSendChatMessage(buf);
+      Client::SendChatMessage(buf);
       std::memset(buf, 0, sizeof(buf));
       snap_to_bottom = 2;
     }

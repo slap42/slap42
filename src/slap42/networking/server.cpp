@@ -63,7 +63,9 @@ static void RunServer(uint16_t port) {
           }
           evt.peer->data = (void*)(uint64_t)current_id;
 
-          peer_data.emplace((peer_id)(uint64_t)evt.peer->data, std::make_shared<PeerData>());
+          auto new_peer = std::make_shared<PeerData>();
+          new_peer->peer = evt.peer;
+          peer_data.emplace((peer_id)(uint64_t)evt.peer->data, new_peer);
 
           {
             PlayerJoinMessage msg { (peer_id)(uint64_t)evt.peer->data };
@@ -93,7 +95,11 @@ static void RunServer(uint16_t port) {
         case ENET_EVENT_TYPE_DISCONNECT: {
           printf("[SERVER] A client has disconnected: %x:%u\n", evt.peer->address.host, evt.peer->address.port);
 
-          PlayerLeaveMessage msg { (peer_id)(uint64_t)evt.peer->data };
+          PlayerLeaveMessage msg {
+            .id = (peer_id)(uint64_t)evt.peer->data,
+            // TODO: This doesn't work
+            .kicked = evt.data == 1,
+          };
           BroadcastSerializedMessage(server, msg, evt.peer);
           
           peer_data.erase((peer_id)(uint64_t)evt.peer->data);
@@ -121,6 +127,14 @@ static void RunServer(uint16_t port) {
               msg.deserialize(stream);
               msg.id = (peer_id)(uint64_t)evt.peer->data;
               BroadcastSerializedMessage(server, msg);
+              break;
+            }
+              
+            case MessageType::kKickPlayer: {
+              KickPlayerMessage msg { };
+              msg.deserialize(stream);
+              ENetPeer* peer = peer_data[msg.id]->peer;
+              enet_peer_disconnect(peer, 1);
               break;
             }
             

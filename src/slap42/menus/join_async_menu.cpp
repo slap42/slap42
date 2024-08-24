@@ -29,7 +29,7 @@ void Reset(const char* host, uint16_t port) {
 }
 
 static void DoThread() {
-  success = Client::ClientConnect(server_host.c_str(), server_port);
+  success = Client::Connect(server_host.c_str(), server_port);
   std::scoped_lock sl(done_mutex);
   done = true;
 }

@@ -142,7 +142,7 @@ void Update(float delta) {
   
   if (position != old_position || rotation != old_rotation) {
     CalcView();
-    Client::ClientSendPositionUpdate(position, rotation);
+    Client::SendPositionUpdate(position, rotation);
   }
 }
 

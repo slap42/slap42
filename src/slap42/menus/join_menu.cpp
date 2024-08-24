@@ -2,10 +2,8 @@
 
 #include <cstdio>
 #include <sstream>
-#include <enet/enet.h>
 #include <imgui.h>
 #include "join_error_menu.hpp"
-#include "networking/client.hpp"
 #include "menus/menu_state_machine.hpp"
 #include "menus/join_async_menu.hpp"
 

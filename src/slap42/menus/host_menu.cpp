@@ -40,12 +40,13 @@ void Render() {
       Server::StopServer();
       Server::StartServer(port);
 
+      // Spin while waiting for server to either start or fail to start - should be a few milliseconds
       while (Server::GetState() == ServerState::kStopped) {
         void(0);
       }
 
       if (Server::GetState() == ServerState::kRunning) {
-        if (Client::ClientConnect("localhost", port)) {
+        if (Client::Connect("localhost", port)) {
           MenuStateMachine::SetState(MenuState::kNone);
         }
         else {

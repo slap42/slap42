@@ -11,13 +11,14 @@
 namespace Slap42 {
 namespace Client {
 
-bool ClientConnect(const char* hostname, uint16_t port);
+bool Connect(const char* hostname, uint16_t port);
 void InterruptConnectAttempt();
-void ClientDisconnect();
-void ClientPollMessages();
+void Disconnect();
+void PollMessages();
 
-void ClientSendPositionUpdate(const glm::vec3& pos, const glm::vec2& rot);
-void ClientSendChatMessage(const std::string& msg);
+void SendPositionUpdate(const glm::vec3& pos, const glm::vec2& rot);
+void SendChatMessage(const std::string& msg);
+void SendKickPlayer(peer_id id);
 
 std::unordered_map<peer_id, std::shared_ptr<PeerData>>* GetPeerData();
 

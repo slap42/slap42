@@ -7,14 +7,19 @@
 #include "join_error_menu.hpp"
 #include "join_async_menu.hpp"
 #include "pause_menu.hpp"
+#include "connected_players_menu.hpp"
 #include "window/controls.hpp"
 
 namespace Slap42 {
 namespace MenuStateMachine {
 
-MenuState state = MenuState::kHostJoinMenu;
+static MenuState state = MenuState::kHostJoinMenu;
+static bool state_changed_this_frame = false;
 
 void SetState(MenuState s) {
+  if (state_changed_this_frame) return;
+  state_changed_this_frame = true;
+  
   if (state == MenuState::kNone) {
     Controls::CacheCursorGrabbed();
   }
@@ -33,6 +38,11 @@ void SetState(MenuState s) {
 MenuState GetState() {
   return state;
 }
+
+void Update() {
+  state_changed_this_frame = false;
+}
+
 
 void Render() {
   switch (state) {
@@ -65,6 +75,10 @@ void Render() {
 
   case MenuState::kPauseMenu:
     PauseMenu::Render();
+    break;
+      
+  case MenuState::kConnectedPlayersMenu:
+    ConnectedPlayersMenu::Render();
     break;
 
   }

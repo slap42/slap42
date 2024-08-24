@@ -11,6 +11,7 @@ enum class MenuState {
   kJoinErrorMenu,
   kJoinAsyncMenu,
   kPauseMenu,
+  kConnectedPlayersMenu,
 };
 
 }

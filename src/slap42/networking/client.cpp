@@ -28,7 +28,7 @@ std::unordered_map<peer_id, std::shared_ptr<PeerData>>* GetPeerData() {
   return &peer_data;
 }
 
-bool ClientConnect(const char* hostname, uint16_t port) {
+bool Connect(const char* hostname, uint16_t port) {
   if (peer)  {
     fprintf(stderr, "[CLIENT] ClientConnect called when client is already connected");
     return false;
@@ -84,7 +84,7 @@ void InterruptConnectAttempt() {
   interrupt_connect_attempt = true;
 }
 
-void ClientDisconnect() {
+void Disconnect() {
   if (!peer)  {
     return;
   }
@@ -108,7 +108,7 @@ void ClientDisconnect() {
   void(0);
 }
 
-void ClientPollMessages() {
+void PollMessages() {
   if (!peer) return;
 
   ENetEvent evt;
@@ -149,7 +149,12 @@ void ClientPollMessages() {
             msg.deserialize(stream);
 
             std::stringstream ss;
-            ss << "Player " << (int)msg.id << " left the game";
+            if (!msg.kicked) {
+              ss << "Player " << (int)msg.id << " left the game";
+            }
+            else {
+              ss << "Player " << (int)msg.id << " was kicked";
+            }
             ChatPanel::AddChatMessage(255, ss.str());
 
             peer_data.erase(msg.id);
@@ -173,24 +178,36 @@ void ClientPollMessages() {
         }
         break;
       }
+        
+      case ENET_EVENT_TYPE_DISCONNECT:
+        printf("[CLIENT] Disconnect recieved from server\n");
+        break;
+      
       default:
         break;
     }
   }
 }
 
-void ClientSendPositionUpdate(const glm::vec3& pos, const glm::vec2& rot) {
+void SendPositionUpdate(const glm::vec3& pos, const glm::vec2& rot) {
   PlayerPositionUpdateMessage pm { .pos = pos, .rot = rot };
   SendSerializedMessage(peer, pm);
 }
 
-void ClientSendChatMessage(const std::string& msg) {
+void SendChatMessage(const std::string& msg) {
   if (msg.length() > 255) {
     fprintf(stderr, "[CLIENT] Error - Can't send a chat message of length > 255 \"%s\"\n", msg.c_str());
   }
   ChatMessageMessage cm { };
   strcpy(cm.msg_buf, msg.c_str());
   SendSerializedMessage(peer, cm);
+}
+
+void SendKickPlayer(peer_id id) {
+  KickPlayerMessage km { 
+    .id = id,
+  };
+  SendSerializedMessage(peer, km);
 }
 
 }

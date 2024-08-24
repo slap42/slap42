@@ -5,10 +5,12 @@
 namespace Slap42 {
 namespace MenuStateMachine {
 
-void Render();
-
 void SetState(MenuState state);
 MenuState GetState();
+
+void Update();
+
+void Render();
 
 }
 }

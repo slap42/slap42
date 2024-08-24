@@ -16,7 +16,7 @@ void Render() {
   ImGui::Begin("Pause Menu", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar);
 
   int render_distance = Level::GetRenderDistance();
-  if (ImGui::SliderInt("Render Distance", &render_distance, 5, 30)) {
+  if (ImGui::SliderInt("Render Distance", &render_distance, 5, 40)) {
     Level::SetRenderDistance(render_distance);
   }
 
@@ -24,8 +24,12 @@ void Render() {
   if (ImGui::SliderFloat("FOV", &fov, 1.0f, 2.0f, "%.2f", ImGuiSliderFlags_AlwaysClamp)) {
     Camera::SetFov(fov);
   }
+  
+  if (ImGui::Button("Players")) {
+    MenuStateMachine::SetState(MenuState::kConnectedPlayersMenu);
+  }
 
-  if (ImGui::Button("Back")) {
+  if (ImGui::Button("Back") || Controls::IsButtonPressed(Button::kOpenMainMenu)) {
     MenuStateMachine::SetState(MenuState::kNone);
   }
 
