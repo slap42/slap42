@@ -1,7 +1,5 @@
 #include "join_menu.hpp"
 
-#include <cstdio>
-#include <sstream>
 #include <imgui.h>
 #include "menus/menu_state_machine.hpp"
 #include "menus/join_async_menu.hpp"

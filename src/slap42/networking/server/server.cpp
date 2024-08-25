@@ -1,10 +1,8 @@
 #include "server.hpp"
 
-#include <cstdio>
 #include <thread>
 #include <memory>
 #include <mutex>
-#include <unordered_map>
 #include <enet/enet.h>
 #include <glm/glm.hpp>
 #include "menus/error_menu.hpp"

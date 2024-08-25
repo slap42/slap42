@@ -61,7 +61,6 @@ bool Connect(const char* hostname, uint16_t port) {
   auto start = std::chrono::steady_clock::now();
   while (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - start).count() < 5) {
     if (enet_host_service(client, &evt, 0) && evt.type == ENET_EVENT_TYPE_CONNECT) {
-      printf("[CLIENT] Connection to %s:%u succeeded!\n", hostname, port);
       return true;
     }
 
@@ -102,7 +101,6 @@ void Disconnect() {
         enet_packet_destroy(evt.packet);
         break;
       case ENET_EVENT_TYPE_DISCONNECT:
-        printf("[CLIENT] Disconnect succeeded\n");
         goto break_loop;
       default:
         break;
