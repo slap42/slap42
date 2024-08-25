@@ -22,6 +22,8 @@ int main() {
 
   atexit(enet_deinitialize);
   atexit(Window::Destroy);
+  atexit(Level::Destroy);
+
   if (enet_initialize() != 0) {
     fprintf(stderr, "enet_initialize failed\n");
   }
@@ -113,7 +115,6 @@ int main() {
     Window::SwapBuffers();
   }
 
-  Level::Destroy();
   Client::Disconnect();
   Server::StopServer();
 }

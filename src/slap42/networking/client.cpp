@@ -198,7 +198,7 @@ void PollMessages() {
           ErrorMenu::SetErrorMessage("You were kicked from the server :(");
           break;
         default:
-          // If we get here the connection probably timed out, all we know is that the disconnect was not initiated by either the client or the server
+          // If we get here the connection probably timed out, all we know is that the disconnect was not initiated by a player
           ErrorMenu::SetErrorMessage("Disconnected from server");
           break;
         }
