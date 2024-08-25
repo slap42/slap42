@@ -66,18 +66,16 @@ set(SLAP42_MENUS_FILES
   src/slap42/menus/host_join_menu.cpp
   src/slap42/menus/host_menu.hpp
   src/slap42/menus/host_menu.cpp
-  src/slap42/menus/host_error_menu.hpp
-  src/slap42/menus/host_error_menu.cpp
   src/slap42/menus/join_menu.hpp
   src/slap42/menus/join_menu.cpp
-  src/slap42/menus/join_error_menu.hpp
-  src/slap42/menus/join_error_menu.cpp
   src/slap42/menus/join_async_menu.hpp
   src/slap42/menus/join_async_menu.cpp
   src/slap42/menus/pause_menu.hpp
   src/slap42/menus/pause_menu.cpp
   src/slap42/menus/connected_players_menu.hpp
   src/slap42/menus/connected_players_menu.cpp
+  src/slap42/menus/error_menu.hpp
+  src/slap42/menus/error_menu.cpp
 )
 source_group("src/menus" FILES ${SLAP42_MENUS_FILES})
 

@@ -3,7 +3,6 @@
 #include <cstdio>
 #include <sstream>
 #include <imgui.h>
-#include "join_error_menu.hpp"
 #include "menus/menu_state_machine.hpp"
 #include "menus/join_async_menu.hpp"
 #include "utils/hostname_port_validation.hpp"
@@ -27,7 +26,7 @@ void Render() {
       MenuStateMachine::SetState(MenuState::kJoinAsyncMenu);
     }
     else {
-      MenuStateMachine::SetState(MenuState::kJoinErrorMenu);
+      MenuStateMachine::SetState(MenuState::kErrorMenu);
     }
   }
 

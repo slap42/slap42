@@ -5,6 +5,7 @@
 #include <mutex>
 #include <imgui.h>
 #include "networking/client.hpp"
+#include "menus/error_menu.hpp"
 #include "menus/menu_state_machine.hpp"
 #include "window/controls.hpp"
 
@@ -49,7 +50,7 @@ void Render() {
         MenuStateMachine::SetState(MenuState::kNone);
       }
       else {
-        MenuStateMachine::SetState(MenuState::kJoinErrorMenu);
+        MenuStateMachine::SetState(MenuState::kErrorMenu);
       }
     }
   }

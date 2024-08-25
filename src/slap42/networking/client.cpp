@@ -10,7 +10,7 @@
 #include "graphics/camera.hpp"
 #include "hud_panels/chat_panel.hpp"
 #include "level/level.hpp"
-#include "menus/join_error_menu.hpp"
+#include "menus/error_menu.hpp"
 #include "menus/menu_state_machine.hpp"
 #include "networking/message_types.hpp"
 #include "networking/message_serializer.hpp"
@@ -40,7 +40,7 @@ bool Connect(const char* hostname, uint16_t port) {
 
   client = enet_host_create(nullptr, 1, 1, 0, 0);
   if (!client) {
-    JoinErrorMenu::SetErrorMessage("[CLIENT] enet_host_create failed\n");
+    ErrorMenu::SetErrorMessage("[CLIENT] enet_host_create failed\n");
     return false;
   }
   
@@ -52,7 +52,7 @@ bool Connect(const char* hostname, uint16_t port) {
   peer = enet_host_connect(client, &address, 1, 0);
   if (!peer) {
     client = nullptr;
-    JoinErrorMenu::SetErrorMessage("[CLIENT] enet_host_connect failed\n");
+    ErrorMenu::SetErrorMessage("[CLIENT] enet_host_connect failed\n");
     return false;
   }
   
@@ -76,7 +76,7 @@ bool Connect(const char* hostname, uint16_t port) {
   client = nullptr;
   peer = nullptr;
   if (!interrupt_connect_attempt) {
-    JoinErrorMenu::SetErrorMessage("[CLIENT] Failed to connect to the server\n");
+    ErrorMenu::SetErrorMessage("[CLIENT] Failed to connect to the server\n");
   }
   std::scoped_lock sl(interrupt_connect_attempt_mutex);
   interrupt_connect_attempt = false;
@@ -195,14 +195,14 @@ void PollMessages() {
 
         switch ((DisconnectReason)evt.data) {
         case DisconnectReason::kClientKicked:
-          JoinErrorMenu::SetErrorMessage("You were kicked from the server :(");
+          ErrorMenu::SetErrorMessage("You were kicked from the server :(");
           break;
         default:
           // If we get here the connection probably timed out, all we know is that the disconnect was not initiated by either the client or the server
-          JoinErrorMenu::SetErrorMessage("Disconnected from server");
+          ErrorMenu::SetErrorMessage("Disconnected from server");
           break;
         }
-        MenuStateMachine::SetState(MenuState::kJoinErrorMenu);        
+        MenuStateMachine::SetState(MenuState::kErrorMenu);        
         Disconnect();
         break;
       }

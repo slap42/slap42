@@ -1,13 +1,18 @@
-#include "join_error_menu.hpp"
+#include "error_menu.hpp"
 
 #include <string>
 #include <imgui.h>
 #include "menus/menu_state_machine.hpp"
 
 namespace Slap42 {
-namespace JoinErrorMenu {
+namespace ErrorMenu {
 
+static MenuState back = MenuState::kHostJoinMenu;
 static std::string message;
+
+void SetReturnMenu(MenuState b) {
+  back = b;
+}
 
 void SetErrorMessage(const char* msg) {
   message = msg;
@@ -22,7 +27,7 @@ void Render() {
   ImGui::Text("%s", message.c_str());
 
   if (ImGui::Button("Back")) {
-    MenuStateMachine::SetState(MenuState::kJoinMenu);
+    MenuStateMachine::SetState(back);
   }
 
   ImGui::End();

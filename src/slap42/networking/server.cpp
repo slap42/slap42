@@ -8,7 +8,7 @@
 #include <enet/enet.h>
 #include <glm/glm.hpp>
 #include "disconnect_reasons.hpp"
-#include "menus/host_error_menu.hpp"
+#include "menus/error_menu.hpp"
 #include "networking/message_types.hpp"
 #include "networking/message_serializer.hpp"
 #include "networking/peer_data.hpp"
@@ -40,7 +40,7 @@ static void RunServer(uint16_t port) {
 
   ENetHost* server = enet_host_create(&address, 32, 1, 0, 0);
   if (!server) {
-    HostErrorMenu::SetErrorMessage("[SERVER] Failed to start server: enet_host_create failed.\nThe chosen port might already be in use by another application.");
+    ErrorMenu::SetErrorMessage("[SERVER] Failed to start server: enet_host_create failed.\nThe chosen port might already be in use by another application.");
     SetState(ServerState::kError);
     return;
   }

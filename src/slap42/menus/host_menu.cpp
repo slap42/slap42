@@ -4,7 +4,7 @@
 #include <sstream>
 #include <imgui.h>
 #include "host_menu.hpp"
-#include "host_error_menu.hpp"
+#include "error_menu.hpp"
 #include "menu_state_machine.hpp"
 #include "networking/client.hpp"
 #include "networking/server.hpp"
@@ -37,18 +37,18 @@ void Render() {
           MenuStateMachine::SetState(MenuState::kNone);
         }
         else {
-          HostErrorMenu::SetErrorMessage("Failed to connect to localhost");
+          ErrorMenu::SetErrorMessage("Failed to connect to localhost");
           Server::StopServer();
-          MenuStateMachine::SetState(MenuState::kHostErrorMenu);
+          MenuStateMachine::SetState(MenuState::kErrorMenu);
         }
       }
       else {
         Server::StopServer();
-        MenuStateMachine::SetState(MenuState::kHostErrorMenu);
+        MenuStateMachine::SetState(MenuState::kErrorMenu);
       }
     }
     else {
-      MenuStateMachine::SetState(MenuState::kHostErrorMenu);
+      MenuStateMachine::SetState(MenuState::kErrorMenu);
     }
   }
 
