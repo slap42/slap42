@@ -6,7 +6,7 @@ namespace Slap42 {
 
 class EntityMesh : public Mesh {
 public:
-  EntityMesh(float* vertices, int vertices_size_bytes, unsigned short* indices, int indices_size_bytes);
+  EntityMesh(float* vertices, size_t vertices_size_bytes, unsigned short* indices, size_t indices_size_bytes);
 };
 
 }

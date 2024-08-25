@@ -1,5 +1,6 @@
 #include "chunk.hpp"
 
+#include <vector>
 #include "noise.hpp"
 
 namespace Slap42 {
@@ -10,8 +11,8 @@ Chunk::Chunk(int chunkx, int chunkz) : x(chunkx), z(chunkz) {
   constexpr size_t kVertexBufferSize = (kChunkSize + 1) * (kChunkSize + 1) * kVertexSize;
   constexpr size_t kIndexBufferSize = kChunkSize * kChunkSize * 6;
 
-  float* vertices = new float[kVertexBufferSize];
-  unsigned short* indices = new unsigned short[kIndexBufferSize];
+  std::vector<float> vertices(kVertexBufferSize);
+  std::vector<unsigned short> indices(kIndexBufferSize);
 
   for (size_t z = 0; z < kChunkSize + 1; ++z) {
     for (size_t x = 0; x < kChunkSize + 1; ++x) {
@@ -21,7 +22,7 @@ Chunk::Chunk(int chunkx, int chunkz) : x(chunkx), z(chunkz) {
       vertices[i + 0] = xx;
       vertices[i + 1] = Noise::SampleHeight(xx, zz);
       vertices[i + 2] = zz;
-      vertices[i + 3] = Noise::SampleTexture(xx, zz);
+      vertices[i + 3] = Noise::SampleTerrainTexture(xx, zz);
     }
   }
 
@@ -38,10 +39,7 @@ Chunk::Chunk(int chunkx, int chunkz) : x(chunkx), z(chunkz) {
     }
   }
 
-  mesh = new TerrainMesh(vertices, kVertexBufferSize * sizeof(float), indices, kIndexBufferSize * sizeof(unsigned short));
-
-  delete[] vertices;
-  delete[] indices;
+  mesh = new TerrainMesh(vertices.data(), vertices.size() * sizeof(float), indices.data(), indices.size() * sizeof(unsigned short));
 }
 
 Chunk::~Chunk() {

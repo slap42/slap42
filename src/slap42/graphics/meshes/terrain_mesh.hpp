@@ -6,7 +6,7 @@ namespace Slap42 {
 
 class TerrainMesh : public Mesh {
 public:
-  TerrainMesh(float* vertices, int vertices_size_bytes, unsigned short* indices, int indices_size_bytes);
+  TerrainMesh(float* vertices, size_t vertices_size_bytes, unsigned short* indices, size_t indices_size_bytes);
 };
 
 }

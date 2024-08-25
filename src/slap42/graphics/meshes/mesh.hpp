@@ -1,10 +1,12 @@
 #pragma once
 
+#include <cstddef>
+
 namespace Slap42 {
 
 class Mesh {
 public:
-  Mesh(float* vertices, int vertices_size_bytes, unsigned short* indices, int indices_size_bytes);
+  Mesh(float* vertices, size_t vertices_size_bytes, unsigned short* indices, size_t indices_size_bytes);
   virtual ~Mesh();
 
 public:

@@ -86,6 +86,9 @@ If running in a VM, make sure mouse integration is turned on or cursor input won
 - Controls rebinding
 - Serialize preferences including username, fov, and render distance
 - ImGui styling
+- Lighting
+- Skybox
+- Day / night cycle
 
 ### Backlog
 

@@ -11,9 +11,10 @@
 namespace Slap42 {
 namespace Level {
 
-static int render_distance = 8;
+static int render_distance = 16;
 static Texture* grass_texture;
 static Texture* dirt_texture;
+static Texture* bark_texture;
 static std::unordered_map<uint64_t, Chunk*> chunks;
 
 void Create() {
@@ -21,6 +22,7 @@ void Create() {
 
   grass_texture = new Texture("res/images/Grass002_2K-PNG_Color.png");
   dirt_texture = new Texture("res/images/Ground067_2K-PNG_Color.png");
+  bark_texture = new Texture("res/images/Bark014_2K-PNG_Color.png");
 }
 
 void Destroy() {
@@ -28,6 +30,7 @@ void Destroy() {
 
   delete grass_texture;
   delete dirt_texture;
+  delete bark_texture;
   
   Shader::TerrainShader::Destroy();
 }
@@ -111,6 +114,7 @@ void Render() {
   
   grass_texture->Bind(0);
   dirt_texture->Bind(1);
+  bark_texture->Bind(2);
 
   for (const auto& chunk : chunks) {
     chunk.second->Render();
