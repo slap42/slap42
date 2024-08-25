@@ -23,31 +23,34 @@ void Render() {
 
   if (ImGui::InputText("Server Port", buf, sizeof(buf), ImGuiInputTextFlags_EnterReturnsTrue) || ImGui::Button("Start Server")) {
     uint16_t port;
-    if (Validation::TryParsePort(buf, port)) {
+    bool result = Validation::TryParsePort(buf, port);
+    if (!result) {
+      MenuStateMachine::SetState(MenuState::kErrorMenu);
+      ImGui::End();
+      return;
+    }
+
+    Server::StopServer();
+    Server::StartServer(port);
+
+    // Spin while waiting for server to either start or fail to start - should be a few milliseconds
+    while (Server::GetState() == ServerState::kStopped) {
+      void(0);
+    }
+
+    if (Server::GetState() == ServerState::kError) {
       Server::StopServer();
-      Server::StartServer(port);
+      MenuStateMachine::SetState(MenuState::kErrorMenu);
+      ImGui::End();
+      return;
+    }
 
-      // Spin while waiting for server to either start or fail to start - should be a few milliseconds
-      while (Server::GetState() == ServerState::kStopped) {
-        void(0);
-      }
-
-      if (Server::GetState() == ServerState::kRunning) {
-        if (Client::Connect("localhost", port)) {
-          MenuStateMachine::SetState(MenuState::kNone);
-        }
-        else {
-          ErrorMenu::SetErrorMessage("Failed to connect to localhost");
-          Server::StopServer();
-          MenuStateMachine::SetState(MenuState::kErrorMenu);
-        }
-      }
-      else {
-        Server::StopServer();
-        MenuStateMachine::SetState(MenuState::kErrorMenu);
-      }
+    if (Client::Connect("localhost", port)) {
+      MenuStateMachine::SetState(MenuState::kNone);
     }
     else {
+      ErrorMenu::SetErrorMessage("Failed to connect to localhost");
+      Server::StopServer();
       MenuStateMachine::SetState(MenuState::kErrorMenu);
     }
   }
