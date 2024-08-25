@@ -20,13 +20,24 @@ void OnClientConnect(ENetEvent& evt) {
   
   auto new_peer = std::make_shared<PeerData>();
   new_peer->peer = evt.peer;
-  peer_data.emplace((peer_id)(uint64_t)evt.peer->data, new_peer);
-  
+  peer_data.emplace(current_id, new_peer);
+
+  // Tell the new peer server metadata such as the total capacity and the player's own ID
   {
-    PlayerJoinMessage msg { (peer_id)(uint64_t)evt.peer->data };
+    ServerInfoMessage msg {
+      .id = current_id,
+      .capacity = capacity,
+    };
+    SendSerializedMessage(evt.peer, msg);
+  }
+  
+  // Tell all current peers that a new peer has connected
+  {
+    PlayerJoinMessage msg { current_id };
     BroadcastSerializedMessage(server, msg, evt.peer);
   }
   
+  // Tell the new peer about all the current peers
   ENetPeer* current_peer;
   for (current_peer = server->peers; current_peer < &server->peers[server->peerCount]; ++current_peer) {
     if (current_peer->state != ENET_PEER_STATE_CONNECTED) {

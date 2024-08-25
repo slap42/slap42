@@ -11,6 +11,7 @@ namespace Server {
 
 extern ENetHost* server;
 extern std::unordered_map<peer_id, std::shared_ptr<PeerData>> peer_data;
+extern int capacity;
 
 }
 }

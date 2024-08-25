@@ -9,6 +9,9 @@
 namespace Slap42 {
 namespace ConnectedPlayersMenu {
 
+static peer_id id;
+static int capacity;
+
 void Render() {
   static const bool kIsServerOwner = Server::GetState() == ServerState::kRunning;
   
@@ -17,14 +20,15 @@ void Render() {
 
   ImGui::Begin("Connected Players", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar);
   
-  ImGui::Text("Connected Players");
+  ImGui::Text("Server Capacity: %d/%d", Client::GetPeerData()->size() + 1, capacity);
   ImGui::Spacing();
   
+  ImGui::Text("Connected Players:");
   if (ImGui::BeginTable("ConnectedPlayersTable", 2)) {
     
     ImGui::TableNextRow();
     ImGui::TableSetColumnIndex(0);
-    ImGui::Text("You");
+    ImGui::Text("Player %d (You)", (int)id);
     
     for (auto& peer : *Client::GetPeerData()) {
       ImGui::TableNextRow();
@@ -47,6 +51,11 @@ void Render() {
   }
 
   ImGui::End();
+}
+
+void SetIdAndCapacity(peer_id i, int c) {
+  id = i;
+  capacity = c;
 }
 
 }

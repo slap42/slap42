@@ -80,7 +80,6 @@ If running in a VM, make sure mouse integration is turned on or cursor input won
 - Physics
 - Grass and trees
 - Model loading
-- Allow configuring the number of players able to join a server
 - IP whitelists/blacklists for servers
 - Usernames
 - Joystick controls

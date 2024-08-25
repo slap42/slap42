@@ -32,12 +32,14 @@ ServerState GetState() {
   return state;
 }
 
-static void RunServer(uint16_t port) {
+static void RunServer(uint16_t port, int c) {
+  capacity = c;
+
   ENetAddress address { };
   address.host = ENET_HOST_ANY;
   address.port = port;
 
-  server = enet_host_create(&address, 32, 1, 0, 0);
+  server = enet_host_create(&address, capacity, 1, 0, 0);
   if (!server) {
     ErrorMenu::SetErrorMessage("[SERVER] Failed to start server: enet_host_create failed.\nThe chosen port might already be in use by another application.");
     SetState(ServerState::kError);
@@ -76,9 +78,9 @@ static void RunServer(uint16_t port) {
   enet_host_destroy(server);
 }
 
-void StartServer(uint16_t port) {
+void StartServer(uint16_t port, int capacity) {
   if (GetState() != ServerState::kStopped) return;
-  server_thread = new std::thread(RunServer, port);
+  server_thread = new std::thread(RunServer, port, capacity);
 }
 
 void StopServer() {

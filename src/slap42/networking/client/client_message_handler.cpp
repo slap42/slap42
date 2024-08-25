@@ -5,6 +5,7 @@
 #include <bytepack/bytepack.hpp>
 #include "client.hpp"
 #include "client_data.hpp"
+#include "menus/connected_players_menu.hpp"
 #include "menus/error_menu.hpp"
 #include "menus/menu_state_machine.hpp"
 #include "networking/disconnect_reasons.hpp"
@@ -35,6 +36,13 @@ void OnMessageRecv(ENetEvent& evt) {
   stream.read(type);
 
   switch (type) {
+    case MessageType::kServerInfo: {
+      ServerInfoMessage msg { };
+      msg.deserialize(stream);
+      ConnectedPlayersMenu::SetIdAndCapacity(msg.id, msg.capacity);
+      break;
+    }
+
     case MessageType::kPositionUpdate: {
       PlayerPositionUpdateMessage msg { };
       msg.deserialize(stream);

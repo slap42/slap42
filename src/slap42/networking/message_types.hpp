@@ -12,6 +12,7 @@ enum class MessageType : uint8_t {
   kPlayerLeave         = 0x03,
   kChatMessage         = 0x04,
   kKickPlayer          = 0x05,
+  kServerInfo          = 0x06,
 };
 
 typedef uint8_t peer_id;
@@ -89,6 +90,21 @@ struct KickPlayerMessage {
 
   void deserialize(bytepack::binary_stream<>& stream) {
     stream.read(id);
+  }
+};
+
+struct ServerInfoMessage {
+  peer_id id;
+  int capacity;
+  
+  MessageType Type() const { return MessageType::kServerInfo; }
+
+  void serialize(bytepack::binary_stream<>& stream) const {
+    stream.write(id, capacity);
+  }
+
+  void deserialize(bytepack::binary_stream<>& stream) {
+    stream.read(id, capacity);
   }
 };
 

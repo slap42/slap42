@@ -5,6 +5,7 @@ namespace Server {
 
 ENetHost* server;
 std::unordered_map<peer_id, std::shared_ptr<PeerData>> peer_data;
+int capacity;
 
 }
 }
