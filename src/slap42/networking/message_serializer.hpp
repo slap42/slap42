@@ -12,7 +12,8 @@ void SendSerializedMessage(ENetPeer* peer, const T& t) {
   serialization_stream.write(t.Type());
   t.serialize(serialization_stream);
   bytepack::buffer_view buffer = serialization_stream.data();
-  ENetPacket* packet = enet_packet_create(buffer.as<std::uint8_t>(), buffer.size(), ENET_PACKET_FLAG_RELIABLE);
+  ENetPacket* packet = enet_packet_create(buffer.as<std::uint8_t>(), buffer.size(),
+    t.Strategy() == MessageStrategy::kReliable ? ENET_PACKET_FLAG_RELIABLE : 0);
   enet_peer_send(peer, 0, packet);
 }
 
@@ -22,7 +23,8 @@ void BroadcastSerializedMessage(ENetHost* host, const T& t, ENetPeer* to_ignore 
   serialization_stream.write(t.Type());
   t.serialize(serialization_stream);
   bytepack::buffer_view buffer = serialization_stream.data();
-  ENetPacket* packet = enet_packet_create(buffer.as<std::uint8_t>(), buffer.size(), ENET_PACKET_FLAG_RELIABLE);
+  ENetPacket* packet = enet_packet_create(buffer.as<std::uint8_t>(), buffer.size(),
+    t.Strategy() == MessageStrategy::kReliable ? ENET_PACKET_FLAG_RELIABLE : 0);
 
   ENetPeer* current_peer;
   for (current_peer = host->peers; current_peer < &host->peers[host->peerCount]; ++current_peer) {

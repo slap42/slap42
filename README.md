@@ -89,6 +89,10 @@ If running in a VM, make sure mouse integration is turned on or cursor input won
 
 ### Backlog
 
+#### Cleanup
+
+- Figure out if there is a way to show an error message if the connection fails because the server is at capacity
+
 #### "It Works On My Machine"
 
 - Terrain flickering bug reported on Windows

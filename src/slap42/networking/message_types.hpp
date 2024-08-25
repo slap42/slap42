@@ -15,6 +15,11 @@ enum class MessageType : uint8_t {
   kServerInfo          = 0x06,
 };
 
+enum class MessageStrategy {
+  kUnreliable,
+  kReliable,
+};
+
 typedef uint8_t peer_id;
 
 struct PlayerPositionUpdateMessage {
@@ -22,7 +27,8 @@ struct PlayerPositionUpdateMessage {
   glm::vec3 pos;
   glm::vec2 rot;
 
-  MessageType Type() const { return MessageType::kPositionUpdate; }
+  MessageType Type() const         { return MessageType::kPositionUpdate; }
+  MessageStrategy Strategy() const { return MessageStrategy::kUnreliable; }
 
   void serialize(bytepack::binary_stream<>& stream) const {
     stream.write(id, pos.x, pos.y, pos.z, rot.x, rot.y);
@@ -38,7 +44,8 @@ struct PlayerJoinMessage {
   glm::vec3 pos;
   glm::vec2 rot;
 
-  MessageType Type() const { return MessageType::kPlayerJoin; }
+  MessageType Type() const         { return MessageType::kPlayerJoin;   }
+  MessageStrategy Strategy() const { return MessageStrategy::kReliable; }
 
   void serialize(bytepack::binary_stream<>& stream) const {
     stream.write(id, pos.x, pos.y, pos.z, rot.x, rot.y);
@@ -53,7 +60,8 @@ struct PlayerLeaveMessage {
   peer_id id;
   bool kicked = false;
 
-  MessageType Type() const { return MessageType::kPlayerLeave; }
+  MessageType Type() const         { return MessageType::kPlayerLeave;  }
+  MessageStrategy Strategy() const { return MessageStrategy::kReliable; }
 
   void serialize(bytepack::binary_stream<>& stream) const {
     stream.write(id, kicked);
@@ -68,7 +76,8 @@ struct ChatMessageMessage {
   peer_id id;
   char msg_buf[256] { };
 
-  MessageType Type() const { return MessageType::kChatMessage; }
+  MessageType Type() const         { return MessageType::kChatMessage;  }
+  MessageStrategy Strategy() const { return MessageStrategy::kReliable; }
 
   void serialize(bytepack::binary_stream<>& stream) const {
     stream.write(id, msg_buf);
@@ -82,7 +91,8 @@ struct ChatMessageMessage {
 struct KickPlayerMessage {
   peer_id id;
   
-  MessageType Type() const { return MessageType::kKickPlayer; }
+  MessageType Type() const         { return MessageType::kKickPlayer;   }
+  MessageStrategy Strategy() const { return MessageStrategy::kReliable; }
 
   void serialize(bytepack::binary_stream<>& stream) const {
     stream.write(id);
@@ -97,7 +107,8 @@ struct ServerInfoMessage {
   peer_id id;
   int capacity;
   
-  MessageType Type() const { return MessageType::kServerInfo; }
+  MessageType Type() const         { return MessageType::kServerInfo;   }
+  MessageStrategy Strategy() const { return MessageStrategy::kReliable; }
 
   void serialize(bytepack::binary_stream<>& stream) const {
     stream.write(id, capacity);
