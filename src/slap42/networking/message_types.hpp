@@ -106,16 +106,17 @@ struct KickPlayerMessage {
 struct ServerInfoMessage {
   peer_id id;
   int capacity;
+  uint32_t seed;
   
   MessageType Type() const         { return MessageType::kServerInfo;   }
   MessageStrategy Strategy() const { return MessageStrategy::kReliable; }
 
   void serialize(bytepack::binary_stream<>& stream) const {
-    stream.write(id, capacity);
+    stream.write(id, capacity, seed);
   }
 
   void deserialize(bytepack::binary_stream<>& stream) {
-    stream.read(id, capacity);
+    stream.read(id, capacity, seed);
   }
 };
 

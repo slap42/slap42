@@ -27,6 +27,7 @@ void OnClientConnect(ENetEvent& evt) {
     ServerInfoMessage msg {
       .id = current_id,
       .capacity = capacity,
+      .seed = seed,
     };
     SendSerializedMessage(evt.peer, msg);
   }

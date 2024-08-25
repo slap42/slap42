@@ -43,6 +43,8 @@ set(SLAP42_LEVEL_FILES
   src/slap42/level/chunk.cpp
   src/slap42/level/level.hpp
   src/slap42/level/level.cpp
+  src/slap42/level/noise.hpp
+  src/slap42/level/noise.cpp
 )
 source_group("src/level" FILES ${SLAP42_LEVEL_FILES})
 
@@ -103,6 +105,8 @@ source_group("src/hud_panels" FILES ${SLAP42_HUD_PANELS_FILES})
 
 set(SLAP42_UTILS_FILES
   src/slap42/utils/hash.hpp
+  src/slap42/utils/stoi_wrapper.hpp
+  src/slap42/utils/stoi_wrapper.cpp
   src/slap42/utils/hostname_port_validation.hpp
   src/slap42/utils/hostname_port_validation.cpp
 )

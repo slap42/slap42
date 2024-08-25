@@ -5,13 +5,14 @@
 #include <bytepack/bytepack.hpp>
 #include "client.hpp"
 #include "client_data.hpp"
+#include "hud_panels/chat_panel.hpp"
+#include "level/noise.hpp"
 #include "menus/connected_players_menu.hpp"
 #include "menus/error_menu.hpp"
 #include "menus/menu_state_machine.hpp"
 #include "networking/disconnect_reasons.hpp"
 #include "networking/message_types.hpp"
 #include "networking/peer_data.hpp"
-#include "hud_panels/chat_panel.hpp"
 
 namespace Slap42 {
 namespace Client {
@@ -40,6 +41,7 @@ void OnMessageRecv(ENetEvent& evt) {
       ServerInfoMessage msg { };
       msg.deserialize(stream);
       ConnectedPlayersMenu::SetIdAndCapacity(msg.id, msg.capacity);
+      Noise::SetSeed(msg.seed);
       break;
     }
 
@@ -89,8 +91,8 @@ void OnMessageRecv(ENetEvent& evt) {
   
       std::stringstream ss;
       ss << "[Player " << (int)msg.id << "] " << msg.msg_buf;
-  
       ChatPanel::AddChatMessage(msg.id, ss.str());
+      
       break;
     }
       

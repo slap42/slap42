@@ -5,6 +5,7 @@
 #include "graphics/camera.hpp"
 #include "graphics/shaders/terrain_shader.hpp"
 #include "graphics/texture.hpp"
+#include "noise.hpp"
 #include "utils/hash.hpp"
 
 namespace Slap42 {
@@ -32,6 +33,8 @@ void Destroy() {
 }
 
 void UnloadChunks() {
+  Noise::SetSeed(-1);
+  
   for (const auto& chunk : chunks) {
     delete chunk.second;
   }
@@ -58,7 +61,7 @@ void Update() {
   }
 
   // Load chunks close to the player
-  {
+  if (Noise::GetSeed() != -1) {
     int x = 0, z = 0, dx = 0, dz = 0;
     dz = -1;
     int t = render_distance;

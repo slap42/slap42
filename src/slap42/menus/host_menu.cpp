@@ -9,6 +9,7 @@
 #include "networking/client/client.hpp"
 #include "networking/server/server.hpp"
 #include "utils/hostname_port_validation.hpp"
+#include "utils/stoi_wrapper.hpp"
 
 namespace Slap42 {
 namespace HostMenu {
@@ -19,15 +20,17 @@ void Render() {
 
   ImGui::Begin("Host Game", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar);
 
-  static char buf[256] { "6969" };
-
   static int capacity = 32;
   ImGui::InputInt("Max Server Capacity", &capacity);
   capacity = std::clamp(capacity, 1, 255);
+  
+  static char seed_buf[256] { "" };
+  ImGui::InputText("World Seed", seed_buf, sizeof(seed_buf));
 
-  if (ImGui::InputText("Server Port", buf, sizeof(buf), ImGuiInputTextFlags_EnterReturnsTrue) || ImGui::Button("Start Server")) {
+  static char port_buf[256] { "6969" };
+  if (ImGui::InputText("Server Port", port_buf, sizeof(port_buf), ImGuiInputTextFlags_EnterReturnsTrue) || ImGui::Button("Start Server")) {
     uint16_t port;
-    bool result = Validation::TryParsePort(buf, port);
+    bool result = Validation::TryParsePort(port_buf, port);
     if (!result) {
       MenuStateMachine::SetState(MenuState::kErrorMenu);
       ImGui::End();
@@ -35,7 +38,10 @@ void Render() {
     }
 
     Server::StopServer();
-    Server::StartServer(port, capacity);
+    uint32_t seed = 0;
+    // TODO: hash non-integer seeds
+    Validation::TryStou(seed_buf, &seed);
+    Server::StartServer(port, capacity, seed);
 
     // Spin while waiting for server to either start or fail to start - should be a few milliseconds
     while (Server::GetState() == ServerState::kStopped) {

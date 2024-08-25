@@ -20,7 +20,7 @@ void Render() {
 
   ImGui::Begin("Connected Players", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar);
   
-  ImGui::Text("Server Capacity: %d/%d", Client::GetPeerData()->size() + 1, capacity);
+  ImGui::Text("Server Capacity: %d/%d", (int)Client::GetPeerData()->size() + 1, capacity);
   ImGui::Spacing();
   
   ImGui::Text("Connected Players:");

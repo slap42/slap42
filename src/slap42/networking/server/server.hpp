@@ -12,7 +12,7 @@ enum class ServerState {
 
 namespace Server {
 
-void StartServer(uint16_t port, int capacity);
+void StartServer(uint16_t port, int capacity, uint32_t seed);
 void StopServer();
 
 ServerState GetState();

@@ -1,6 +1,6 @@
 #include "chunk.hpp"
 
-#include "OpenSimplexNoise.hh"
+#include "noise.hpp"
 
 namespace Slap42 {
 
@@ -10,10 +10,6 @@ Chunk::Chunk(int chunkx, int chunkz) : x(chunkx), z(chunkz) {
   constexpr size_t kVertexBufferSize = (kChunkSize + 1) * (kChunkSize + 1) * kVertexSize;
   constexpr size_t kIndexBufferSize = kChunkSize * kChunkSize * 6;
 
-  OSN::Noise<2> noise;
-  constexpr float kHeight = 5.0f;
-  constexpr float kSample = 0.1f;
-
   float* vertices = new float[kVertexBufferSize];
   unsigned short* indices = new unsigned short[kIndexBufferSize];
 
@@ -22,10 +18,10 @@ Chunk::Chunk(int chunkx, int chunkz) : x(chunkx), z(chunkz) {
       size_t i = x * kVertexSize + z * kVertexSize * (kChunkSize + 1);
       float xx = (float)(x + chunkx * kChunkSizeF);
       float zz = (float)(z + chunkz * kChunkSizeF);
-      vertices[i +  0] = xx;
-      vertices[i +  1] = noise.eval((0.0f + xx) * kSample, (1.0f + zz) * kSample) * kHeight;
-      vertices[i +  2] = zz;
-      vertices[i +  3] = noise.eval((0.0f + xx) * kSample, (1.0f + zz) * kSample);
+      vertices[i + 0] = xx;
+      vertices[i + 1] = Noise::SampleHeight(xx, zz);
+      vertices[i + 2] = zz;
+      vertices[i + 3] = Noise::SampleTexture(xx, zz);
     }
   }
 

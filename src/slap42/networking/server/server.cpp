@@ -32,9 +32,10 @@ ServerState GetState() {
   return state;
 }
 
-static void RunServer(uint16_t port, int c) {
+static void RunServer(uint16_t port, int c, int s) {
   capacity = c;
-
+  seed = s;
+  
   ENetAddress address { };
   address.host = ENET_HOST_ANY;
   address.port = port;
@@ -78,9 +79,9 @@ static void RunServer(uint16_t port, int c) {
   enet_host_destroy(server);
 }
 
-void StartServer(uint16_t port, int capacity) {
+void StartServer(uint16_t port, int capacity, uint32_t seed) {
   if (GetState() != ServerState::kStopped) return;
-  server_thread = new std::thread(RunServer, port, capacity);
+  server_thread = new std::thread(RunServer, port, capacity, seed);
 }
 
 void StopServer() {
