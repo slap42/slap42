@@ -4,9 +4,9 @@
 #include <thread>
 #include <mutex>
 #include <imgui.h>
-#include "networking/client.hpp"
 #include "menus/error_menu.hpp"
 #include "menus/menu_state_machine.hpp"
+#include "networking/client/client.hpp"
 #include "window/controls.hpp"
 
 namespace Slap42 {

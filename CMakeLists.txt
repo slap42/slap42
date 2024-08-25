@@ -49,14 +49,30 @@ source_group("src/level" FILES ${SLAP42_LEVEL_FILES})
 set(SLAP42_NETWORKING_FILES
   src/slap42/networking/message_types.hpp
   src/slap42/networking/message_serializer.hpp
-  src/slap42/networking/server.hpp
-  src/slap42/networking/server.cpp
-  src/slap42/networking/client.hpp
-  src/slap42/networking/client.cpp
   src/slap42/networking/peer_data.hpp
   src/slap42/networking/disconnect_reasons.hpp
 )
 source_group("src/networking" FILES ${SLAP42_NETWORKING_FILES})
+
+set(SLAP42_NETWORKING_CLIENT_FILES
+  src/slap42/networking/client/client.hpp
+  src/slap42/networking/client/client.cpp
+  src/slap42/networking/client/client_message_handler.hpp
+  src/slap42/networking/client/client_message_handler.cpp
+  src/slap42/networking/client/client_data.hpp
+  src/slap42/networking/client/client_data.cpp
+)
+source_group("src/networking/client" FILES ${SLAP42_NETWORKING_CLIENT_FILES})
+
+set(SLAP42_NETWORKING_SERVER_FILES
+  src/slap42/networking/server/server.hpp
+  src/slap42/networking/server/server.cpp
+  src/slap42/networking/server/server_message_handler.hpp
+  src/slap42/networking/server/server_message_handler.cpp
+  src/slap42/networking/server/server_data.hpp
+  src/slap42/networking/server/server_data.cpp
+)
+source_group("src/networking/server" FILES ${SLAP42_NETWORKING_SERVER_FILES})
 
 set(SLAP42_MENUS_FILES
   src/slap42/menus/menu_state.hpp
@@ -107,6 +123,8 @@ add_executable(${PROJECT_NAME}
   ${SLAP42_GRAPHICS_SHADERS_FILES}
   ${SLAP42_LEVEL_FILES}
   ${SLAP42_NETWORKING_FILES}
+  ${SLAP42_NETWORKING_CLIENT_FILES}
+  ${SLAP42_NETWORKING_SERVER_FILES}
   ${SLAP42_MENUS_FILES}
   ${SLAP42_HUD_PANELS_FILES}
   ${SLAP42_UTILS_FILES}

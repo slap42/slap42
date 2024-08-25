@@ -6,7 +6,7 @@
 #include <unordered_map>
 #include <glm/glm.hpp>
 #include "networking/message_types.hpp"
-#include "peer_data.hpp"
+#include "networking/peer_data.hpp"
 
 namespace Slap42 {
 namespace Client {
@@ -21,7 +21,6 @@ void SendChatMessage(const std::string& msg);
 void SendKickPlayer(peer_id id);
 
 std::unordered_map<peer_id, std::shared_ptr<PeerData>>* GetPeerData();
-
 
 }
 }

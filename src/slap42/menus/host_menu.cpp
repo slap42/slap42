@@ -6,8 +6,8 @@
 #include "host_menu.hpp"
 #include "error_menu.hpp"
 #include "menu_state_machine.hpp"
-#include "networking/client.hpp"
-#include "networking/server.hpp"
+#include "networking/client/client.hpp"
+#include "networking/server/server.hpp"
 #include "utils/hostname_port_validation.hpp"
 
 namespace Slap42 {

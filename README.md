@@ -90,11 +90,8 @@ If running in a VM, make sure mouse integration is turned on or cursor input won
 
 ### Backlog
 
-#### Bugs
-
 #### Cleanup
 
-- Cleanup the switch statements in Client/Server to make them easier to read
 - Point logs at an in-game console instead of stderr/stdout?
 
 #### "It Works On My Machine"

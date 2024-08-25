@@ -6,7 +6,7 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/color_space.hpp>
 #include <imgui.h>
-#include "networking/client.hpp"
+#include "networking/client/client.hpp"
 #include "window/controls.hpp"
 #include "window/window.hpp"
 

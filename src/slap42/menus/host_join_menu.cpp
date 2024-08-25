@@ -1,8 +1,6 @@
 #include "host_join_menu.hpp"
 
 #include <imgui.h>
-#include "networking/client.hpp"
-#include "networking/server.hpp"
 #include "menus/menu_state_machine.hpp"
 #include "window/controls.hpp"
 

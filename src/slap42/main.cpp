@@ -12,8 +12,8 @@
 #include "hud_panels/chat_panel.hpp"
 #include "level/level.hpp"
 #include "menus/menu_state_machine.hpp"
-#include "networking/client.hpp"
-#include "networking/server.hpp"
+#include "networking/client/client.hpp"
+#include "networking/server/server.hpp"
 #include "window/controls.hpp"
 #include "window/window.hpp"
 

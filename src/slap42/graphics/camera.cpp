@@ -7,7 +7,7 @@
 #include <glm/gtx/rotate_vector.hpp>
 #include <imgui.h>
 #include "gl_check.hpp"
-#include "networking/client.hpp"
+#include "networking/client/client.hpp"
 #include "window/controls.hpp"
 #include "window/window.hpp"
 

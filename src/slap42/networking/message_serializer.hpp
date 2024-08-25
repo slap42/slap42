@@ -2,6 +2,7 @@
 
 #include <bytepack/bytepack.hpp>
 #include <enet/enet.h>
+#include "message_types.hpp"
 
 namespace Slap42 {
 

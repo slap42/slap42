@@ -6,12 +6,14 @@
 #include <mutex>
 #include <enet/enet.h>
 #include <glm/gtc/type_ptr.hpp>
-#include "disconnect_reasons.hpp"
 #include "graphics/camera.hpp"
+#include "client_data.hpp"
+#include "client_message_handler.hpp"
 #include "hud_panels/chat_panel.hpp"
 #include "level/level.hpp"
 #include "menus/error_menu.hpp"
 #include "menus/menu_state_machine.hpp"
+#include "networking/disconnect_reasons.hpp"
 #include "networking/message_types.hpp"
 #include "networking/message_serializer.hpp"
 #include "networking/peer_data.hpp"
@@ -21,9 +23,7 @@ namespace Slap42 {
 namespace Client {
 
 static ENetHost* client = nullptr;
-static ENetPeer* peer = nullptr;
-
-static std::unordered_map<peer_id, std::shared_ptr<PeerData>> peer_data;
+static ENetPeer* server = nullptr;
 
 static bool interrupt_connect_attempt = false;
 static std::mutex interrupt_connect_attempt_mutex;
@@ -33,7 +33,7 @@ std::unordered_map<peer_id, std::shared_ptr<PeerData>>* GetPeerData() {
 }
 
 bool Connect(const char* hostname, uint16_t port) {
-  if (peer)  {
+  if (server)  {
     fprintf(stderr, "[CLIENT] ClientConnect called when client is already connected");
     return false;
   }
@@ -49,8 +49,8 @@ bool Connect(const char* hostname, uint16_t port) {
   address.port = port;
   enet_address_set_host(&address, hostname);
   
-  peer = enet_host_connect(client, &address, 1, 0);
-  if (!peer) {
+  server = enet_host_connect(client, &address, 1, 0);
+  if (!server) {
     client = nullptr;
     ErrorMenu::SetErrorMessage("[CLIENT] enet_host_connect failed\n");
     return false;
@@ -72,9 +72,9 @@ bool Connect(const char* hostname, uint16_t port) {
   }
   
   // Timeout, connection fail
-  enet_peer_reset(peer);
+  enet_peer_reset(server);
   client = nullptr;
-  peer = nullptr;
+  server = nullptr;
   if (!interrupt_connect_attempt) {
     ErrorMenu::SetErrorMessage("[CLIENT] Failed to connect to the server\n");
   }
@@ -89,12 +89,12 @@ void InterruptConnectAttempt() {
 }
 
 void Disconnect() {
-  if (!peer)  {
+  if (!server)  {
     return;
   }
 
   ENetEvent evt;
-  enet_peer_disconnect(peer, (int)DisconnectReason::kClientVoluntaryDisconnect);
+  enet_peer_disconnect(server, (int)DisconnectReason::kClientVoluntaryDisconnect);
   // No need to wait here, as the connection will timeout on server side
   while (enet_host_service(client, &evt, 0) > 0) {
     switch (evt.type) {
@@ -116,94 +116,23 @@ void Disconnect() {
   peer_data.clear();
 
   // Destroy server connection
-  enet_peer_reset(peer);
-  peer = nullptr;
+  enet_peer_reset(server);
+  server = nullptr;
 }
 
 void PollMessages() {
-  if (!peer) return;
+  if (!server) return;
 
   ENetEvent evt;
   while (enet_host_service(client, &evt, 0) > 0) {
     switch (evt.type) {
       case ENET_EVENT_TYPE_RECEIVE: {
-        bytepack::binary_stream stream(bytepack::buffer_view(evt.packet->data, evt.packet->dataLength));
-        MessageType type;
-        stream.read(type);
-        
-        switch (type) {
-          case MessageType::kPositionUpdate: {
-            PlayerPositionUpdateMessage msg { };
-            msg.deserialize(stream);
-            // printf("[CLIENT] Player moved to: (%.2f, %.2f, %.2f) (%.2f, %.2f)\n", msg.pos.x, msg.pos.y, msg.pos.z, msg.rot.x, msg.rot.y);
-            peer_data.at(msg.id)->pos = msg.pos;
-            peer_data.at(msg.id)->rot = msg.rot;
-            break;
-          }
-            
-          case MessageType::kPlayerJoin: {
-            PlayerJoinMessage msg { };
-            msg.deserialize(stream);
-
-            std::stringstream ss;
-            ss << "Player " << (int)msg.id << " joined the game";
-            ChatPanel::AddChatMessage(255, ss.str());
-
-            auto new_peer_data = std::make_shared<PeerData>();
-            new_peer_data->pos = msg.pos;
-            new_peer_data->rot = msg.rot;
-            peer_data.emplace(msg.id, new_peer_data);
-            break;
-          }
-            
-          case MessageType::kPlayerLeave: {
-            PlayerLeaveMessage msg { };
-            msg.deserialize(stream);
-
-            std::stringstream ss;
-            if (!msg.kicked) {
-              ss << "Player " << (int)msg.id << " left the game";
-            }
-            else {
-              ss << "Player " << (int)msg.id << " was kicked";
-            }
-            ChatPanel::AddChatMessage(255, ss.str());
-
-            peer_data.erase(msg.id);
-            break;
-          }
-
-          case MessageType::kChatMessage: {
-            ChatMessageMessage msg { };
-            msg.deserialize(stream);
-
-            std::stringstream ss;
-            ss << "[Player " << (int)msg.id << "] " << msg.msg_buf;
-
-            ChatPanel::AddChatMessage(msg.id, ss.str());
-            break;
-          }
-            
-          default:
-            printf("[CLIENT] Unhandled message type received\n");
-            break;
-        }
+        OnMessageRecv(evt);
         break;
       }
         
       case ENET_EVENT_TYPE_DISCONNECT: {
-
-        switch ((DisconnectReason)evt.data) {
-        case DisconnectReason::kClientKicked:
-          ErrorMenu::SetErrorMessage("You were kicked from the server :(");
-          break;
-        default:
-          // If we get here the connection probably timed out, all we know is that the disconnect was not initiated by a player
-          ErrorMenu::SetErrorMessage("Disconnected from server");
-          break;
-        }
-        MenuStateMachine::SetState(MenuState::kErrorMenu);        
-        Disconnect();
+        OnServerDisconnect(evt);
         break;
       }
       
@@ -215,7 +144,7 @@ void PollMessages() {
 
 void SendPositionUpdate(const glm::vec3& pos, const glm::vec2& rot) {
   PlayerPositionUpdateMessage pm { .pos = pos, .rot = rot };
-  SendSerializedMessage(peer, pm);
+  SendSerializedMessage(server, pm);
 }
 
 void SendChatMessage(const std::string& msg) {
@@ -224,14 +153,14 @@ void SendChatMessage(const std::string& msg) {
   }
   ChatMessageMessage cm { };
   strcpy(cm.msg_buf, msg.c_str());
-  SendSerializedMessage(peer, cm);
+  SendSerializedMessage(server, cm);
 }
 
 void SendKickPlayer(peer_id id) {
   KickPlayerMessage km { 
     .id = id,
   };
-  SendSerializedMessage(peer, km);
+  SendSerializedMessage(server, km);
 }
 
 }
