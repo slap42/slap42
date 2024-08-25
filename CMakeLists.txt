@@ -174,5 +174,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE imgui)
 add_subdirectory(src/extern/opensimplex SYSTEM)
 target_link_libraries(${PROJECT_NAME} PRIVATE opensimplex)
 
+add_subdirectory(src/extern/picosha2 SYSTEM)
+target_link_libraries(${PROJECT_NAME} PRIVATE picosha2)
+
 add_subdirectory(src/extern/stb SYSTEM)
 target_link_libraries(${PROJECT_NAME} PRIVATE stb)

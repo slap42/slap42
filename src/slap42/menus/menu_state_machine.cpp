@@ -28,6 +28,9 @@ void SetState(MenuState s) {
   if (state == MenuState::kNone) {
     Controls::SetInputStateWithCachedCursor();
   }
+  else if (state == MenuState::kHostMenu) {
+    HostMenu::GenerateRandomSeed();
+  }
   else if (state == MenuState::kPauseMenu) {
     Controls::SetInputState(InputState::kNonBlockingMenu);
   }

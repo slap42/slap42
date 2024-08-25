@@ -1,8 +1,10 @@
 #include "join_menu.hpp"
 
+#include <random>
 #include <string>
 #include <sstream>
 #include <imgui.h>
+#include <picosha2.h>
 #include "host_menu.hpp"
 #include "error_menu.hpp"
 #include "menu_state_machine.hpp"
@@ -14,6 +16,8 @@
 namespace Slap42 {
 namespace HostMenu {
 
+static char seed_buf[256] { "" };
+
 void Render() {
   ImVec2 display_size = ImGui::GetIO().DisplaySize;
   ImGui::SetNextWindowPos({ display_size.x * 0.5f, display_size.y * 0.5f }, ImGuiCond_Always, { 0.5f, 0.5f });
@@ -24,7 +28,6 @@ void Render() {
   ImGui::InputInt("Max Server Capacity", &capacity);
   capacity = std::clamp(capacity, 1, 255);
   
-  static char seed_buf[256] { "" };
   ImGui::InputText("World Seed", seed_buf, sizeof(seed_buf));
 
   static char port_buf[256] { "6969" };
@@ -39,8 +42,14 @@ void Render() {
 
     Server::StopServer();
     uint32_t seed = 0;
-    // TODO: hash non-integer seeds
-    Validation::TryStou(seed_buf, &seed);
+    if (!Validation::TryStou(seed_buf, &seed)) {
+      // If the seed cannot be parsed to a number, hash it
+      std::string hash_hex_str;
+      picosha2::hash256_hex_string(std::string(seed_buf), hash_hex_str);
+      std::stringstream ss;
+      ss << std::hex << hash_hex_str.substr(0, 8);
+      ss >> seed;
+    }
     Server::StartServer(port, capacity, seed);
 
     // Spin while waiting for server to either start or fail to start - should be a few milliseconds
@@ -71,6 +80,14 @@ void Render() {
   }
 
   ImGui::End();
+}
+
+void GenerateRandomSeed() {
+  std::random_device dev;
+  std::mt19937 rng(dev());
+  std::uniform_int_distribution<std::mt19937::result_type> dist(0, std::numeric_limits<uint32_t>::max());
+  std::string s = std::to_string(dist(rng));
+  std::strcpy(seed_buf, s.c_str());
 }
 
 }

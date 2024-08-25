@@ -13,3 +13,6 @@
 [submodule "src/extern/bytepack"]
 	path = src/extern/bytepack
 	url = https://github.com/farukeryilmaz/bytepack
+[submodule "src/extern/picosha2"]
+	path = src/extern/picosha2
+	url = https://github.com/okdshin/PicoSHA2
