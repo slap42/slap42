@@ -89,6 +89,8 @@ source_group("src/hud_panels" FILES ${SLAP42_HUD_PANELS_FILES})
 
 set(SLAP42_UTILS_FILES
   src/slap42/utils/hash.hpp
+  src/slap42/utils/hostname_port_validation.hpp
+  src/slap42/utils/hostname_port_validation.cpp
 )
 source_group("src/utils" FILES ${SLAP42_UTILS_FILES})
 

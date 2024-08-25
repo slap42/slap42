@@ -96,7 +96,6 @@ If running in a VM, make sure mouse integration is turned on or cursor input won
 
 - Cleanup the switch statements in Client/Server to make them easier to read
 - Point logs at an in-game console instead of stderr/stdout?
-- Better validation for hostname and port
 
 #### "It Works On My Machine"
 - Terrain flickering bug reported on Windows

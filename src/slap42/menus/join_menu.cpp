@@ -6,37 +6,10 @@
 #include "join_error_menu.hpp"
 #include "menus/menu_state_machine.hpp"
 #include "menus/join_async_menu.hpp"
+#include "utils/hostname_port_validation.hpp"
 
 namespace Slap42 {
 namespace JoinMenu {
-
-static bool TryParseHostAndPort(std::string buf, std::string& host, uint16_t& port) {
-  size_t colon_pos = buf.find_first_of(':');
-
-  if (colon_pos != std::string::npos) {
-    // Colon found, try to parse host and port
-    host = buf.substr(0, colon_pos);
-    
-    std::string port_str = buf.substr(colon_pos + 1);
-    for (char c : port_str) {
-      if (!isdigit(c)) {
-        std::stringstream ss;
-        ss << port_str << " is not a valid port number";
-        JoinErrorMenu::SetErrorMessage(ss.str().c_str());
-        return false;
-      }
-    }
-
-    port = std::stoi(port_str);
-    return true;
-  }
-  else {
-    // No colon, use default port
-    host = buf;
-    port = 6969;
-    return true;
-  }
-}
 
 void Render() {
   ImVec2 display_size = ImGui::GetIO().DisplaySize;
@@ -49,7 +22,7 @@ void Render() {
   if (ImGui::InputText("Server Address", buf, sizeof(buf), ImGuiInputTextFlags_EnterReturnsTrue) || ImGui::Button("Connect")) {
     std::string host;
     uint16_t port;
-    if (TryParseHostAndPort(buf, host, port)) {
+    if (Validation::TryParseHostAndPort(buf, host, port)) {
       JoinAsyncMenu::Reset(host.c_str(), port);
       MenuStateMachine::SetState(MenuState::kJoinAsyncMenu);
     }

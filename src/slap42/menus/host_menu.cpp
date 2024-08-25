@@ -8,23 +8,10 @@
 #include "menu_state_machine.hpp"
 #include "networking/client.hpp"
 #include "networking/server.hpp"
+#include "utils/hostname_port_validation.hpp"
 
 namespace Slap42 {
 namespace HostMenu {
-
-static bool TryParsePort(std::string buf, uint16_t& port) {
-  for (char c : buf) {
-    if (!isdigit(c)) {
-      std::stringstream ss;
-      ss << buf << " is not a valid port number";
-      HostErrorMenu::SetErrorMessage(ss.str().c_str());
-      return false;
-    }
-  }
-  
-  port = std::stoi(buf);
-  return true;
-}
 
 void Render() {
   ImVec2 display_size = ImGui::GetIO().DisplaySize;
@@ -36,7 +23,7 @@ void Render() {
 
   if (ImGui::InputText("Server Port", buf, sizeof(buf), ImGuiInputTextFlags_EnterReturnsTrue) || ImGui::Button("Start Server")) {
     uint16_t port;
-    if (TryParsePort(buf, port)) {
+    if (Validation::TryParsePort(buf, port)) {
       Server::StopServer();
       Server::StartServer(port);
 
