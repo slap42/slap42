@@ -1,30 +1,17 @@
 #pragma once
 
-#include <unordered_map>
-#include "chunk.hpp"
-#include "graphics/shaders/terrain_shader.hpp"
-#include "graphics/texture.hpp"
-
 namespace Slap42 {
+namespace Level {
 
-class Level {
-public:
-  Level();
-  ~Level();
+void Create();
+void Destroy();
+void UnloadChunks();
 
-public:
-  void Update();
-  void Render() const;
+void Update();
+void Render();
 
-public:
-  static int GetRenderDistance();
-  static void SetRenderDistance(int render_distance);
+int GetRenderDistance();
+void SetRenderDistance(int render_distance);
 
-private:
-  Texture* grass_texture;
-  Texture* dirt_texture;
-
-  std::unordered_map<uint64_t, Chunk*> chunks;
-};
-
+}
 }

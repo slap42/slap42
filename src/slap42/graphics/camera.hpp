@@ -9,6 +9,7 @@ namespace Camera {
 
 void Create();
 void Update(float delta);
+void ResetPosition();
 
 glm::vec3 GetPosition();
 

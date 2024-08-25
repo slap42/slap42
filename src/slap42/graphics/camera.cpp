@@ -146,6 +146,12 @@ void Update(float delta) {
   }
 }
 
+void ResetPosition() {
+  position = glm::vec3{ 0.0f };
+  rotation = glm::vec2{ 0.0f };
+  CalcView();
+}
+
 glm::vec3 GetPosition() {
   return position;
 }

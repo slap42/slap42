@@ -28,7 +28,7 @@ int main() {
 
   Window::Create();
 
-  Level level;
+  Level::Create();
 
   Shader::EntityShader::Create();
 
@@ -72,7 +72,7 @@ int main() {
     Window::PollEvents();
     
     if (Controls::IsInPlayerInputState() || Controls::GetInputState() == InputState::kNonBlockingMenu) {
-      level.Update();
+      Level::Update();
     }
 
     if (Controls::IsInPlayerInputState()) {
@@ -85,7 +85,7 @@ int main() {
 
     Window::Clear();
 
-    level.Render();
+    Level::Render();
 
     Shader::EntityShader::Bind();
 
@@ -113,6 +113,7 @@ int main() {
     Window::SwapBuffers();
   }
 
+  Level::Destroy();
   Client::Disconnect();
   Server::StopServer();
 }

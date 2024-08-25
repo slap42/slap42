@@ -10,6 +10,11 @@
 #include "window/controls.hpp"
 #include "window/window.hpp"
 
+// TODO: I have no idea what is including minwindef.h
+#ifdef min
+  #undef min
+#endif
+
 namespace Slap42 {
 namespace ChatPanel {
 

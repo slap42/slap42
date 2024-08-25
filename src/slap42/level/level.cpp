@@ -1,23 +1,29 @@
 #include "level.hpp"
 
-#include "utils/hash.hpp"
+#include <unordered_map>
+#include "chunk.hpp"
 #include "graphics/camera.hpp"
+#include "graphics/shaders/terrain_shader.hpp"
+#include "graphics/texture.hpp"
+#include "utils/hash.hpp"
 
 namespace Slap42 {
+namespace Level {
 
 static int render_distance = 8;
+static Texture* grass_texture;
+static Texture* dirt_texture;
+static std::unordered_map<uint64_t, Chunk*> chunks;
 
-Level::Level() {
+void Create() {
   Shader::TerrainShader::Create();
 
   grass_texture = new Texture("res/images/Grass002_2K-PNG_Color.png");
   dirt_texture = new Texture("res/images/Ground067_2K-PNG_Color.png");
 }
 
-Level::~Level() {
-  for (const auto& chunk : chunks) {
-    delete chunk.second;
-  }
+void Destroy() {
+  UnloadChunks();
 
   delete grass_texture;
   delete dirt_texture;
@@ -25,7 +31,14 @@ Level::~Level() {
   Shader::TerrainShader::Destroy();
 }
 
-void Level::Update() {
+void UnloadChunks() {
+  for (const auto& chunk : chunks) {
+    delete chunk.second;
+  }
+  chunks.clear();
+}
+
+void Update() {
   const glm::vec3 player_pos = Camera::GetPosition();
   
   const float kChunkSpawnDistance = render_distance * 0.4f;
@@ -90,7 +103,7 @@ void Level::Update() {
   }
 }
 
-void Level::Render() const {
+void Render() {
   Shader::TerrainShader::Bind();
   
   grass_texture->Bind(0);
@@ -101,12 +114,13 @@ void Level::Render() const {
   }
 }
 
-int Level::GetRenderDistance() {
+int GetRenderDistance() {
   return render_distance;
 }
 
-void Level::SetRenderDistance(int rd) {
+void SetRenderDistance(int rd) {
   render_distance = rd;
 }
 
+}
 }

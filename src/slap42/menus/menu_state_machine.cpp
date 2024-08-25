@@ -29,9 +29,11 @@ void SetState(MenuState s) {
   if (state == MenuState::kNone) {
     Controls::SetInputStateWithCachedCursor();
   }
-
-  if (state == MenuState::kPauseMenu) {
+  else if (state == MenuState::kPauseMenu) {
     Controls::SetInputState(InputState::kNonBlockingMenu);
+  }
+  else if (state == MenuState::kJoinErrorMenu) {
+    Controls::SetInputState(InputState::kBlockingMenuNotInGame);
   }
 }
 

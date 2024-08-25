@@ -6,8 +6,12 @@
 #include <mutex>
 #include <enet/enet.h>
 #include <glm/gtc/type_ptr.hpp>
+#include "disconnect_reasons.hpp"
+#include "graphics/camera.hpp"
 #include "hud_panels/chat_panel.hpp"
+#include "level/level.hpp"
 #include "menus/join_error_menu.hpp"
+#include "menus/menu_state_machine.hpp"
 #include "networking/message_types.hpp"
 #include "networking/message_serializer.hpp"
 #include "networking/peer_data.hpp"
@@ -90,7 +94,7 @@ void Disconnect() {
   }
 
   ENetEvent evt;
-  enet_peer_disconnect(peer, 0);
+  enet_peer_disconnect(peer, (int)DisconnectReason::kClientVoluntaryDisconnect);
   // No need to wait here, as the connection will timeout on server side
   while (enet_host_service(client, &evt, 0) > 0) {
     switch (evt.type) {
@@ -105,7 +109,15 @@ void Disconnect() {
     }
   }
   break_loop:
-  void(0);
+
+  // Cleanup game data
+  Level::UnloadChunks();
+  Camera::ResetPosition();
+  peer_data.clear();
+
+  // Destroy server connection
+  enet_peer_reset(peer);
+  peer = nullptr;
 }
 
 void PollMessages() {
@@ -179,9 +191,21 @@ void PollMessages() {
         break;
       }
         
-      case ENET_EVENT_TYPE_DISCONNECT:
-        printf("[CLIENT] Disconnect recieved from server\n");
+      case ENET_EVENT_TYPE_DISCONNECT: {
+
+        switch ((DisconnectReason)evt.data) {
+        case DisconnectReason::kClientKicked:
+          JoinErrorMenu::SetErrorMessage("You were kicked from the server :(");
+          break;
+        default:
+          // If we get here the connection probably timed out, all we know is that the disconnect was not initiated by either the client or the server
+          JoinErrorMenu::SetErrorMessage("Disconnected from server");
+          break;
+        }
+        MenuStateMachine::SetState(MenuState::kJoinErrorMenu);        
+        Disconnect();
         break;
+      }
       
       default:
         break;

@@ -54,6 +54,7 @@ set(SLAP42_NETWORKING_FILES
   src/slap42/networking/client.hpp
   src/slap42/networking/client.cpp
   src/slap42/networking/peer_data.hpp
+  src/slap42/networking/disconnect_reasons.hpp
 )
 source_group("src/networking" FILES ${SLAP42_NETWORKING_FILES})
 

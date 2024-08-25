@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <enet/enet.h>
 #include <glm/glm.hpp>
+#include "disconnect_reasons.hpp"
 #include "menus/host_error_menu.hpp"
 #include "networking/message_types.hpp"
 #include "networking/message_serializer.hpp"
@@ -97,8 +98,7 @@ static void RunServer(uint16_t port) {
 
           PlayerLeaveMessage msg {
             .id = (peer_id)(uint64_t)evt.peer->data,
-            // TODO: This doesn't work
-            .kicked = evt.data == 1,
+            .kicked = peer_data[(peer_id)(uint64_t)evt.peer->data]->kicked,
           };
           BroadcastSerializedMessage(server, msg, evt.peer);
           
@@ -134,7 +134,8 @@ static void RunServer(uint16_t port) {
               KickPlayerMessage msg { };
               msg.deserialize(stream);
               ENetPeer* peer = peer_data[msg.id]->peer;
-              enet_peer_disconnect(peer, 1);
+              peer_data[msg.id]->kicked = true;
+              enet_peer_disconnect(peer, (int)DisconnectReason::kClientKicked);
               break;
             }
             
