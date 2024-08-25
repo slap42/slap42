@@ -80,7 +80,6 @@ static void RunServer(uint16_t port) {
 
 void StartServer(uint16_t port) {
   if (GetState() != ServerState::kStopped) return;
-  printf("[SERVER] Starting Server\n");
   server_thread = new std::thread(RunServer, port);
 }
 
@@ -88,7 +87,6 @@ void StopServer() {
   if (GetState() == ServerState::kStopped) return;
   SetState(ServerState::kStopped);
   server_thread->join();
-  printf("[SERVER] Stopped Server\n");
   delete server_thread;
 }
 

@@ -38,7 +38,6 @@ void OnMessageRecv(ENetEvent& evt) {
     case MessageType::kPositionUpdate: {
       PlayerPositionUpdateMessage msg { };
       msg.deserialize(stream);
-      // printf("[CLIENT] Player moved to: (%.2f, %.2f, %.2f) (%.2f, %.2f)\n", msg.pos.x, msg.pos.y, msg.pos.z, msg.rot.x, msg.rot.y);
       peer_data.at(msg.id)->pos = msg.pos;
       peer_data.at(msg.id)->rot = msg.rot;
       break;
@@ -88,7 +87,7 @@ void OnMessageRecv(ENetEvent& evt) {
     }
       
     default:
-      printf("[CLIENT] Unhandled message type received\n");
+      fprintf(stderr, "[CLIENT] Unhandled message type received\n");
       break;
   }
 }

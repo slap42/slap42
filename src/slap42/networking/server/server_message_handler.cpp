@@ -10,8 +10,6 @@ namespace Slap42 {
 namespace Server {
 
 void OnClientConnect(ENetEvent& evt) {
-  printf("[SERVER] A client has connected: %x:%u\n", evt.peer->address.host, evt.peer->address.port);
-  
   // Store ID in peer user data
   // We can't use connectID as this is set to zero on disconnect
   peer_id current_id = 0;
@@ -49,8 +47,6 @@ void OnClientConnect(ENetEvent& evt) {
 }
 
 void OnClientDisconnect(ENetEvent& evt) {
-  printf("[SERVER] A client has disconnected: %x:%u\n", evt.peer->address.host, evt.peer->address.port);
- 
   PlayerLeaveMessage msg {
     .id = (peer_id)(uint64_t)evt.peer->data,
     .kicked = peer_data[(peer_id)(uint64_t)evt.peer->data]->kicked,
@@ -94,7 +90,7 @@ void OnMessageRecv(ENetEvent& evt) {
     }
     
     default: {
-      printf("[SERVER] Unrecognized message type received: %u\n", (unsigned int)type);
+      fprintf(stderr, "[SERVER] Unrecognized message type received: %u\n", (unsigned int)type);
       break;
     }
   }
