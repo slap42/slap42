@@ -8,7 +8,7 @@ namespace Noise {
 
 static uint32_t seed = -1;
 static std::unique_ptr<OSN::Noise<2>> noise_height;
-constexpr static float kHeight = 50.0f;
+constexpr static float kHeight = 100.0f;
 constexpr static float kHeightSampleScale = 0.01f;
 
 void SetSeed(int s) {
@@ -25,7 +25,7 @@ static float SampleHeightBase(float x, float z) {
   return ((noise_height->eval(x * kHeightSampleScale, z * kHeightSampleScale) + 1.0f) * 0.5f);
 }
 
-float SampleHeight(float x, float z) {
+float SampleTerrainHeight(float x, float z) {
   return SampleHeightBase(x, z) * kHeight - kHeight * 0.5f;
 }
 

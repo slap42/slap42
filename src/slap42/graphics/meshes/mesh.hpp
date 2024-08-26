@@ -14,7 +14,7 @@ public:
 
 private:
   unsigned int vao, vbo, ibo;
-  int index_count;
+  size_t index_count;
 };
 
 }
