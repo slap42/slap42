@@ -13,6 +13,11 @@
 #include "utils/hostname_port_validation.hpp"
 #include "utils/stoi_wrapper.hpp"
 
+// I hate windows.h
+#ifdef max
+  #undef max
+#endif
+
 namespace Slap42 {
 namespace HostMenu {
 
