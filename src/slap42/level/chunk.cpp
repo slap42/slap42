@@ -14,8 +14,8 @@ Chunk::Chunk(int chunkx, int chunkz) : x(chunkx), z(chunkz) {
 
   MeshGen::Terrain(vertices, indices, current_index, chunkx * kChunkSize, chunkz * kChunkSize);
 
-  for (int x = 0; x < kChunkSize; ++x) {
-    for (int z = 0; z < kChunkSize; ++z) {
+  for (int x = 0; x < 1; ++x) {
+    for (int z = 0; z < 1; ++z) {
       MeshGen::Tree(vertices, indices, current_index, chunkx * kChunkSize + x, chunkz * kChunkSize + z);
     }
   }

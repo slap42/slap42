@@ -9,8 +9,7 @@ namespace MeshGen {
 
 void Terrain(std::vector<float>& vertices, std::vector<uint16_t>& indices, size_t current_index, int xoffs, int zoffs) {
   constexpr float kChunkSizeF = (float)Chunk::kChunkSize;
-  constexpr size_t kVertexSize = 7;
-  constexpr size_t kVertexBufferSize = (Chunk::kChunkSize + 1) * (Chunk::kChunkSize + 1) * kVertexSize;
+  constexpr size_t kVertexBufferSize = (Chunk::kChunkSize + 1) * (Chunk::kChunkSize + 1) * TerrainMesh::kVertexSize;
   constexpr size_t kIndexBufferSize = Chunk::kChunkSize * Chunk::kChunkSize * 6;
 
   current_index += Chunk::kChunkSize * Chunk::kChunkSize * 2;
@@ -21,7 +20,7 @@ void Terrain(std::vector<float>& vertices, std::vector<uint16_t>& indices, size_
   for (size_t z = 0; z < Chunk::kChunkSize + 1; ++z) {
     for (size_t x = 0; x < Chunk::kChunkSize + 1; ++x) {
 
-      size_t i = x * kVertexSize + z * kVertexSize * (Chunk::kChunkSize + 1);
+      size_t i = x * TerrainMesh::kVertexSize + z * TerrainMesh::kVertexSize * (Chunk::kChunkSize + 1);
       float xx = (float)x + (float)xoffs;
       float zz = (float)z + (float)zoffs;
 
