@@ -4,7 +4,7 @@
 #include "chunk.hpp"
 #include "graphics/camera.hpp"
 #include "graphics/shaders/terrain_shader.hpp"
-#include "graphics/texture.hpp"
+#include "graphics/texture_array.hpp"
 #include "noise.hpp"
 #include "utils/hash.hpp"
 
@@ -12,25 +12,23 @@ namespace Slap42 {
 namespace Level {
 
 static int render_distance = 16;
-static Texture* grass_texture;
-static Texture* dirt_texture;
-static Texture* bark_texture;
+static TextureArray* texture_array;
 static std::unordered_map<uint64_t, Chunk*> chunks;
+static const char* kTextureNames[] = {
+  "res/images/Grass002_2K-PNG_Color.png",
+  "res/images/Ground067_2K-PNG_Color.png",
+  "res/images/Bark014_2K-PNG_Color.png",
+};
 
 void Create() {
   Shader::TerrainShader::Create();
-
-  grass_texture = new Texture("res/images/Grass002_2K-PNG_Color.png");
-  dirt_texture = new Texture("res/images/Ground067_2K-PNG_Color.png");
-  bark_texture = new Texture("res/images/Bark014_2K-PNG_Color.png");
+  texture_array = new TextureArray(kTextureNames, 3);
 }
 
 void Destroy() {
   UnloadChunks();
 
-  delete grass_texture;
-  delete dirt_texture;
-  delete bark_texture;
+  delete texture_array;
   
   Shader::TerrainShader::Destroy();
 }
@@ -112,9 +110,7 @@ void Update(float delta) {
 void Render() {
   Shader::TerrainShader::Bind();
   
-  grass_texture->Bind(0);
-  dirt_texture->Bind(1);
-  bark_texture->Bind(2);
+  texture_array->Bind(0);
 
   for (const auto& chunk : chunks) {
     chunk.second->Render();

@@ -16,9 +16,7 @@ void Create() {
   shader_program = Compile("res/shaders/terrain_shader.vert.glsl", "res/shaders/terrain_shader.frag.glsl");
   Bind();
   GL_CHECK(u_view_projection = glGetUniformLocation(shader_program, "u_view_projection"));
-  GL_CHECK(glUniform1i(glGetUniformLocation(shader_program, "u_texture[0]"), 0));
-  GL_CHECK(glUniform1i(glGetUniformLocation(shader_program, "u_texture[1]"), 1));
-  GL_CHECK(glUniform1i(glGetUniformLocation(shader_program, "u_texture[2]"), 2));
+  GL_CHECK(glUniform1i(glGetUniformLocation(shader_program, "u_texture_array"), 0));
   GL_CHECK(u_sun_direction = glGetUniformLocation(shader_program, "u_sun_direction"));
   SetSunDirection({ 0.0f, -1.0f, 0.0f });
 }

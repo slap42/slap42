@@ -1,3 +1,5 @@
+#include "stoi_wrapper.hpp"
+
 #include <sstream>
 
 namespace Slap42 {

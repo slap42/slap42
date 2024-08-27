@@ -1,6 +1,7 @@
 #include "hostname_port_validation.hpp"
 
 #include <sstream>
+#include <limits>
 #include "menus/error_menu.hpp"
 #include "stoi_wrapper.hpp"
 
