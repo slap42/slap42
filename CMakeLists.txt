@@ -48,6 +48,14 @@ set(SLAP42_LEVEL_FILES
 )
 source_group("src/level" FILES ${SLAP42_LEVEL_FILES})
 
+set(SLAP42_LEVEL_MESHGEN_FILES
+  src/slap42/level/meshgen/procedural_terrain.hpp
+  src/slap42/level/meshgen/procedural_terrain.cpp
+  src/slap42/level/meshgen/procedural_tree.hpp
+  src/slap42/level/meshgen/procedural_tree.cpp
+)
+source_group("src/level/meshgen" FILES ${SLAP42_LEVEL_MESHGEN_FILES})
+
 set(SLAP42_NETWORKING_FILES
   src/slap42/networking/message_types.hpp
   src/slap42/networking/message_serializer.hpp
@@ -126,6 +134,7 @@ add_executable(${PROJECT_NAME}
   ${SLAP42_GRAPHICS_MESHES_FILES}
   ${SLAP42_GRAPHICS_SHADERS_FILES}
   ${SLAP42_LEVEL_FILES}
+  ${SLAP42_LEVEL_MESHGEN_FILES}
   ${SLAP42_NETWORKING_FILES}
   ${SLAP42_NETWORKING_CLIENT_FILES}
   ${SLAP42_NETWORKING_SERVER_FILES}

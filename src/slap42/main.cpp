@@ -2,6 +2,7 @@
 #include <cstdio>
 
 #include <enet/enet.h>
+#include <glad/gl.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <GLFW/glfw3.h>
 #include <imgui.h>
@@ -72,9 +73,18 @@ int main() {
     MenuStateMachine::Update();
     Client::PollMessages();
     Window::PollEvents();
-    
+
     if (Controls::IsInPlayerInputState() || Controls::GetInputState() == InputState::kNonBlockingMenu) {
-      Level::Update();
+      // Update sun position and clear color for a day/night cycle
+      // TODO: Get initial sun_animation_time from server and occasionally sync with other players
+      static float sun_animation_time = 2.0f; // Start in mid morning
+      sun_animation_time += delta * 0.00000027f; // 1 day/night cycle is approx 1 hour
+      glm::vec3 sun_dir = glm::vec3(std::sin(sun_animation_time), std::cos(sun_animation_time), 0.0f);
+      Shader::TerrainShader::SetSunDirection(sun_dir);
+      float sky_brightness = std::clamp(-std::cos(sun_animation_time) + 0.7f, 0.0f, 1.0f);
+      glClearColor(0.53f * sky_brightness, 0.81f * sky_brightness, 0.92f * sky_brightness, 1.0f);
+
+      Level::Update(delta);
     }
 
     if (Controls::IsInPlayerInputState()) {

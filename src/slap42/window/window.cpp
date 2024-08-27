@@ -56,7 +56,7 @@ void Create() {
   
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
-  glClearColor(0.2, 0.4, 0.6, 1.0);
+  glClearColor(0.0, 0.0, 0.0, 1.0);
 
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();

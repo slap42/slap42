@@ -44,7 +44,7 @@ void UnloadChunks() {
   chunks.clear();
 }
 
-void Update() {
+void Update(float delta) {
   const glm::vec3 player_pos = Camera::GetPosition();
   
   const float kChunkSpawnDistance = render_distance * 0.4f;
