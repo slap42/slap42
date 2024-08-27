@@ -44,10 +44,10 @@ If you download the game from itch.io you will probably get warnings about the e
 
 ### Controls
 
-- WASD - Move
+- WASD, LShift, Space - Move
 - Mouse or Arrow Keys - Turn the camera
 - T - Open chat
-- Esc - Close chat / unlock mouse
+- Esc - Close chat / Open menu
 
 ### Hamachi Network
 
