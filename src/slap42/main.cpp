@@ -63,11 +63,13 @@ int main() {
 
   Camera::Create();
 
-  auto last_time = std::chrono::high_resolution_clock::now();
+  auto start_time = std::chrono::high_resolution_clock::now();
+  auto last_time = start_time;
 
   while (Window::IsOpen()) {
     auto current_time = std::chrono::high_resolution_clock::now();
     float delta = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - last_time).count();
+    float total_time = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - start_time).count();
     last_time = current_time;
     
     MenuStateMachine::Update();
@@ -77,8 +79,7 @@ int main() {
     if (Controls::IsInPlayerInputState() || Controls::GetInputState() == InputState::kNonBlockingMenu) {
       // Update sun position and clear color for a day/night cycle
       // TODO: Get initial sun_animation_time from server and occasionally sync with other players
-      static float sun_animation_time = 2.0f; // Start in mid morning
-      sun_animation_time += delta * 0.00000027f; // 1 day/night cycle is approx 1 hour
+      float sun_animation_time = total_time * 0.00000027f + 2.0f; // Start in mid morning, 1 day/night cycle is approx 1 hour
       glm::vec3 sun_dir = glm::vec3(std::sin(sun_animation_time), std::cos(sun_animation_time), 0.0f);
       Shader::TerrainShader::SetSunDirection(sun_dir);
       float sky_brightness = std::clamp(-std::cos(sun_animation_time) + 0.7f, 0.0f, 1.0f);
