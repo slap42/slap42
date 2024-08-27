@@ -8,7 +8,7 @@ namespace Slap42 {
 
 Texture::Texture(const char* filename) {
   int width, height, channel_count;
-  stbi_uc* pixels = stbi_load(filename, &width, &height, &channel_count, 4);
+  stbi_uc* pixels = stbi_load(filename, &width, &height, &channel_count, 3);
   if (!pixels) {
     fprintf(stderr, "Failed to load texture \"%s\"\n", filename);
   }
@@ -19,7 +19,7 @@ Texture::Texture(const char* filename) {
   GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
   GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
   GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-  GL_CHECK(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels));
+  GL_CHECK(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, pixels));
   GL_CHECK(glGenerateMipmap(GL_TEXTURE_2D));
 
   stbi_image_free(pixels);

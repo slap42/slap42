@@ -1,10 +1,12 @@
 #pragma once
 
+#include <cstddef>
+
 namespace Slap42 {
 
 class TextureArray {
 public:
-  TextureArray(const char** filenames, int file_count);
+  TextureArray(const char** filenames, size_t file_count);
   ~TextureArray();
 
 public:

@@ -22,7 +22,7 @@ static const char* kTextureNames[] = {
 
 void Create() {
   Shader::TerrainShader::Create();
-  texture_array = new TextureArray(kTextureNames, 3);
+  texture_array = new TextureArray(kTextureNames, sizeof(kTextureNames) / sizeof(char*));
 }
 
 void Destroy() {
