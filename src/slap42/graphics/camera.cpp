@@ -7,6 +7,7 @@
 #include <glm/gtx/rotate_vector.hpp>
 #include <imgui.h>
 #include "gl_check.hpp"
+#include "level/noise.hpp"
 #include "networking/client/client.hpp"
 #include "window/controls.hpp"
 #include "window/window.hpp"
@@ -28,8 +29,8 @@ static void CalcViewProjection() {
 }
 
 static void CalcView() {
-  const glm::vec3 kXAxis(1.0f, 0.0f, 0.0f);
-  const glm::vec3 kYAxis(0.0f, 1.0f, 0.0f);
+  constexpr glm::vec3 kXAxis(1.0f, 0.0f, 0.0f);
+  constexpr glm::vec3 kYAxis(0.0f, 1.0f, 0.0f);
   
   view = glm::rotate(glm::mat4(1.0f), rotation.x, kXAxis);
   view = glm::rotate(view, rotation.y, kYAxis);
@@ -57,7 +58,6 @@ void SetFov(float f) {
 }
 
 void Create() {
-  position = glm::vec3(0.0f, 0.0f, -2.0f);
   CalcView();
   CalcProjection();
   
@@ -150,6 +150,12 @@ void ResetPosition() {
   position = glm::vec3{ 0.0f };
   rotation = glm::vec2{ 0.0f };
   CalcView();
+}
+
+void SetPosition(const glm::vec3& pos) {
+  position = pos;
+  CalcView();
+  Client::SendPositionUpdate(position, rotation);
 }
 
 glm::vec3 GetPosition() {

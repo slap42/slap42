@@ -5,6 +5,7 @@
 #include <bytepack/bytepack.hpp>
 #include "client.hpp"
 #include "client_data.hpp"
+#include "graphics/camera.hpp"
 #include "hud_panels/chat_panel.hpp"
 #include "level/noise.hpp"
 #include "menus/connected_players_menu.hpp"
@@ -40,8 +41,9 @@ void OnMessageRecv(ENetEvent& evt) {
     case MessageType::kServerInfo: {
       ServerInfoMessage msg { };
       msg.deserialize(stream);
-      ConnectedPlayersMenu::SetIdAndCapacity(msg.id, msg.capacity);
       Noise::SetSeed(msg.seed);
+      Camera::SetPosition({ 0.0f, Noise::SampleTerrainHeight(0.0f, 0.0f) - 1.8f, 0.0f});
+      ConnectedPlayersMenu::SetIdAndCapacity(msg.id, msg.capacity);
       break;
     }
 
