@@ -5,7 +5,7 @@
 
 namespace Slap42 {
 
-Mesh::Mesh(float* vertices, size_t vertices_size_bytes, unsigned short* indices, size_t indices_size_bytes) : index_count(indices_size_bytes / sizeof(unsigned short)) { 
+Mesh::Mesh(float* vertices, size_t vertices_size_bytes, uint16_t* indices, size_t indices_size_bytes) : index_count(indices_size_bytes / sizeof(uint16_t)) { 
   GL_CHECK(glGenVertexArrays(1, &vao));
   GL_CHECK(glGenBuffers(1, &vbo));
   GL_CHECK(glGenBuffers(1, &ibo));

@@ -10,6 +10,7 @@
 #include "graphics/camera.hpp"
 #include "graphics/meshes/entity_mesh.hpp"
 #include "graphics/shaders/entity_shader.hpp"
+#include "graphics/shaders/terrain_shader.hpp"
 #include "hud_panels/chat_panel.hpp"
 #include "level/level.hpp"
 #include "menus/menu_state_machine.hpp"
@@ -45,7 +46,7 @@ int main() {
      1.0f,  1.0f,  1.0f, 1.0f, 1.0f,
     -1.0f,  1.0f,  1.0f, 0.0f, 1.0f,
   };
-  unsigned short indices[] = {
+  uint16_t indices[] = {
     0, 2, 1,
     0, 3, 2,
     4, 5, 6,

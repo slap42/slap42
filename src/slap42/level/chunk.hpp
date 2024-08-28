@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include "graphics/meshes/scenery_mesh.hpp"
 #include "graphics/meshes/terrain_mesh.hpp"
 
 namespace Slap42 {
@@ -11,7 +12,8 @@ public:
   ~Chunk();
 
 public:
-  void Render() const;
+  void RenderTerrain() const;
+  void RenderScenery() const;
 
 public:
   constexpr static size_t kChunkSize = 128;
@@ -21,7 +23,8 @@ public:
   inline int GetZ() const { return z; }
 
 private:
-  TerrainMesh* mesh;
+  SceneryMesh* scenery_mesh;
+  TerrainMesh* terrain_mesh;
   int x, z;
 };
 

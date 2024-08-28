@@ -1,12 +1,12 @@
 #pragma once
 
-#include <cstdint>
-#include <vector>
+#include <glm/glm.hpp>
+#include "raw_mesh.hpp"
 
 namespace Slap42 {
 namespace MeshGen {
 
-void Tree(std::vector<float>& vertices, std::vector<uint16_t>& indices, size_t current_index, int xoffs, int zoffs);
+void Tree(RawMesh& raw_mesh, const glm::vec3& origin, const glm::vec3& direction);
 
 }
 }

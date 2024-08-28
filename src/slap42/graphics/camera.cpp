@@ -9,6 +9,9 @@
 #include "gl_check.hpp"
 #include "level/noise.hpp"
 #include "networking/client/client.hpp"
+#include "shaders/entity_shader.hpp"
+#include "shaders/scenery_shader.hpp"
+#include "shaders/terrain_shader.hpp"
 #include "window/controls.hpp"
 #include "window/window.hpp"
 
@@ -26,6 +29,7 @@ static void CalcViewProjection() {
   glm::mat4 view_projection = projection * view;
   Shader::TerrainShader::SetViewProjection(view_projection);
   Shader::EntityShader::SetViewProjection(view_projection);
+  Shader::SceneryShader::SetViewProjection(view_projection);
 }
 
 static void CalcView() {

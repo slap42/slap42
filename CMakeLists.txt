@@ -25,6 +25,8 @@ set(SLAP42_GRAPHICS_MESHES_FILES
   src/slap42/graphics/meshes/entity_mesh.cpp
   src/slap42/graphics/meshes/terrain_mesh.hpp
   src/slap42/graphics/meshes/terrain_mesh.cpp
+  src/slap42/graphics/meshes/scenery_mesh.hpp
+  src/slap42/graphics/meshes/scenery_mesh.cpp
 )
 source_group("src/graphics/meshes" FILES ${SLAP42_GRAPHICS_MESHES_FILES})
 
@@ -35,6 +37,8 @@ set(SLAP42_GRAPHICS_SHADERS_FILES
   src/slap42/graphics/shaders/entity_shader.cpp
   src/slap42/graphics/shaders/terrain_shader.hpp
   src/slap42/graphics/shaders/terrain_shader.cpp
+  src/slap42/graphics/shaders/scenery_shader.hpp
+  src/slap42/graphics/shaders/scenery_shader.cpp
 )
 source_group("src/graphics/shaders" FILES ${SLAP42_GRAPHICS_SHADERS_FILES})
 
@@ -49,6 +53,7 @@ set(SLAP42_LEVEL_FILES
 source_group("src/level" FILES ${SLAP42_LEVEL_FILES})
 
 set(SLAP42_LEVEL_MESHGEN_FILES
+  src/slap42/level/meshgen/raw_mesh.hpp
   src/slap42/level/meshgen/procedural_terrain.hpp
   src/slap42/level/meshgen/procedural_terrain.cpp
   src/slap42/level/meshgen/procedural_tree.hpp

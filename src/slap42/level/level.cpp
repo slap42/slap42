@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include "chunk.hpp"
 #include "graphics/camera.hpp"
+#include "graphics/shaders/scenery_shader.hpp"
 #include "graphics/shaders/terrain_shader.hpp"
 #include "graphics/texture_array.hpp"
 #include "noise.hpp"
@@ -22,14 +23,14 @@ static const char* kTextureNames[] = {
 
 void Create() {
   Shader::TerrainShader::Create();
+  Shader::SceneryShader::Create();
   texture_array = new TextureArray(kTextureNames, sizeof(kTextureNames) / sizeof(char*));
 }
 
 void Destroy() {
   UnloadChunks();
-
   delete texture_array;
-  
+  Shader::SceneryShader::Destroy();
   Shader::TerrainShader::Destroy();
 }
 
@@ -109,11 +110,12 @@ void Update(float delta) {
 
 void Render() {
   Shader::TerrainShader::Bind();
-  
-  texture_array->Bind(0);
-
   for (const auto& chunk : chunks) {
-    chunk.second->Render();
+    chunk.second->RenderTerrain();
+  }
+  Shader::SceneryShader::Bind();
+  for (const auto& chunk : chunks) {
+    chunk.second->RenderScenery();
   }
 }
 

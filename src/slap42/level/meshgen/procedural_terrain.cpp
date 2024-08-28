@@ -7,22 +7,19 @@
 namespace Slap42 {
 namespace MeshGen {
 
-void Terrain(std::vector<float>& vertices, std::vector<uint16_t>& indices, size_t current_index, int xoffs, int zoffs) {
-  constexpr float kChunkSizeF = (float)Chunk::kChunkSize;
+TerrainMesh* Terrain(int chunkx, int chunkz) {
   constexpr size_t kVertexBufferSize = (Chunk::kChunkSize + 1) * (Chunk::kChunkSize + 1) * TerrainMesh::kVertexSize;
   constexpr size_t kIndexBufferSize = Chunk::kChunkSize * Chunk::kChunkSize * 6;
 
-  current_index += Chunk::kChunkSize * Chunk::kChunkSize * 2;
-
-  vertices.resize(kVertexBufferSize);
-  indices.resize(kIndexBufferSize);
+  float* vertices = new float[kVertexBufferSize];
+  uint16_t* indices = new uint16_t[kIndexBufferSize];
 
   for (size_t z = 0; z < Chunk::kChunkSize + 1; ++z) {
     for (size_t x = 0; x < Chunk::kChunkSize + 1; ++x) {
 
       size_t i = x * TerrainMesh::kVertexSize + z * TerrainMesh::kVertexSize * (Chunk::kChunkSize + 1);
-      float xx = (float)x + (float)xoffs;
-      float zz = (float)z + (float)zoffs;
+      float xx = (float)x + (float)chunkx * (float)Chunk::kChunkSize;
+      float zz = (float)z + (float)chunkz * (float)Chunk::kChunkSize;
 
       // Position
       vertices[i + 0] = xx;
@@ -50,6 +47,7 @@ void Terrain(std::vector<float>& vertices, std::vector<uint16_t>& indices, size_
       vertices[i + 4] = n.x;
       vertices[i + 5] = n.y;
       vertices[i + 6] = n.z;
+
     }
   }
 
@@ -65,6 +63,13 @@ void Terrain(std::vector<float>& vertices, std::vector<uint16_t>& indices, size_
       indices[i + 5] = j + Chunk::kChunkSize + 2;
     }
   }
+
+  TerrainMesh* mesh = new TerrainMesh(vertices, kVertexBufferSize * sizeof(float), indices, kIndexBufferSize * sizeof(uint16_t));
+
+  delete[] vertices;
+  delete[] indices;
+  
+  return mesh;
 }
 
 }

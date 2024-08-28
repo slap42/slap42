@@ -1,12 +1,11 @@
 #pragma once
 
-#include <cstdint>
-#include <vector>
+#include "graphics/meshes/terrain_mesh.hpp"
 
 namespace Slap42 {
 namespace MeshGen {
 
-void Terrain(std::vector<float>& vertices, std::vector<uint16_t>& indices, size_t current_index, int xoffs, int zoffs);
+TerrainMesh* Terrain(int chunkx, int chunkz);
 
 }
 }

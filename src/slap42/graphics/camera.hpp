@@ -1,8 +1,6 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include "shaders/entity_shader.hpp"
-#include "shaders/terrain_shader.hpp"
 
 namespace Slap42 {
 namespace Camera {
