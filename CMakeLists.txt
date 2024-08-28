@@ -122,6 +122,8 @@ set(SLAP42_UTILS_FILES
   src/slap42/utils/stoi_wrapper.cpp
   src/slap42/utils/hostname_port_validation.hpp
   src/slap42/utils/hostname_port_validation.cpp
+  src/slap42/utils/random.hpp
+  src/slap42/utils/random.cpp
 )
 source_group("src/utils" FILES ${SLAP42_UTILS_FILES})
 

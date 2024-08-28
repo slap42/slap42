@@ -42,7 +42,7 @@ void OnMessageRecv(ENetEvent& evt) {
       ServerInfoMessage msg { };
       msg.deserialize(stream);
       Noise::SetSeed(msg.seed);
-      Camera::SetPosition({ 0.0f, Noise::SampleTerrainHeight(0.0f, 0.0f) - 1.8f, 0.0f});
+      Camera::SetPosition({ 0.0f, Noise::SampleTerrainHeight(0.0f, 0.0f) - 1.7f, 0.0f});
       ConnectedPlayersMenu::SetIdAndCapacity(msg.id, msg.capacity);
       break;
     }

@@ -79,7 +79,11 @@ void Create() {
 void Update(float delta) {
   static GLFWwindow* window = Window::GetGlfwWindow();
   
-  constexpr float kMoveSpeed = 0.05f;
+  // Speed in meters per second
+  constexpr float kFlyingSpeed = 20.0f;
+  constexpr float kWalkingSpeed = 1.42f;
+  // Translate to meters per thousandths of a second
+  constexpr float kMoveSpeed = kWalkingSpeed * 0.001f;
   constexpr float kRotationSpeed = 0.04f;
   constexpr float kMouseSensitivity = 0.005f;
   
@@ -145,6 +149,7 @@ void Update(float delta) {
   }
   
   if (position != old_position || rotation != old_rotation) {
+    position.y = -Noise::SampleTerrainHeight(-position.x, -position.z) - 1.7f;
     CalcView();
     Client::SendPositionUpdate(position, rotation);
   }
