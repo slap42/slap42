@@ -79,16 +79,22 @@ void Create() {
 void Update(float delta) {
   static GLFWwindow* window = Window::GetGlfwWindow();
   
-  // Speed in meters per second
-  constexpr float kFlyingSpeed = 20.0f;
-  constexpr float kWalkingSpeed = 1.42f;
-  // Translate to meters per thousandths of a second
-  constexpr float kMoveSpeed = kWalkingSpeed * 0.001f;
   constexpr float kRotationSpeed = 0.04f;
   constexpr float kMouseSensitivity = 0.005f;
   
   glm::vec3 old_position = position;
   glm::vec2 old_rotation = rotation;
+  
+  // Speed in meters per second
+  constexpr float kFlyingSpeed = 20.0f;
+  constexpr float kWalkingSpeed = 1.42f;
+  static float move_speed = kWalkingSpeed * 0.001f;
+  static bool flying = false;
+  if (Controls::IsButtonPressed(Button::kToggleFlying)) {
+    flying = !flying;
+    move_speed = flying ? kFlyingSpeed * 0.001f : kWalkingSpeed * 0.001f;
+    position.x += 0.0001f;
+  }
   
   // Rotation
   if (Controls::IsButtonDown(Button::kRotateLeft)) {
@@ -138,18 +144,20 @@ void Update(float delta) {
   
   if (dir.x != 0.0f || dir.z != 0.0f) {
     dir = glm::rotateY(dir, -rotation.y);
-    position += glm::normalize(dir) * kMoveSpeed * delta;
+    position += glm::normalize(dir) * move_speed * delta;
   }
   
   if (Controls::IsButtonDown(Button::kCrouch)) {
-    position.y += kMoveSpeed * delta;
+    position.y += move_speed * delta;
   }
   if (Controls::IsButtonDown(Button::kJump)) {
-    position.y -= kMoveSpeed * delta;
+    position.y -= move_speed * delta;
   }
   
   if (position != old_position || rotation != old_rotation) {
-    position.y = -Noise::SampleTerrainHeight(-position.x, -position.z) - 1.7f;
+    if (!flying) {
+      position.y = -Noise::SampleTerrainHeight(-position.x, -position.z) - 1.7f;
+    }
     CalcView();
     Client::SendPositionUpdate(position, rotation);
   }

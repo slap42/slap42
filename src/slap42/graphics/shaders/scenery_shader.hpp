@@ -12,6 +12,7 @@ void Destroy();
 void Bind();
 
 void SetViewProjection(const glm::mat4& view_projection);
+void SetSunDirection(const glm::vec3& sun_dir);
 
 }
 }

@@ -11,6 +11,7 @@
 #include "graphics/meshes/entity_mesh.hpp"
 #include "graphics/shaders/entity_shader.hpp"
 #include "graphics/shaders/terrain_shader.hpp"
+#include "graphics/shaders/scenery_shader.hpp"
 #include "hud_panels/chat_panel.hpp"
 #include "level/level.hpp"
 #include "menus/menu_state_machine.hpp"
@@ -80,9 +81,10 @@ int main() {
     if (Controls::IsInPlayerInputState() || Controls::GetInputState() == InputState::kNonBlockingMenu) {
       // Update sun position and clear color for a day/night cycle
       // TODO: Get initial sun_animation_time from server and occasionally sync with other players
-      float sun_animation_time = total_time * 0.00000027f + 2.0f; // Start in mid morning, 1 day/night cycle is approx 1 hour
+      float sun_animation_time = total_time * 0.00027f + 2.0f; // Start in mid morning, 1 day/night cycle is approx 1 hour
       glm::vec3 sun_dir = glm::vec3(std::sin(sun_animation_time), std::cos(sun_animation_time), 0.0f);
       Shader::TerrainShader::SetSunDirection(sun_dir);
+      Shader::SceneryShader::SetSunDirection(sun_dir);
       float sky_brightness = std::clamp(-std::cos(sun_animation_time) + 0.7f, 0.0f, 1.0f);
       glClearColor(0.53f * sky_brightness, 0.81f * sky_brightness, 0.92f * sky_brightness, 1.0f);
 

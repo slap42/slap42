@@ -10,11 +10,14 @@ namespace SceneryShader {
 
 static unsigned int shader_program;
 static unsigned int u_view_projection;
+static unsigned int u_sun_direction;
 
 void Create() {
   shader_program = Compile("res/shaders/scenery_shader.vert.glsl", "res/shaders/scenery_shader.frag.glsl");
   Bind();
   GL_CHECK(u_view_projection = glGetUniformLocation(shader_program, "u_view_projection"));
+  GL_CHECK(u_sun_direction = glGetUniformLocation(shader_program, "u_sun_direction"));
+  SetSunDirection({ 0.0f, -1.0f, 0.0f });
 }
 
 void Destroy() {
@@ -28,6 +31,11 @@ void Bind() {
 void SetViewProjection(const glm::mat4& view_projection) {
   Bind();
   GL_CHECK(glUniformMatrix4fv(u_view_projection, 1, GL_FALSE, glm::value_ptr(view_projection)));
+}
+
+void SetSunDirection(const glm::vec3& dir) {
+  Bind();
+  GL_CHECK(glUniform3fv(u_sun_direction, 1, glm::value_ptr(dir)));
 }
 
 }

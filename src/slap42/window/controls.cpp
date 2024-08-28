@@ -28,6 +28,7 @@ static std::unordered_map<Button, ButtonData> button_data = {
   { Button::kMoveRight,       { GLFW_KEY_D,              ButtonBindDevice::kKeyboard } },
   { Button::kJump,            { GLFW_KEY_SPACE,          ButtonBindDevice::kKeyboard } },
   { Button::kCrouch,          { GLFW_KEY_LEFT_SHIFT,     ButtonBindDevice::kKeyboard } },
+  { Button::kToggleFlying,    { GLFW_KEY_TAB,            ButtonBindDevice::kKeyboard } },
   { Button::kRotateUp,        { GLFW_KEY_UP,             ButtonBindDevice::kKeyboard } },
   { Button::kRotateDown,      { GLFW_KEY_DOWN,           ButtonBindDevice::kKeyboard } },
   { Button::kRotateLeft,      { GLFW_KEY_LEFT,           ButtonBindDevice::kKeyboard } },

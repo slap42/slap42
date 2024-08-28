@@ -25,15 +25,15 @@ void Tree(RawMesh& m, const glm::vec3& origin, const glm::vec3& direction) {
   glm::vec3 dir = direction;
 
   for (size_t j = 0; j < kSegmentCount; ++j) {
-    float length_fraction = (float)j / (float)kSegmentCount;
+    float v = (float)j / (float)kSegmentCount;
     
     for (size_t i = 0; i < kSegmentPolyCount; ++i) {
       float angle = ((float)i / (float)kSegmentPolyCount) * k2Pi;
-      glm::vec3 p = glm::rotate(glm::vec3(0.0f, 0.0f, 1.0f) * segment_radius, angle, dir);
+      glm::vec3 n = glm::rotate(glm::vec3(0.0f, 0.0f, 1.0f), angle, dir);
       
-      float x = pos.x + p.x;
-      float y = pos.y + p.y;
-      float z = pos.z + p.z;
+      float x = pos.x + n.x * segment_radius;
+      float y = pos.y + n.y * segment_radius;
+      float z = pos.z + n.z * segment_radius;
 
       m.vertices.push_back(x);
       m.vertices.push_back(y);
@@ -41,21 +41,33 @@ void Tree(RawMesh& m, const glm::vec3& origin, const glm::vec3& direction) {
       
       float u = (float)i / (float)(kSegmentPolyCount - 1);
       m.vertices.push_back(u);
-      m.vertices.push_back(length_fraction);
+      m.vertices.push_back(v);
+      
+      m.vertices.push_back(n.x);
+      m.vertices.push_back(n.y);
+      m.vertices.push_back(n.z);
     }
 
-    dir += glm::vec3(RandMToN(-kBranchTwistiness, kBranchTwistiness), RandMToN(-kBranchTwistiness, kBranchTwistiness), RandMToN(-kBranchTwistiness, kBranchTwistiness));
+    dir += glm::vec3(
+      RandMToN(-kBranchTwistiness, kBranchTwistiness),
+      std::abs(RandMToN(-kBranchTwistiness, kBranchTwistiness)),
+      RandMToN(-kBranchTwistiness, kBranchTwistiness)
+    );
     dir = glm::normalize(dir);
     segment_radius *= 0.8f;
     pos += dir * kSegmentLength;
   }
   
-    m.vertices.push_back(pos.x);
-    m.vertices.push_back(pos.y);
-    m.vertices.push_back(pos.z);
+  m.vertices.push_back(pos.x);
+  m.vertices.push_back(pos.y);
+  m.vertices.push_back(pos.z);
     
-    m.vertices.push_back(0.5f);
-    m.vertices.push_back(1.0f);
+  m.vertices.push_back(0.5f);
+  m.vertices.push_back(1.0f);
+  
+  m.vertices.push_back(dir.x);
+  m.vertices.push_back(dir.y);
+  m.vertices.push_back(dir.z);
 
   for (size_t j = 0; j < kSegmentCount - 1; ++j) {
     for (size_t i = 0; i < kSegmentPolyCount; ++i) {

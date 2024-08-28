@@ -15,6 +15,8 @@ enum class Button {
 
   kJump,
   kCrouch,
+  
+  kToggleFlying,
 
   kOpenChatMenu,
   kOpenMainMenu,
