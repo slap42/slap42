@@ -8,17 +8,29 @@
 
 namespace Slap42 {
 
-Chunk::Chunk(int chunkx, int chunkz) : x(chunkx), z(chunkz) {
-  terrain_mesh = MeshGen::Terrain(chunkx, chunkz);
+  Chunk::Chunk(int chunkx, int chunkz) : x(chunkx), z(chunkz) {
+    terrain_mesh = MeshGen::Terrain(chunkx, chunkz);
 
-  MeshGen::RawMesh raw_mesh;
-  glm::vec3 origin = {
-    chunkx * (float)Chunk::kChunkSize,
-    Noise::SampleTerrainHeight(chunkx * (float)Chunk::kChunkSize, chunkz * (float)Chunk::kChunkSize),
-    chunkz * (float)Chunk::kChunkSize
-  };
-  glm::vec3 direction = glm::normalize(glm::vec3(RandMToN(-0.5f, 0.5f), 1.0f, RandMToN(-0.5f, 0.5f)));
-  MeshGen::Tree(raw_mesh, origin, direction);
+    MeshGen::RawMesh raw_mesh;
+
+    // For each chunk, check whether it contains a tree
+    for (size_t x = 0; x < kChunkSize; ++x) {
+      for (size_t z = 0; z < kChunkSize; ++z) {
+        if (Noise::SampleTrees(chunkx * (float)Chunk::kChunkSize + x, chunkz * (float)Chunk::kChunkSize + z)) {
+            
+          glm::vec3 origin = {
+            chunkx * (float)Chunk::kChunkSize + x,
+            Noise::SampleTerrainHeight(chunkx * (float)Chunk::kChunkSize + x, chunkz * (float)Chunk::kChunkSize + z) - 0.5f,
+            chunkz * (float)Chunk::kChunkSize + z
+          };
+          glm::vec3 direction = glm::normalize(glm::vec3(RandMToN(-0.5f, 0.5f), 1.0f, RandMToN(-0.5f, 0.5f)));
+          MeshGen::Tree(raw_mesh, origin, direction);
+
+        }
+      }
+    }
+
+
   scenery_mesh = new SceneryMesh(raw_mesh.vertices.data(), raw_mesh.vertices.size() * sizeof(float), raw_mesh.indices.data(), raw_mesh.indices.size() * sizeof(uint16_t));
 }
 
