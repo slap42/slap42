@@ -1,36 +1,41 @@
 #include "procedural_tree.hpp"
 
 #include <cmath>
+#include <vector>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/rotate_vector.hpp>
 #include "utils/random.hpp"
+#include "level/noise.hpp"
 
 namespace Slap42 {
 namespace MeshGen {
 
-void Tree(RawMesh& m, const glm::vec3& origin, const glm::vec3& direction) {
+void Tree(RawMesh& m, const glm::vec3& origin, const glm::vec3& direction, size_t segment_count, float og_segment_radius, bool trunk) {
+  if (segment_count == 0) return;
+
   constexpr float k2Pi = 6.28318530718f;
+  constexpr glm::vec3 kUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
   constexpr size_t kSegmentPolyCount = 5;
   constexpr float  kSegmentLength = 1.0f;
-  constexpr size_t kSegmentCount = 5;
   constexpr float kBranchTwistiness = 0.2f;
-  
-  float segment_radius = 0.25f;
 
-  // Add an offset to the orientation of the branch to make it seem more random
-  const float kRotationOffset = origin.x * 0.17f + origin.y * 0.79f + + origin.z * 0.13f;
-
-  glm::vec3 pos = { origin.x, origin.y - 0.5f, origin.z };
+  std::vector<glm::vec3> positions;
+  std::vector<glm::vec3> directions;
+  std::vector<float> segment_radiuses;
+  glm::vec3 pos = { origin.x, origin.y, origin.z };
   glm::vec3 dir = direction;
 
-  for (size_t j = 0; j < kSegmentCount; ++j) {
-    float v = (float)j / (float)kSegmentCount;
+  for (size_t j = 0; j < segment_count; ++j) {
+    float v = (float)j / (float)segment_count;
+
+    float segment_radius = og_segment_radius * (1.0f - v);
+    segment_radiuses.push_back(segment_radius);
     
     for (size_t i = 0; i < kSegmentPolyCount; ++i) {
       float angle = ((float)i / (float)kSegmentPolyCount) * k2Pi;
-      glm::vec3 n = glm::rotate(glm::vec3(0.0f, 0.0f, 1.0f), angle, dir);
-      
+      glm::vec3 n = glm::rotate(glm::normalize(glm::cross(dir, kUp)), angle, dir);
+
       float x = pos.x + n.x * segment_radius;
       float y = pos.y + n.y * segment_radius;
       float z = pos.z + n.z * segment_radius;
@@ -54,7 +59,9 @@ void Tree(RawMesh& m, const glm::vec3& origin, const glm::vec3& direction) {
       RandMToN(-kBranchTwistiness, kBranchTwistiness)
     );
     dir = glm::normalize(dir);
-    segment_radius *= 0.8f;
+    directions.push_back(dir);
+
+    positions.push_back(pos);
     pos += dir * kSegmentLength;
   }
   
@@ -69,7 +76,7 @@ void Tree(RawMesh& m, const glm::vec3& origin, const glm::vec3& direction) {
   m.vertices.push_back(dir.y);
   m.vertices.push_back(dir.z);
 
-  for (size_t j = 0; j < kSegmentCount - 1; ++j) {
+  for (size_t j = 0; j < segment_count - 1; ++j) {
     for (size_t i = 0; i < kSegmentPolyCount; ++i) {
       size_t v0 = m.current_index + j * kSegmentPolyCount + i;
       size_t v1 = m.current_index + j * kSegmentPolyCount + (i + 1) % kSegmentPolyCount;
@@ -86,16 +93,30 @@ void Tree(RawMesh& m, const glm::vec3& origin, const glm::vec3& direction) {
   }
   
   for (size_t i = 0; i < kSegmentPolyCount; ++i) {
-    size_t v0 = m.current_index + (kSegmentCount - 1) * kSegmentPolyCount + i;
-    size_t v1 = m.current_index + (kSegmentCount - 1) * kSegmentPolyCount + (i + 1) % kSegmentPolyCount;
-    size_t v2 = m.current_index + kSegmentCount * kSegmentPolyCount;
+    size_t v0 = m.current_index + (segment_count - 1) * kSegmentPolyCount + i;
+    size_t v1 = m.current_index + (segment_count - 1) * kSegmentPolyCount + (i + 1) % kSegmentPolyCount;
+    size_t v2 = m.current_index + segment_count * kSegmentPolyCount;
     
     m.indices.push_back(v0);
     m.indices.push_back(v1);
     m.indices.push_back(v2);
   }
   
-  m.current_index += kSegmentPolyCount * kSegmentCount + 1;
+  m.current_index += kSegmentPolyCount * segment_count + 1;
+
+  for (size_t i = 1; i < segment_count; ++i) {
+    if (RandZeroToOne() > 0.6f) {
+      if (trunk && Noise::SampleTerrainHeight(positions[i].x, positions[i].z) + 2.0f > positions[i].y) {
+        continue;
+      }
+
+      float angle = RandMToN(0.0f, k2Pi);
+      glm::vec3 n = glm::rotate(glm::normalize(glm::cross(directions[i], kUp)), angle, directions[i]);
+      n.y = std::abs(n.y);
+
+      Tree(m, positions[i], n, segment_count - i - 1, segment_radiuses[i] * 0.75f, false);
+    }
+  }
 }
 
 }

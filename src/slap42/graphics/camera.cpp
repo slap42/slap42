@@ -88,8 +88,8 @@ void Update(float delta) {
   // Speed in meters per second
   constexpr float kFlyingSpeed = 20.0f;
   constexpr float kWalkingSpeed = 1.42f;
-  static float move_speed = kWalkingSpeed * 0.001f;
-  static bool flying = false;
+  static float move_speed = kFlyingSpeed * 0.001f;
+  static bool flying = true;
   if (Controls::IsButtonPressed(Button::kToggleFlying)) {
     flying = !flying;
     move_speed = flying ? kFlyingSpeed * 0.001f : kWalkingSpeed * 0.001f;

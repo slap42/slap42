@@ -15,5 +15,5 @@ float CalculateLight() {
 }
 
 void main() {
-  o_color = texture(u_texture_array, vec3(v_tex, 2.0)); // * CalculateLight();
+  o_color = texture(u_texture_array, vec3(v_tex, 2.0)) * CalculateLight();
 }
