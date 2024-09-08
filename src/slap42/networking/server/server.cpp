@@ -42,7 +42,7 @@ static void RunServer(uint16_t port, int c, int s) {
 
   server = enet_host_create(&address, capacity, 1, 0, 0);
   if (!server) {
-    ErrorMenu::SetErrorMessage("[SERVER] Failed to start server: enet_host_create failed.\nThe chosen port might already be in use by another application.");
+    ErrorMenu::SetErrorMessage("Failed to start server: enet_host_create failed.\nThe chosen port might already be in use by another application.");
     SetState(ServerState::kError);
     return;
   }

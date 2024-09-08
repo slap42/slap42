@@ -34,13 +34,13 @@ std::unordered_map<peer_id, std::shared_ptr<PeerData>>* GetPeerData() {
 
 bool Connect(const char* hostname, uint16_t port) {
   if (server)  {
-    fprintf(stderr, "[CLIENT] ClientConnect called when client is already connected");
+    fprintf(stderr, "[CLIENT] Client::Connect called when client is already connected");
     return false;
   }
 
   client = enet_host_create(nullptr, 1, 1, 0, 0);
   if (!client) {
-    ErrorMenu::SetErrorMessage("[CLIENT] enet_host_create failed\n");
+    ErrorMenu::SetErrorMessage("enet_host_create failed\n");
     return false;
   }
   
@@ -52,7 +52,7 @@ bool Connect(const char* hostname, uint16_t port) {
   server = enet_host_connect(client, &address, 1, 0);
   if (!server) {
     client = nullptr;
-    ErrorMenu::SetErrorMessage("[CLIENT] enet_host_connect failed\n");
+    ErrorMenu::SetErrorMessage("enet_host_connect failed\n");
     return false;
   }
   
@@ -75,7 +75,7 @@ bool Connect(const char* hostname, uint16_t port) {
   client = nullptr;
   server = nullptr;
   if (!interrupt_connect_attempt) {
-    ErrorMenu::SetErrorMessage("[CLIENT] Failed to connect to the server\n");
+    ErrorMenu::SetErrorMessage("Failed to connect to the server\n");
   }
   std::scoped_lock sl(interrupt_connect_attempt_mutex);
   interrupt_connect_attempt = false;

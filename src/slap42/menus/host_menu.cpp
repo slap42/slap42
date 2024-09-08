@@ -69,11 +69,10 @@ void Render() {
       return;
     }
 
-    if (Client::Connect("localhost", port)) {
+    if (Client::Connect("127.0.0.1", port)) {
       MenuStateMachine::SetState(MenuState::kNone);
     }
     else {
-      ErrorMenu::SetErrorMessage("Failed to connect to localhost");
       Server::StopServer();
       MenuStateMachine::SetState(MenuState::kErrorMenu);
     }

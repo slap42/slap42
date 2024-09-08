@@ -14,7 +14,7 @@ void Render() {
 
   ImGui::Begin("Join Game", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar);
 
-  static char buf[256] { "localhost:6969" };
+  static char buf[256] { "127.0.0.1:6969" };
 
   if (ImGui::InputText("Server Address", buf, sizeof(buf), ImGuiInputTextFlags_EnterReturnsTrue) || ImGui::Button("Connect")) {
     std::string host;
