@@ -10,6 +10,12 @@ class Chunk {
 public:
   Chunk(int chunkx, int chunkz);
   ~Chunk();
+  
+public:
+  void LoadMeshes();
+  
+public:
+  inline bool AreMeshesLoaded() const { return meshes_loaded; };
 
 public:
   void RenderTerrain() const;
@@ -26,6 +32,7 @@ private:
   SceneryMesh* scenery_mesh;
   TerrainMesh* terrain_mesh;
   int x, z;
+  bool meshes_loaded = false;
 };
 
 }

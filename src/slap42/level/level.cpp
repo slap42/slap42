@@ -126,7 +126,9 @@ void Render() {
     Shader::TerrainShader::SetViewProjection(Camera::GetViewProjection());
   }
   for (const auto& chunk : chunks) {
-    chunk.second->RenderTerrain();
+    if (chunk.second->AreMeshesLoaded()) {
+      chunk.second->RenderTerrain();
+    }
   }
   Shader::SceneryShader::Bind();
   Shader::SceneryShader::SetSunDirection(sun_dir);
@@ -134,7 +136,9 @@ void Render() {
     Shader::SceneryShader::SetViewProjection(Camera::GetViewProjection());
   }
   for (const auto& chunk : chunks) {
-    chunk.second->RenderScenery();
+    if (chunk.second->AreMeshesLoaded()) {
+      chunk.second->RenderScenery();
+    }
   }
 }
 

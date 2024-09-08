@@ -8,35 +8,42 @@
 
 namespace Slap42 {
 
-  Chunk::Chunk(int chunkx, int chunkz) : x(chunkx), z(chunkz) {
-    terrain_mesh = MeshGen::Terrain(chunkx, chunkz);
-
-    MeshGen::RawMesh raw_mesh;
-
-    // For each chunk, check whether it contains a tree
-    for (size_t x = 0; x < kChunkSize; ++x) {
-      for (size_t z = 0; z < kChunkSize; ++z) {
-        if (Noise::SampleTrees(chunkx * (float)Chunk::kChunkSize + x, chunkz * (float)Chunk::kChunkSize + z)) {
-            
-          glm::vec3 origin = {
-            chunkx * (float)Chunk::kChunkSize + x,
-            Noise::SampleTerrainHeight(chunkx * (float)Chunk::kChunkSize + x, chunkz * (float)Chunk::kChunkSize + z) - 0.5f,
-            chunkz * (float)Chunk::kChunkSize + z
-          };
-          glm::vec3 direction = glm::normalize(glm::vec3(RandMToN(-0.5f, 0.5f), 1.0f, RandMToN(-0.5f, 0.5f)));
-          MeshGen::Tree(raw_mesh, origin, direction);
-
-        }
-      }
-    }
-
-
-  scenery_mesh = new SceneryMesh(raw_mesh.vertices.data(), raw_mesh.vertices.size() * sizeof(float), raw_mesh.indices.data(), raw_mesh.indices.size() * sizeof(uint16_t));
+Chunk::Chunk(int chunkx, int chunkz) : x(chunkx), z(chunkz) {
+  LoadMeshes();
 }
 
 Chunk::~Chunk() {
-  delete scenery_mesh;
-  delete terrain_mesh;
+  if (meshes_loaded) {
+    delete scenery_mesh;
+    delete terrain_mesh;
+  }
+}
+
+void Chunk::LoadMeshes() {
+  terrain_mesh = MeshGen::Terrain(x, z);
+
+  MeshGen::RawMesh raw_mesh;
+
+  // For each chunk, check whether it contains a tree
+  for (size_t xx = 0; xx < kChunkSize; ++xx) {
+    for (size_t zz = 0; zz < kChunkSize; ++zz) {
+      if (Noise::SampleTrees(x * (float)Chunk::kChunkSize + xx, z * (float)Chunk::kChunkSize + zz)) {
+            
+        glm::vec3 origin = {
+          x * (float)Chunk::kChunkSize + xx,
+          Noise::SampleTerrainHeight(x * (float)Chunk::kChunkSize + xx, z * (float)Chunk::kChunkSize + zz) - 0.5f,
+          z * (float)Chunk::kChunkSize + zz
+        };
+        glm::vec3 direction = glm::normalize(glm::vec3(RandMToN(-0.5f, 0.5f), 1.0f, RandMToN(-0.5f, 0.5f)));
+        MeshGen::Tree(raw_mesh, origin, direction);
+
+      }
+    }
+  }
+
+  scenery_mesh = new SceneryMesh(raw_mesh.vertices.data(), raw_mesh.vertices.size() * sizeof(float), raw_mesh.indices.data(), raw_mesh.indices.size() * sizeof(uint16_t));
+  
+  meshes_loaded = true;
 }
 
 void Chunk::RenderTerrain() const {
