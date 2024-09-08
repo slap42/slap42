@@ -20,7 +20,7 @@ You can download the game here: https://slap42.itch.io/slap42
 
 However, since I don't have signing keys, etc. you will probably see a whole load of warnings saying the executable file cannot be opened, it comes from an untrusted source, and so on. You can either follow the process for your platform to run it anyway (On Windows `more options` > `run anyway`), or you can compile it from source. At some point I will start signing binaries, but this isn't a big priority right now.
 
-I'll release updates on the itch.io page as often as I can remember to. Updates for the Windows version will release much more often than macOS and Linux, because I'm mostly working on a Windows machine. But I'll try to keep them up to date.
+I'll release updates on the itch.io page as often as I can remember to. Updates for the Windows and macOS versions will release much more often than Linux because that's where I do most of my development.
 
 Since I am updating the game often, things will break all the time. Sorry.
 
