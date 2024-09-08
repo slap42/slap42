@@ -18,6 +18,8 @@ ImRiux is officially entitled to a 3% revshare for making an actual contribution
 
 You can download the game here: https://slap42.itch.io/slap42
 
+However, since I don't have signing keys, etc. you will probably see a whole load of warnings saying the executable file cannot be opened, it comes from an untrusted source, and so on. You can either follow the process for your platform to run it anyway (On Windows that's `more options` > `run anyway`), or oyu can compile it from source. At some point I will start signing binaries, but this isn't a big priority right now.
+
 I'll release updates on the itch.io page as often as I can remember to. Updates for the Windows version will release much more often than macOS and Linux, because I'm mostly working on a Windows machine. But I'll try to keep them up to date.
 
 Since I am updating the game often, things will break all the time. Sorry.
@@ -37,10 +39,6 @@ The game expects to be run from a folder containing another folder called `res`.
 If you're on Windows it should be enough to just unzip the folder you downloaded from itch.io and click `Slap42.exe`, making sure not to move any of the files or folders from their original locations.
 
 If running from a terminal or command prompt, make sure the working directory is the folder containing the executable file and the res folder.
-
-### Warnings on Windows
-
-If you download the game from itch.io you will probably get warnings about the executable not being from a trusted source. I haven't paid Microsoft for a signing key yet, so this warning will pop up until I do so. If you trust me you can choose `more options` then `run anyway`. If you don't trust me that's okay, you can compile from source yourself or go look at the code to make sure I'm not doing anything dodgy.
 
 ### Controls
 
