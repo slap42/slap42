@@ -29,12 +29,10 @@ void Bind() {
 }
 
 void SetViewProjection(const glm::mat4& view_projection) {
-  Bind();
   GL_CHECK(glUniformMatrix4fv(u_view_projection, 1, GL_FALSE, glm::value_ptr(view_projection)));
 }
 
 void SetSunDirection(const glm::vec3& dir) {
-  Bind();
   GL_CHECK(glUniform3fv(u_sun_direction, 1, glm::value_ptr(dir)));
 }
 

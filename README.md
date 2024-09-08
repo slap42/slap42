@@ -93,7 +93,6 @@ If running in a VM, make sure mouse integration is turned on or cursor input won
 
 #### Cleanup
 
-- Remove unnecessary shader binds when uploading per-frame uniform values
 - Figure out if there is a way to show an error message if the connection fails because the server is at capacity
 - Generate meshes on another thread
 - Leaves

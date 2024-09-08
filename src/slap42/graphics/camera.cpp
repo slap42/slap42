@@ -18,18 +18,27 @@
 namespace Slap42 {
 namespace Camera {
 
-static glm::vec3 position = glm::vec3(0.0f);
-static glm::vec2 rotation = glm::vec2(0.0f);
-static glm::mat4 view = glm::mat4(1.0f);
-static glm::mat4 projection = glm::mat4(1.0f);
+static glm::vec3 position;
+static glm::vec2 rotation;
+static glm::mat4 view;
+static glm::mat4 projection;
+static glm::mat4 view_projection;
 
 static float fov = 1.5f;
 
+static bool flag_vp_dirty = false;
+
+bool IsVpDirty() {
+  return flag_vp_dirty;
+}
+
+const glm::mat4& GetViewProjection() {
+  return view_projection;
+}
+
 static void CalcViewProjection() {
-  glm::mat4 view_projection = projection * view;
-  Shader::TerrainShader::SetViewProjection(view_projection);
-  Shader::EntityShader::SetViewProjection(view_projection);
-  Shader::SceneryShader::SetViewProjection(view_projection);
+  view_projection = projection * view;
+  flag_vp_dirty = true;
 }
 
 static void CalcView() {
@@ -77,6 +86,8 @@ void Create() {
 }
 
 void Update(float delta) {
+  flag_vp_dirty = false;
+  
   static GLFWwindow* window = Window::GetGlfwWindow();
   
   constexpr float kRotationSpeed = 0.04f;

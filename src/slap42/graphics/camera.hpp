@@ -15,5 +15,8 @@ glm::vec3 GetPosition();
 float GetFov();
 void SetFov(float fov);
 
+bool IsVpDirty();
+const glm::mat4& GetViewProjection();
+
 }
 }

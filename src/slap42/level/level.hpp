@@ -9,7 +9,7 @@ void Create();
 void Destroy();
 void UnloadChunks();
 
-void Update(float delta);
+void Update(float time, float delta);
 void Render();
 
 int GetRenderDistance();

@@ -28,12 +28,10 @@ void Bind() {
 }
 
 void SetTransform(const glm::mat4& transform) {
-  Bind();
   GL_CHECK(glUniformMatrix4fv(u_transform, 1, GL_FALSE, glm::value_ptr(transform)));
 }
 
 void SetViewProjection(const glm::mat4& view_projection) {
-  Bind();
   GL_CHECK(glUniformMatrix4fv(u_view_projection, 1, GL_FALSE, glm::value_ptr(view_projection)));
 }
 

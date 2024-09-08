@@ -1,5 +1,6 @@
 #include "level.hpp"
 
+#include <glad/gl.h>
 #include <unordered_map>
 #include "chunk.hpp"
 #include "graphics/camera.hpp"
@@ -20,6 +21,8 @@ static const char* kTextureNames[] = {
   "res/images/Ground067_2K-PNG_Color.png",
   "res/images/Bark014_2K-PNG_Color.png",
 };
+static glm::vec3 sun_dir;
+static float sky_brightness;
 
 void Create() {
   Shader::TerrainShader::Create();
@@ -43,7 +46,13 @@ void UnloadChunks() {
   chunks.clear();
 }
 
-void Update(float delta) {
+void Update(float time, float delta) {
+  // Update sun position and clear color for a day/night cycle
+  // TODO: Get initial sun_animation_time from server and occasionally sync with other players
+  float sun_animation_time = time * 0.00000027f + 2.0f; // Start in mid morning, 1 day/night cycle is approx 1 hour
+  sun_dir = glm::vec3(std::sin(sun_animation_time), std::cos(sun_animation_time), 0.0f);
+  sky_brightness = std::clamp(-std::cos(sun_animation_time) + 0.7f, 0.0f, 1.0f);
+  
   const glm::vec3 player_pos = Camera::GetPosition();
   
   const float kChunkSpawnDistance = render_distance * 0.4f;
@@ -109,11 +118,21 @@ void Update(float delta) {
 }
 
 void Render() {
+  glClearColor(0.53f * sky_brightness, 0.81f * sky_brightness, 0.92f * sky_brightness, 1.0f);
+  
   Shader::TerrainShader::Bind();
+  Shader::TerrainShader::SetSunDirection(sun_dir);
+  if (Camera::IsVpDirty()) {
+    Shader::TerrainShader::SetViewProjection(Camera::GetViewProjection());
+  }
   for (const auto& chunk : chunks) {
     chunk.second->RenderTerrain();
   }
   Shader::SceneryShader::Bind();
+  Shader::SceneryShader::SetSunDirection(sun_dir);
+  if (Camera::IsVpDirty()) {
+    Shader::SceneryShader::SetViewProjection(Camera::GetViewProjection());
+  }
   for (const auto& chunk : chunks) {
     chunk.second->RenderScenery();
   }
