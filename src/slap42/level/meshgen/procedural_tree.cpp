@@ -14,8 +14,6 @@ void Tree(RawMesh& m, const glm::vec3& origin, const glm::vec3& direction, size_
   if (segment_count == 0) return;
 
   constexpr float k2Pi = 6.28318530718f;
-  constexpr glm::vec3 kUp = glm::vec3(0.0f, 1.0f, 0.0f);
-
   constexpr size_t kSegmentPolyCount = 5;
   constexpr float  kSegmentLength = 1.0f;
   constexpr float kBranchTwistiness = 0.2f;
@@ -25,7 +23,8 @@ void Tree(RawMesh& m, const glm::vec3& origin, const glm::vec3& direction, size_
   std::vector<float> segment_radiuses;
   glm::vec3 pos = { origin.x, origin.y, origin.z };
   glm::vec3 dir = direction;
-
+  glm::vec3 otherdir = { std::abs(dir.y), std::abs(dir.x), std::abs(dir.z) };
+  
   for (size_t j = 0; j < segment_count; ++j) {
     float v = (float)j / (float)segment_count;
 
@@ -34,7 +33,7 @@ void Tree(RawMesh& m, const glm::vec3& origin, const glm::vec3& direction, size_
     
     for (size_t i = 0; i < kSegmentPolyCount; ++i) {
       float angle = ((float)i / (float)kSegmentPolyCount) * k2Pi;
-      glm::vec3 n = glm::rotate(glm::normalize(glm::cross(dir, kUp)), angle, dir);
+      glm::vec3 n = glm::rotate(glm::normalize(glm::cross(dir, otherdir)), angle, dir);
 
       float x = pos.x + n.x * segment_radius;
       float y = pos.y + n.y * segment_radius;
@@ -44,7 +43,7 @@ void Tree(RawMesh& m, const glm::vec3& origin, const glm::vec3& direction, size_
       m.vertices.push_back(y);
       m.vertices.push_back(z);
       
-      float u = (float)i / (float)(kSegmentPolyCount - 1);
+      float u = ((float)i / (float)(kSegmentPolyCount - 1)) * segment_radius + (1.0f - segment_radius) / 2.0f;
       m.vertices.push_back(u);
       m.vertices.push_back(v);
       
@@ -111,7 +110,7 @@ void Tree(RawMesh& m, const glm::vec3& origin, const glm::vec3& direction, size_
       }
 
       float angle = RandMToN(0.0f, k2Pi);
-      glm::vec3 n = glm::rotate(glm::normalize(glm::cross(directions[i], kUp)), angle, directions[i]);
+      glm::vec3 n = glm::rotate(glm::normalize(glm::cross(directions[i], otherdir)), angle, directions[i]);
       n.y = std::abs(n.y);
 
       Tree(m, positions[i], n, segment_count - i - 1, segment_radiuses[i] * 0.75f, false);
